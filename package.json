@@ -1,0 +1,51 @@
+{
+  "name": "capacitor-media",
+  "version": "0.0.1",
+  "description": "Enable some media features for Capacitor such as create albums, save videos and gifs.",
+  "main": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "scripts": {
+    "build": "npm run clean && tsc",
+    "clean": "rm -rf ./dist",
+    "watch": "tsc --watch",
+    "prepublishOnly": "npm run build",
+    "release:custom": "standard-version release --release-as x.x.x",
+    "release:patch": "standard-version release --release-as patch",
+    "release:minor": "standard-version release --release-as minor",
+    "release:major": "standard-version release --release-as major"
+  },
+  "author": "Stewan Silva",
+  "license": "MIT",
+  "dependencies": {
+    "@capacitor/core": "latest"
+  },
+  "devDependencies": {
+    "typescript": "^2.6.2"
+  },
+  "files": [
+    "dist/",
+    "ios/",
+    "android/",
+    "CapacitorMedia.podspec"
+  ],
+  "keywords": [
+    "capacitor",
+    "plugin",
+    "native"
+  ],
+  "capacitor": {
+    "ios": {
+      "src": "ios"
+    },
+    "android": {
+      "src": "android"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stewwan/capacitor-media"
+  },
+  "bugs": {
+    "url": "https://github.com/stewwan/capacitor-media/issues"
+  }
+}
