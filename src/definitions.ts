@@ -52,10 +52,10 @@ export interface MediaLocation {
 }
 
 export interface MediaAlbum {
-  identifier: string;
+  identifier?: string;
   name: string;
-  count: number;
-  type: MediaAlbumType;
+  count?: number;
+  type?: MediaAlbumType;
 }
 
 export interface MediaAlbumResponse {
