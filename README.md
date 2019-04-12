@@ -28,8 +28,16 @@ media
 // Get a list of user albums
 media
   .getAlbums()
-  .then(console.log) // -> { albums: [{name:'My Album'}, {name:'My Another Album'}]}
+  .then(console.log) // -> { albums: [{name:'My Album', identifier:'A1-B2-C3-D4'}, {name:'My Another Album', identifier:'E5-F6-G7-H8'}]}
   .catch(console.log);
+```
+
+## Disclaimer
+
+Make sure you pass the correct album parameter according to the platform
+
+```js
+album: this.platform.is("ios") ? album.identifier : album.name;
 ```
 
 ## iOS setup
