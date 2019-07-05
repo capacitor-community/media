@@ -1,4 +1,4 @@
-# capacitor-media
+# capacitor-media [![npm version](https://badge.fury.io/js/capacitor-media.svg)](https://badge.fury.io/js/capacitor-media)
 
 Capacitor plugin to activate media features such as saving videos and gifs into user's photo gallery
 
@@ -14,13 +14,13 @@ Capacitor plugin to activate media features such as saving videos and gifs into 
 ## Usage
 
 ```js
-import { Media } from "capacitor-media";
+import { Media } from 'capacitor-media';
 const media = new Media();
 
 //
 // Save video to a specfic album
 media
-  .saveVideo({ path: "/path/to/the/file", album: "My Album" })
+  .saveVideo({ path: '/path/to/the/file', album: 'My Album' })
   .then(console.log)
   .catch(console.log);
 
@@ -37,7 +37,7 @@ media
 Make sure you pass the correct album parameter according to the platform
 
 ```js
-album: this.platform.is("ios") ? album.identifier : album.name;
+album: this.platform.is('ios') ? album.identifier : album.name;
 ```
 
 ## iOS setup
@@ -74,6 +74,7 @@ Now you should be set to go. Try to run your client using `ionic cap run android
 
 ## You may also like
 
+- [capacitor-analytics](https://github.com/stewwan/capacitor-analytics)
 - [capacitor-intercom](https://github.com/stewwan/capacitor-intercom)
 - [capacitor-fcm](https://github.com/stewwan/capacitor-fcm)
 - [capacitor-twitter](https://github.com/stewwan/capacitor-twitter)
