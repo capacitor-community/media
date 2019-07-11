@@ -74,10 +74,12 @@ Now you should be set to go. Try to run your client using `ionic cap run android
 
 ## You may also like
 
-- [capacitor-analytics](https://github.com/stewwan/capacitor-analytics)
-- [capacitor-intercom](https://github.com/stewwan/capacitor-intercom)
 - [capacitor-fcm](https://github.com/stewwan/capacitor-fcm)
+- [capacitor-analytics](https://github.com/stewwan/capacitor-analytics)
+- [capacitor-crashlytics](https://github.com/stewwan/capacitor-crashlytics)
+- [capacitor-intercom](https://github.com/stewwan/capacitor-intercom)
 - [capacitor-twitter](https://github.com/stewwan/capacitor-twitter)
+- [capacitor-datepick](https://github.com/stewwan/capacitor-datepick)
 
 Cheers 🍻
 
