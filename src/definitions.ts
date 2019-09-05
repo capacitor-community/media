@@ -1,6 +1,6 @@
-declare global {
+declare module '@capacitor/core' {
   interface PluginRegistry {
-    MediaPlugin?: IMediaPlugin;
+    MediaPlugin: MediaPluginProtocol;
   }
 }
 
@@ -17,15 +17,15 @@ export declare enum MediaAlbumType {
   /**
    * Album is a "smart" album (such as Favorites or Recently Added)
    */
-  Smart = "smart",
+  Smart = 'smart',
   /**
    * Album is a cloud-shared album
    */
-  Shared = "shared",
+  Shared = 'shared',
   /**
    * Album is a user-created album
    */
-  User = "user"
+  User = 'user'
 }
 
 export interface MediaLocation {
@@ -128,7 +128,7 @@ export interface MediaFetchOptions {
   albumIdentifier?: string;
 }
 
-export interface IMediaPlugin {
+export interface MediaPluginProtocol {
   getMedias(options?: MediaFetchOptions): Promise<MediaResponse>;
   getAlbums(): Promise<MediaAlbumResponse>;
   savePhoto(options?: MediaSaveOptions): Promise<void>;

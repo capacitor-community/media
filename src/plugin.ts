@@ -1,16 +1,16 @@
-import { Plugins } from "@capacitor/core";
+import { Plugins } from '@capacitor/core';
 import {
-  IMediaPlugin,
+  MediaPluginProtocol,
   MediaFetchOptions,
   MediaResponse,
   MediaAlbumResponse,
   MediaSaveOptions,
   MediaAlbumCreate
-} from "./definitions";
+} from './definitions';
 
 const { MediaPlugin } = Plugins;
 
-export class Media implements IMediaPlugin {
+export class Media implements MediaPluginProtocol {
   getMedias(options?: MediaFetchOptions): Promise<MediaResponse> {
     return MediaPlugin.getMedias(options);
   }
