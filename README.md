@@ -79,7 +79,6 @@ Now you should be set to go. Try to run your client using `ionic cap run android
 - [capacitor-crashlytics](https://github.com/stewwan/capacitor-crashlytics)
 - [capacitor-intercom](https://github.com/stewwan/capacitor-intercom)
 - [capacitor-twitter](https://github.com/stewwan/capacitor-twitter)
-- [capacitor-datepick](https://github.com/stewwan/capacitor-datepick)
 
 Cheers 🍻
 
