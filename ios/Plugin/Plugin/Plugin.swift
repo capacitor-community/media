@@ -89,11 +89,18 @@ public class MediaPlugin: CAPPlugin {
             // Add it to the photo library.
             PHPhotoLibrary.shared().performChanges({
                 
-                let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: URL(string: data)!)
-                
-                if let collection = targetCollection {
-                    let addAssetRequest = PHAssetCollectionChangeRequest(for: collection)
-                    addAssetRequest?.addAssets([creationRequest?.placeholderForCreatedAsset! as Any] as NSArray)
+                let url = URL(string: data)
+                let data = try? Data(contentsOf: url!)
+                if (data != nil) {
+                    let image = UIImage(data: data!)
+                    let creationRequest = PHAssetChangeRequest.creationRequestForAsset(from: image!)
+                    
+                    if let collection = targetCollection {
+                        let addAssetRequest = PHAssetCollectionChangeRequest(for: collection)
+                        addAssetRequest?.addAssets([creationRequest.placeholderForCreatedAsset! as Any] as NSArray)
+                    }
+                } else {
+                    call.error("Could not convert fileURL into Data");
                 }
                 
             }, completionHandler: {success, error in
