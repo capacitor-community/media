@@ -21,9 +21,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 
 @NativePlugin(permissions = {
@@ -160,6 +166,45 @@ public class MediaPlugin extends Plugin {
         }
     }
 
+    private String _getPathExtension(String path) {
+        int extensionIndex = path.lastIndexOf(".");
+        return extensionIndex == -1 ? "" : "." + path.substring(extensionIndex);
+    }
+
+    private String _downloadMediaFromRemote(String remotePath) {
+        try {
+            URL remoteURL = new URL(remotePath);
+            HttpURLConnection connection = (HttpURLConnection) remoteURL.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream inputStream = connection.getInputStream();
+            File file = new File(Environment.getExternalStorageDirectory() + "/temp/");
+            if (!file.exists()) {
+                file.mkdir();
+            }
+            
+            String extension = _getPathExtension(remoteURL.getPath());
+            String filePath = file.getAbsolutePath() + "/" + System.currentTimeMillis() + extension;
+            OutputStream outputStream = new FileOutputStream(filePath);
+            byte[] buffer = new byte[4 * 104];
+            int read;
+
+            while ((read = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, read);
+            }
+
+            outputStream.flush();
+            outputStream.close();
+            inputStream.close();
+            return filePath;
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
 
     private void _saveMedia(PluginCall call, String destination) {
         String dest;
@@ -176,8 +221,19 @@ public class MediaPlugin extends Plugin {
             return;
         }
 
-        Uri inputUri = Uri.parse(inputPath);
-        File inputFile = new File(inputUri.getPath());
+        String fileLocalPath;
+        if (inputPath.startsWith("http") || inputPath.startsWith("https")) {
+            fileLocalPath = _downloadMediaFromRemote(inputPath);
+        } else {
+            fileLocalPath = Uri.parse(inputPath).getPath();
+        }
+
+        if (fileLocalPath == "") {
+            call.reject("file download fail");
+            return;
+        }
+
+        File inputFile = new File(fileLocalPath);
 
         String album = call.getString("album");
         File albumDir = Environment.getExternalStoragePublicDirectory(dest);
@@ -186,7 +242,14 @@ public class MediaPlugin extends Plugin {
         }
 
         try {
-            File expFile = copyFile(inputFile, albumDir);
+            String userExtension = call.getString("extension");
+            String extension = userExtension.isEmpty() ? _getPathExtension(inputFile.getAbsolutePath()) : userExtension;
+            if (extension.isEmpty()) {
+                call.reject("Input file path extension is required");
+                return;
+            }
+
+            File expFile = copyFile(inputFile, albumDir, extension);
             scanPhoto(expFile);
 
             JSObject result = new JSObject();
@@ -199,7 +262,7 @@ public class MediaPlugin extends Plugin {
 
     }
 
-    private File copyFile(File inputFile, File albumDir) {
+    private File copyFile(File inputFile, File albumDir, String extension) {
 
         // if destination folder does not exist, create it
         if (!albumDir.exists()) {
@@ -208,12 +271,9 @@ public class MediaPlugin extends Plugin {
             }
         }
 
-        String absolutePath = inputFile.getAbsolutePath();
-        String extension = absolutePath.substring(absolutePath.lastIndexOf("."));
-
         // generate image file name using current date and time
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmssSSS").format(new Date());
-        File newFile = new File(albumDir, "IMG_" + timeStamp + "." + extension);
+        File newFile = new File(albumDir, "IMG_" + timeStamp + extension);
 
         // Read and write image files
         FileChannel inChannel = null;
