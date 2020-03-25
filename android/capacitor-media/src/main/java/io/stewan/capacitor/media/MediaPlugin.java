@@ -213,7 +213,7 @@ public class MediaPlugin extends Plugin {
 
         // generate image file name using current date and time
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmssSSS").format(new Date());
-        File newFile = new File(albumDir, "IMG_" + timeStamp + "." + extension);
+        File newFile = new File(albumDir, "IMG_" + timeStamp + extension);
 
         // Read and write image files
         FileChannel inChannel = null;

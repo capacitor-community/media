@@ -1,6 +1,6 @@
 {
   "name": "capacitor-media",
-  "version": "0.0.6",
+  "version": "2.0.0",
   "description": "Enable some media features for Capacitor such as create albums, save videos and gifs.",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
