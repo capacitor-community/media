@@ -2,12 +2,12 @@ package io.stewan.capacitor.media;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
-import android.util.Log;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
@@ -42,7 +42,7 @@ public class MediaPlugin extends Plugin {
     public void getAlbums(PluginCall call) {
         Log.d("DEBUG LOG", "GET ALBUMS");
         if (hasPermission(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            Log.d("DEBUG LOG", "HAS PERMISSIONS");
+            Log.d("DEBUG LOG", "HAS PERMISSION");
             _getAlbums(call);
         } else {
             Log.d("DEBUG LOG", "NOT ALLOWED");
@@ -88,7 +88,7 @@ public class MediaPlugin extends Plugin {
     public void createAlbum(PluginCall call) {
         Log.d("DEBUG LOG", "CREATE ALBUM");
         if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            Log.d("DEBUG LOG", "HAS PERMISSIONS");
+            Log.d("DEBUG LOG", "HAS PERMISSION");
             _createAlbum(call);
         } else {
             Log.d("DEBUG LOG", "NOT ALLOWED");
@@ -100,7 +100,15 @@ public class MediaPlugin extends Plugin {
     private void _createAlbum(PluginCall call) {
         Log.d("DEBUG LOG", "___CREATE ALBUM");
         String folderName = call.getString("name");
-        String folder = Environment.getExternalStorageDirectory() + "/" + folderName;
+        String folder;
+
+        if (Build.VERSION.SDK_INT >= 29) {
+            folder = getContext().getExternalMediaDirs()[0].getAbsolutePath()+"/"+folderName;
+        }else{
+            folder = Environment.getExternalStoragePublicDirectory(folderName).toString();
+        }
+
+        Log.d("ENV STORAGE", folder);
 
         File f = new File(folder);
 
@@ -122,14 +130,15 @@ public class MediaPlugin extends Plugin {
 
     @PluginMethod()
     public void savePhoto(PluginCall call) {
-        Log.d("DEBUG LOG", "SAVE VIDEO TO ALBUM");
+        Log.d("DEBUG LOG", "SAVE PHOTO TO ALBUM");
         if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            Log.d("DEBUG LOG", "HAS PERMISSIONS");
+            Log.d("DEBUG LOG", "HAS PERMISSION");
             _saveMedia(call, "PICTURES");
         } else {
             Log.d("DEBUG LOG", "NOT ALLOWED");
             saveCall(call);
             pluginRequestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 1986);
+            Log.d("DEBUG LOG", "___SAVE PHOTO TO ALBUM AFTER PERMISSION REQUEST");
         }
     }
 
@@ -137,7 +146,7 @@ public class MediaPlugin extends Plugin {
     public void saveVideo(PluginCall call) {
         Log.d("DEBUG LOG", "SAVE VIDEO TO ALBUM");
         if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            Log.d("DEBUG LOG", "HAS PERMISSIONS");
+            Log.d("DEBUG LOG", "HAS PERMISSION");
             _saveMedia(call, "MOVIES");
         } else {
             Log.d("DEBUG LOG", "NOT ALLOWED");
@@ -151,7 +160,7 @@ public class MediaPlugin extends Plugin {
     public void saveGif(PluginCall call) {
         Log.d("DEBUG LOG", "SAVE GIF TO ALBUM");
         if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            Log.d("DEBUG LOG", "HAS PERMISSIONS");
+            Log.d("DEBUG LOG", "HAS PERMISSION");
             _saveMedia(call, "PICTURES");
         } else {
             Log.d("DEBUG LOG", "NOT ALLOWED");
@@ -180,10 +189,26 @@ public class MediaPlugin extends Plugin {
         File inputFile = new File(inputUri.getPath());
 
         String album = call.getString("album");
-        File albumDir = Environment.getExternalStoragePublicDirectory(dest);
-        if (album != null) {
-            albumDir = new File(albumDir, album);
+        File albumDir = null;
+        String albumPath;
+        Log.d("SDK BUILD VERSION", String.valueOf(Build.VERSION.SDK_INT));
+
+        if (Build.VERSION.SDK_INT >= 29) {
+            albumPath = getContext().getExternalMediaDirs()[0].getAbsolutePath();
+
+        }else{
+            albumPath = Environment.getExternalStoragePublicDirectory(dest).getAbsolutePath();
         }
+
+        // Log.d("ENV LOG", String.valueOf(getContext().getExternalMediaDirs()));
+
+        if (album != null) {
+            albumDir = new File(albumPath, album);
+        }else{
+            call.error("album name required");
+        }
+
+        Log.d("ENV LOG - ALBUM DIR", String.valueOf(albumDir));
 
         try {
             File expFile = copyFile(inputFile, albumDir);
@@ -263,28 +288,23 @@ public class MediaPlugin extends Plugin {
         bridge.getActivity().sendBroadcast(mediaScanIntent);
     }
 
-
-    @Override
-    protected void handleRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.handleRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (savedLastCall == null) {
-            Log.d(getLogTag(), "No stored plugin call for permissions request result");
-            return;
+    @PluginMethod()
+    public void hasStoragePermission(PluginCall call) {
+        if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            call.success();
+        } else {
+            call.error("permission denied WRITE_EXTERNAL_STORAGE");
         }
-
-        for (int r : grantResults) {
-            if (r == PackageManager.PERMISSION_DENIED) {
-                Log.d(getLogTag(), "Permission not granted by the user");
-                savedLastCall.reject("Permission denied");
-                return;
-            }
-        }
-
-        if (requestCode == 9800) {
-            // doWhatever(savedLastCall);
-        }
-
-        savedLastCall = null;
     }
+
+    @PluginMethod()
+    public void requestStoragePermission(PluginCall call) {
+        pluginRequestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, 1986);
+        if (hasPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            call.success();
+        }else{
+            call.error("permission denied");
+        }
+    }
+
 }
