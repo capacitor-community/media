@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.0.1](https://github.com/stewwan/capacitor-media/compare/v0.0.6...v2.0.1) (2020-04-22)
+
+
+### Features
+
+* **android:** update to capacitor v2 ([42b5620](https://github.com/stewwan/capacitor-media/commit/42b56204e5b9aeee7b66934774a174f4b6ab8afb))
+
+
+### Bug Fixes
+
+* **android:** enable api 29 for saveMedia ([e446af5](https://github.com/stewwan/capacitor-media/commit/e446af568d60fdbe8809e10559a059ad94ab1ece))
+
 ### [0.0.6](https://github.com/stewwan/capacitor-media/compare/v0.0.5...v0.0.6) (2019-10-17)
 
 
