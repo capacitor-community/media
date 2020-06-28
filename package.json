@@ -22,9 +22,8 @@
     "@capacitor/core": "latest"
   },
   "devDependencies": {
-    "typescript": "^3.2.4",
-    "@capacitor/ios": "latest",
-    "@capacitor/android": "latest"
+    "all-contributors-cli": "^6.16.0",
+    "typescript": "^3.2.4"
   },
   "files": [
     "dist/",
