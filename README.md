@@ -59,7 +59,7 @@ npx cap sync
 ## Usage
 
 ```js
-import { Media } from "capacitor-media";
+import { Media } from "@capacitor-community/media";
 const media = new Media();
 
 //
@@ -89,7 +89,7 @@ album: this.platform.is("ios") ? album.identifier : album.name;
 
 - `ionic start my-cap-app --capacitor`
 - `cd my-cap-app`
-- `npm install —-save capacitor-media`
+- `npm install —-save @capacitor-community/media`
 - `mkdir www && touch www/index.html`
 - `npx cap add ios`
 - `npx cap open ios`
@@ -101,7 +101,7 @@ album: this.platform.is("ios") ? album.identifier : album.name;
 
 - `ionic start my-cap-app --capacitor`
 - `cd my-cap-app`
-- `npm install —-save capacitor-media`
+- `npm install —-save @capacitor-community/media`
 - `mkdir www && touch www/index.html`
 - `npx cap add android`
 - `npx cap open android`
