@@ -1,6 +1,51 @@
-# capacitor-media [![npm version](https://badge.fury.io/js/capacitor-media.svg)](https://badge.fury.io/js/capacitor-media)
+<p align="center"><br><img src="https://user-images.githubusercontent.com/236501/85893648-1c92e880-b7a8-11ea-926d-95355b8175c7.png" width="128" height="128" /></p>
+<h3 align="center">Capacitor Media</h3>
+<p align="center"><strong><code>@capacitor-community/media</code></strong></p>
+<p align="center">
+  Capacitor community plugin for enabling extra media capabilities such as saving videos and gifs into user's photo gallery
+</p>
 
-Capacitor plugin to activate media features such as saving videos and gifs into user's photo gallery
+<p align="center">
+  <img src="https://img.shields.io/maintenance/yes/2020?style=flat-square" />
+  <a href="https://www.npmjs.com/package/@capacitor-community/media"><img src="https://img.shields.io/npm/l/@capacitor-community/media?style=flat-square" /></a>
+<br>
+  <a href="https://www.npmjs.com/package/@capacitor-community/media"><img src="https://img.shields.io/npm/dw/@capacitor-community/media?style=flat-square" /></a>
+  <a href="https://www.npmjs.com/package/@capacitor-community/media"><img src="https://img.shields.io/npm/v/@capacitor-community/media?style=flat-square" /></a>
+  <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-8-orange?style=flat-square" /></a>
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
+
+</p>
+
+## Maintainers
+
+| Maintainer   | GitHub                                | Social                                          |
+| ------------ | ------------------------------------- | ----------------------------------------------- |
+| Stewan Silva | [stewwan](https://github.com/stewwan) | [@StewanSilva](https://twitter.com/StewanSilva) |
+
+## Notice 🚀
+
+We're starting fresh under an official org. If you were using the previous npm package `capacitor-media`, please update your package.json to `@capacitor-community/media`. Check out [changelog](/CHANGELOG.md) for more info.
+
+## Installation
+
+Using npm:
+
+```bash
+npm install @capacitor-community/media
+```
+
+Using yarn:
+
+```bash
+yarn add @capacitor-community/media
+```
+
+Sync native files:
+
+```bash
+npx cap sync
+```
 
 ## API
 
@@ -14,13 +59,13 @@ Capacitor plugin to activate media features such as saving videos and gifs into 
 ## Usage
 
 ```js
-import { Media } from 'capacitor-media';
+import { Media } from "capacitor-media";
 const media = new Media();
 
 //
 // Save video to a specfic album
 media
-  .saveVideo({ path: '/path/to/the/file', album: 'My Album' })
+  .saveVideo({ path: "/path/to/the/file", album: "My Album" })
   .then(console.log)
   .catch(console.log);
 
@@ -37,7 +82,7 @@ media
 Make sure you pass the correct album parameter according to the platform
 
 ```js
-album: this.platform.is('ios') ? album.identifier : album.name;
+album: this.platform.is("ios") ? album.identifier : album.name;
 ```
 
 ## iOS setup
@@ -67,22 +112,6 @@ album: this.platform.is('ios') ? album.identifier : album.name;
 Now you should be set to go. Try to run your client using `ionic cap run android --livereload`.
 
 > Tip: every time you change a native code you may need to clean up the cache (Build > Clean Project | Build > Rebuild Project) and then run the app again.
-
-## Sample app
-
-(coming soon)
-
-## You may also like
-
-- [capacitor-fcm](https://github.com/stewwan/capacitor-fcm)
-- [capacitor-analytics](https://github.com/stewwan/capacitor-analytics)
-- [capacitor-crashlytics](https://github.com/stewwan/capacitor-crashlytics)
-- [capacitor-intercom](https://github.com/stewwan/capacitor-intercom)
-- [capacitor-twitter](https://github.com/stewwan/capacitor-twitter)
-
-Cheers 🍻
-
-Follow me [@Twitter](https://twitter.com/StewanSilva)
 
 ## License
 
