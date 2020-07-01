@@ -63,7 +63,7 @@ import { Media } from '@capacitor-community/media';
 const media = new Media();
 
 //
-// Save video to a specfic album
+// Save video to a specific album
 media
   .saveVideo({ path: '/path/to/the/file', album: 'My Album' })
   .then(console.log)
