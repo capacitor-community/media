@@ -59,13 +59,13 @@ npx cap sync
 ## Usage
 
 ```js
-import { Media } from "@capacitor-community/media";
+import { Media } from '@capacitor-community/media';
 const media = new Media();
 
 //
 // Save video to a specfic album
 media
-  .saveVideo({ path: "/path/to/the/file", album: "My Album" })
+  .saveVideo({ path: '/path/to/the/file', album: 'My Album' })
   .then(console.log)
   .catch(console.log);
 
@@ -82,7 +82,7 @@ media
 Make sure you pass the correct album parameter according to the platform
 
 ```js
-album: this.platform.is("ios") ? album.identifier : album.name;
+album: this.platform.is('ios') ? album.identifier : album.name;
 ```
 
 ## iOS setup
@@ -107,7 +107,7 @@ album: this.platform.is("ios") ? album.identifier : album.name;
 - `npx cap open android`
 - `[extra step]` in android case we need to tell Capacitor to initialise the plugin:
 
-> on your `MainActivity.java` file add `import io.stewan.capacitor.media.MediaPlugin;` and then inside the init callback `add(MediaPlugin.class);`
+> on your `MainActivity.java` file add `import com.getcapacitor.community.media.MediaPlugin;` and then inside the init callback `add(MediaPlugin.class);`
 
 Now you should be set to go. Try to run your client using `ionic cap run android --livereload`.
 

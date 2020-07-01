@@ -1,4 +1,4 @@
-package io.stewan.capacitor.media;
+package com.getcapacitor.community.media;
 
 import android.Manifest;
 import android.content.Intent;

@@ -1,4 +1,5 @@
 
   <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="io.stewan.capacitor.media.capacitormedia">
-</manifest>
+      package="com.getcapacitor.community.media.media">
+  </manifest>
+  
