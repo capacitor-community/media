@@ -113,6 +113,10 @@ Now you should be set to go. Try to run your client using `ionic cap run android
 
 > Tip: every time you change a native code you may need to clean up the cache (Build > Clean Project | Build > Rebuild Project) and then run the app again.
 
+## Example
+
+- https://github.com/capacitor-community/media/blob/master/example
+
 ## License
 
 MIT
