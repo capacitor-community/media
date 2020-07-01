@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.1](https://github.com/capacitor-community/media/compare/v1.0.0...v1.0.1) (2020-07-01)
+
+
+### Features
+
+* add example ([8cc960b](https://github.com/capacitor-community/media/commit/8cc960badb058d2070f313f41def4577dedcc136))
+
+
+### Bug Fixes
+
+* **android:** revamp platform. fixes [#6](https://github.com/capacitor-community/media/issues/6) ([ebdce5b](https://github.com/capacitor-community/media/commit/ebdce5bc400447fbb54c50412842ca0ae5ea6920))
+
 ## 1.0.0 (2020-06-28)
 
 
