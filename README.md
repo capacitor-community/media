@@ -64,7 +64,7 @@ import { Media } from '@capacitor-community/media';
 //
 // Save video to a specific album
 Media.saveVideo({ path: '/path/to/the/file', album: 'My Album' })
-  .then(console.log)
+  .then(console.log) // on android it returns {filePath: 'uri to media'}
   .catch(console.log);
 
 //
