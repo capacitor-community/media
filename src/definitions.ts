@@ -1,7 +1,10 @@
-declare module '@capacitor/core' {
-  interface PluginRegistry {
-    MediaPlugin: MediaPluginProtocol;
-  }
+export interface MediaPlugin {
+  getMedias(options?: MediaFetchOptions): Promise<MediaResponse>;
+  getAlbums(): Promise<MediaAlbumResponse>;
+  savePhoto(options?: MediaSaveOptions): Promise<PhotoResponse>;
+  saveVideo(options?: MediaSaveOptions): Promise<PhotoResponse>;
+  saveGif(options?: MediaSaveOptions): Promise<PhotoResponse>;
+  createAlbum(options: MediaAlbumCreate): Promise<void>;
 }
 
 export interface MediaSaveOptions {
@@ -9,57 +12,31 @@ export interface MediaSaveOptions {
   album?: string;
 }
 
-export interface MediaAlbumCreate {
-  name: string;
-}
-
-export declare enum MediaAlbumType {
+export interface MediaFetchOptions {
   /**
-   * Album is a "smart" album (such as Favorites or Recently Added)
+   * The number of photos to fetch, sorted by last created date descending
    */
-  Smart = 'smart',
+  quantity?: number;
   /**
-   * Album is a cloud-shared album
+   * The width of thumbnail to return
    */
-  Shared = 'shared',
+  thumbnailWidth?: number;
   /**
-   * Album is a user-created album
+   * The height of thumbnail to return
    */
-  User = 'user'
-}
-
-export interface MediaLocation {
+  thumbnailHeight?: number;
   /**
-   * GPS latitude image was taken at
+   * The quality of thumbnail to return as JPEG (0-100)
    */
-  latitude: number;
+  thumbnailQuality?: number;
   /**
-   * GPS longitude image was taken at
+   * Which types of assets to return (currently only supports "photos")
    */
-  longitude: number;
+  types?: string;
   /**
-   * Heading of user at time image was taken
+   * Which album identifier to query in (get identifier with getAlbums())
    */
-  heading: number;
-  /**
-   * Altitude of user at time image was taken
-   */
-  altitude: number;
-  /**
-   * Speed of user at time image was taken
-   */
-  speed: number;
-}
-
-export interface MediaAlbum {
-  identifier?: string;
-  name: string;
-  count?: number;
-  type?: MediaAlbumType;
-}
-
-export interface MediaAlbumResponse {
-  albums: MediaAlbum[];
+  albumIdentifier?: string;
 }
 
 export interface MediaResponse {
@@ -101,38 +78,59 @@ export interface MediaAsset {
   location: MediaLocation;
 }
 
-export interface MediaFetchOptions {
+export interface MediaLocation {
   /**
-   * The number of photos to fetch, sorted by last created date descending
+   * GPS latitude image was taken at
    */
-  quantity?: number;
+  latitude: number;
   /**
-   * The width of thumbnail to return
+   * GPS longitude image was taken at
    */
-  thumbnailWidth?: number;
+  longitude: number;
   /**
-   * The height of thumbnail to return
+   * Heading of user at time image was taken
    */
-  thumbnailHeight?: number;
+  heading: number;
   /**
-   * The quality of thumbnail to return as JPEG (0-100)
+   * Altitude of user at time image was taken
    */
-  thumbnailQuality?: number;
+  altitude: number;
   /**
-   * Which types of assets to return (currently only supports "photos")
+   * Speed of user at time image was taken
    */
-  types?: string;
-  /**
-   * Which album identifier to query in (get identifier with getAlbums())
-   */
-  albumIdentifier?: string;
+  speed: number;
 }
 
-export interface MediaPluginProtocol {
-  getMedias(options?: MediaFetchOptions): Promise<MediaResponse>;
-  getAlbums(): Promise<MediaAlbumResponse>;
-  savePhoto(options?: MediaSaveOptions): Promise<void>;
-  saveVideo(options?: MediaSaveOptions): Promise<void>;
-  saveGif(options?: MediaSaveOptions): Promise<void>;
-  createAlbum(options: MediaAlbumCreate): Promise<void>;
+export interface MediaAlbumResponse {
+  albums: MediaAlbum[];
+}
+
+export interface MediaAlbum {
+  identifier?: string;
+  name: string;
+  count?: number;
+  type?: MediaAlbumType;
+}
+
+export declare enum MediaAlbumType {
+  /**
+   * Album is a "smart" album (such as Favorites or Recently Added)
+   */
+  Smart = 'smart',
+  /**
+   * Album is a cloud-shared album
+   */
+  Shared = 'shared',
+  /**
+   * Album is a user-created album
+   */
+  User = 'user',
+}
+
+export interface MediaAlbumCreate {
+  name: string;
+}
+
+export interface PhotoResponse {
+  filePath: string;
 }
