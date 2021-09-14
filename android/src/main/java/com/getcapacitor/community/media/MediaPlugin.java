@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @CapacitorPlugin(
     name = "Media",
@@ -151,19 +153,26 @@ public class MediaPlugin extends Plugin {
 
         JSObject response = new JSObject();
         JSArray albums = new JSArray();
-        StringBuffer list = new StringBuffer();
+        Set<String> bucketIds = new HashSet<String>();
 
-        String[] projection = new String[] { "DISTINCT " + MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME };
+        String[] projection = new String[] {
+          MediaStore.MediaColumns.BUCKET_DISPLAY_NAME,
+          MediaStore.MediaColumns.BUCKET_ID
+        };
         Cursor cur = getActivity().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, null);
 
         while (cur.moveToNext()) {
-            String albumName = cur.getString((cur.getColumnIndex(MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME)));
-            JSObject album = new JSObject();
+            String albumName = cur.getString((cur.getColumnIndex(MediaStore.MediaColumns.BUCKET_DISPLAY_NAME)));
+            String bucketId = cur.getString((cur.getColumnIndex(MediaStore.MediaColumns.BUCKET_ID)));
 
-            list.append(albumName + "\n");
+            if (!bucketIds.contains(bucketId)){
+              JSObject album = new JSObject();
 
-            album.put("name", albumName);
-            albums.put(album);
+              album.put("name", albumName);
+              albums.put(album);
+
+              bucketIds.add(bucketId);
+            }
         }
 
         response.put("albums", albums);
