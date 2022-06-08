@@ -19,10 +19,8 @@
   "license": "MIT",
   "dependencies": {
     "@capacitor/android": "^2.4.7",
-    "@capacitor/core": "^2.4.7"
-  },
-  "peerDependencies": {
-    "@capacitor/core": "^2.4.7"
+    "@capacitor/core": "^2.4.7",
+    "@capacitor/ios": "^2.4.7"
   },
   "devDependencies": {
     "all-contributors-cli": "^6.16.0",
