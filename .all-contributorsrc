@@ -38,6 +38,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "tallesventura",
+      "name": "Talles Alves",
+      "avatar_url": "https://avatars.githubusercontent.com/u/14003158?v=4",
+      "profile": "https://www.kuau.com.br/",
+      "contributions": [
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 5
