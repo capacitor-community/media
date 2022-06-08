@@ -60,19 +60,16 @@ npx cap sync
 
 ```js
 import { Media } from '@capacitor-community/media';
-const media = new Media();
 
 //
 // Save video to a specific album
-media
-  .saveVideo({ path: '/path/to/the/file', album: 'My Album' })
-  .then(console.log)
+Media.saveVideo({ path: '/path/to/the/file', album: 'My Album' })
+  .then(console.log) // on android it returns {filePath: 'uri to media'}
   .catch(console.log);
 
 //
 // Get a list of user albums
-media
-  .getAlbums()
+Media.getAlbums()
   .then(console.log) // -> { albums: [{name:'My Album', identifier:'A1-B2-C3-D4'}, {name:'My Another Album', identifier:'E5-F6-G7-H8'}]}
   .catch(console.log);
 ```
