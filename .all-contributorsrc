@@ -47,6 +47,15 @@
       "contributions": [
         "maintenance"
       ]
+    },
+    {
+      "login": "zyad-yasser",
+      "name": "Zyad Yasser",
+      "avatar_url": "https://avatars.githubusercontent.com/u/38470992?v=4",
+      "profile": "https://www.zyadyasser.net/",
+      "contributions": [
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 5
