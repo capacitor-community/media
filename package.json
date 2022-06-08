@@ -18,7 +18,9 @@
   "author": "Stewan Silva",
   "license": "MIT",
   "dependencies": {
-    "@capacitor/core": "^2.4.7"
+    "@capacitor/android": "^2.4.7",
+    "@capacitor/core": "^2.4.7",
+    "@capacitor/ios": "^2.4.7"
   },
   "devDependencies": {
     "all-contributors-cli": "^6.16.0",
