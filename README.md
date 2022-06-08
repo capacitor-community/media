@@ -6,22 +6,40 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/maintenance/yes/2020?style=flat-square" />
+  <img src="https://img.shields.io/maintenance/yes/2022?style=flat-square" />
   <a href="https://www.npmjs.com/package/@capacitor-community/media"><img src="https://img.shields.io/npm/l/@capacitor-community/media?style=flat-square" /></a>
 <br>
   <a href="https://www.npmjs.com/package/@capacitor-community/media"><img src="https://img.shields.io/npm/dw/@capacitor-community/media?style=flat-square" /></a>
   <a href="https://www.npmjs.com/package/@capacitor-community/media"><img src="https://img.shields.io/npm/v/@capacitor-community/media?style=flat-square" /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-2-orange?style=flat-square" /></a>
+<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-3-orange?style=flat-square" /></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 </p>
+
+## Sponsors
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://intenseloop.com">
+      <img src="https://static.intenseloop.com/assets/logo-512x512.png" width="40" />
+      </a>
+    </td>
+    <td>
+      <a href="https://intenseloop.com">
+      Intenseloop
+      </a>
+    </td>
+  </tr>
+</table>
+
 
 ## Maintainers
 
 | Maintainer   | GitHub                                | Social                                          |
 | ------------ | ------------------------------------- | ----------------------------------------------- |
-| Stewan Silva | [stewwan](https://github.com/stewwan) | [@StewanSilva](https://twitter.com/StewanSilva) |
+| Stewan Silva | [stewones](https://github.com/stewones) | [@StewanSilva](https://twitter.com/stewones) |
 
 ## Notice 🚀
 
@@ -112,6 +130,8 @@ Now you should be set to go. Try to run your client using `ionic cap run android
 
 ## Example
 
+Still WIP. Please send your PR with more examples!
+
 - https://github.com/capacitor-community/media/blob/master/example
 
 ## License
@@ -127,12 +147,13 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://twitter.com/StewanSilva"><img src="https://avatars1.githubusercontent.com/u/719763?v=4" width="75px;" alt=""/><br /><sub><b>Stew</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=stewwan" title="Code">💻</a> <a href="https://github.com/capacitor-community/media/commits?author=stewwan" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://github.com/zakton5"><img src="https://avatars1.githubusercontent.com/u/7013396?v=4" width="75px;" alt=""/><br /><sub><b>Zachary Keeton</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=zakton5" title="Code">💻</a></td>
+    <td align="center"><a href="https://twitter.com/StewanSilva"><img src="https://avatars1.githubusercontent.com/u/719763?v=4?s=75" width="75px;" alt=""/><br /><sub><b>Stew</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=stewwan" title="Code">💻</a> <a href="https://github.com/capacitor-community/media/commits?author=stewwan" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/zakton5"><img src="https://avatars1.githubusercontent.com/u/7013396?v=4?s=75" width="75px;" alt=""/><br /><sub><b>Zachary Keeton</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=zakton5" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/pgrimaud"><img src="https://avatars.githubusercontent.com/u/1866496?v=4?s=75" width="75px;" alt=""/><br /><sub><b>Pierre Grimaud</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=pgrimaud" title="Documentation">📖</a></td>
   </tr>
 </table>
 
-<!-- markdownlint-enable -->
+<!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
