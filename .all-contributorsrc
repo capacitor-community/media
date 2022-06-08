@@ -56,6 +56,16 @@
       "contributions": [
         "maintenance"
       ]
+    },
+    {
+      "login": "dragermrb",
+      "name": "Manuel Rodríguez",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11479696?v=4",
+      "profile": "https://github.com/dragermrb",
+      "contributions": [
+        "code",
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 5
