@@ -272,12 +272,12 @@ public class MediaPlugin: CAPPlugin {
         let albumId = call.getString("albumIdentifier")
 
         let quantity = call.getInt("quantity", MediaPlugin.DEFAULT_QUANTITY)
-
+        let ascending = call.getBool("ascending") ?? true
         var targetCollection: PHAssetCollection?
 
         let options = PHFetchOptions()
         options.fetchLimit = quantity
-        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+        options.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: ascending)]
 
         if albumId != nil {
             let albumFetchResult = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [albumId!], options: nil)
