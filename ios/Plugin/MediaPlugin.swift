@@ -1,6 +1,7 @@
 import Foundation
 import Photos
 import Capacitor
+import SDWebImage
 
 public class JSDate {
     static func toString(_ date: Date) -> String {
@@ -90,9 +91,17 @@ public class MediaPlugin: CAPPlugin {
             PHPhotoLibrary.shared().performChanges({
 
                 let url = URL(string: data)
-                let data = try? Data(contentsOf: url!)
+                var data = try? Data(contentsOf: url!)
                 if (data != nil) {
-                    let image = UIImage(data: data!)
+                    var image = UIImage(data: data!)
+                    data = image?.sd_imageData(as: .PNG)
+                    if (data != nil) {
+                        image = UIImage(data: data!)
+                    } else {
+                        call.reject("Image conversion failed")
+                        return
+                    }
+                    
                     let creationRequest = PHAssetChangeRequest.creationRequestForAsset(from: image!)
 
                     if let collection = targetCollection {
