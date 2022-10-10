@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Base64;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -26,6 +27,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -205,8 +207,28 @@ public class MediaPlugin extends Plugin {
             return;
         }
 
-        Uri inputUri = Uri.parse(inputPath);
-        File inputFile = new File(inputUri.getPath());
+        File inputFile;
+
+        if (inputPath.startsWith("data:")) {
+            try {
+                String base64EncodedString = inputPath.substring(inputPath.indexOf(",") + 1);
+                byte[] decodedBytes = Base64.decode(base64EncodedString, Base64.DEFAULT);
+                inputFile = File.createTempFile(
+                        "tmp",
+                        "." + inputPath.split("/", 2)[1].split(";", 2)[0],
+                        getContext().getCacheDir()
+                );
+                OutputStream os = new FileOutputStream(inputFile);
+                os.write(decodedBytes);
+                os.close();
+            } catch (Exception e) {
+                call.reject("Temporary file creation from data URL failed");
+                return;
+            }
+        } else {
+            Uri inputUri = Uri.parse(inputPath);
+            inputFile = new File(inputUri.getPath());
+        }
 
         String album = call.getString("album");
         File albumDir = null;
