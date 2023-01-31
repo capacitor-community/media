@@ -1,15 +1,8 @@
-# capacitor-media-example
+# Example Project
 
-Working sample
+### Usage
 
-## Quick Setup
-
-- git clone this repo
-- cd example
-- npm install
-
-Relevant code is located at `src/app/home`
-
-## license
-
-MIT
+```bash
+npm install
+ionic cap sync
+```

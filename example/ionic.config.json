@@ -1,7 +1,7 @@
 {
-  "name": "example",
+  "name": "Media Example",
   "integrations": {
     "capacitor": {}
   },
-  "type": "angular"
+  "type": "react"
 }
