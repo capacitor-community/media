@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Media</string>
+    <string name="title_activity_main">Capacitor Community Media Example</string>
+    <string name="package_name">io.capacitorcommunity.media</string>
+    <string name="custom_url_scheme">io.capacitorcommunity.media</string>
+</resources>
