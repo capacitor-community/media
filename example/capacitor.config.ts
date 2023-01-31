@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.capacitor-community.media',
+  appId: 'io.capacitorcommunity.media',
   appName: 'Capacitor Community Media Example',
   webDir: 'build',
   bundledWebRuntime: false
