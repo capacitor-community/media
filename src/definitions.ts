@@ -37,6 +37,25 @@ export interface MediaFetchOptions {
    * Which album identifier to query in (get identifier with getAlbums())
    */
   albumIdentifier?: string;
+  /**
+   * Sort order of returned assets by field and ascending/descending
+   */
+  sort?: MediaSort;
+}
+
+export interface MediaSort {
+  key:
+    | 'meidaType'
+    | 'mediaSubtypes'
+    | 'sourceType'
+    | 'pixelWidth'
+    | 'pixelHeight'
+    | 'creationDate'
+    | 'modificationDate'
+    | 'duration'
+    | 'isFavorite'
+    | 'hasAdjustments';
+  ascending: boolean;
 }
 
 export interface MediaResponse {
