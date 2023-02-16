@@ -40,23 +40,25 @@ export interface MediaFetchOptions {
   /**
    * Sort order of returned assets by field and ascending/descending
    */
-  sort?: string | MediaSort[];
+  sort?: MediaField | MediaSort[];
 }
 
 export interface MediaSort {
-  key:
-    | 'meidaType'
-    | 'mediaSubtypes'
-    | 'sourceType'
-    | 'pixelWidth'
-    | 'pixelHeight'
-    | 'creationDate'
-    | 'modificationDate'
-    | 'duration'
-    | 'isFavorite'
-    | 'hasAdjustments';
+  key: MediaField;
   ascending: boolean;
 }
+
+export type MediaField =
+  | 'meidaType'
+  | 'mediaSubtypes'
+  | 'sourceType'
+  | 'pixelWidth'
+  | 'pixelHeight'
+  | 'creationDate'
+  | 'modificationDate'
+  | 'duration'
+  | 'isFavorite'
+  | 'hasAdjustments';
 
 export interface MediaResponse {
   medias: MediaAsset[];
