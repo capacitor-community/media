@@ -40,7 +40,7 @@ export interface MediaFetchOptions {
   /**
    * Sort order of returned assets by field and ascending/descending
    */
-  sort?: MediaSort;
+  sort?: string | MediaSort[];
 }
 
 export interface MediaSort {
