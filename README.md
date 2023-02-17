@@ -109,6 +109,16 @@ album: this.platform.is('ios') ? album.identifier : album.name;
 - `npx cap add ios`
 - `npx cap open ios`
 - sign your app at xcode (general tab)
+- add the following key to `Info.plist.`:
+
+```xml
+<dict>
+  ...
+  <key>NSPhotoLibraryUsageDescription</key>
+  <string>Describe why you need access to the library</string>
+  ...
+</dict>
+```
 
 > Tip: every time you change a native code you may need to clean up the cache (Product > Clean build folder) and then run the app again.
 
