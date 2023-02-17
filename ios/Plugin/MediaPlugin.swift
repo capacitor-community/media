@@ -292,18 +292,15 @@ public class MediaPlugin: CAPPlugin {
         
         // Handle when sort is string
         if call.getString("sort") != nil {
-            print("sort is string");
             let key = call.getString("sort") ?? "creationDate"
             sortDescriptors.append(NSSortDescriptor(key: key, ascending: false))
         }
         // Handle when sort is an array
         else if let sortArray = call.getArray("sort") as? [[String: Any]] {
-            print("sort is array");
             for object in sortArray {
         
                 // Should have at least key for array value
                 if let key = object["key"] as? String {
-                    print("sort is array: has good key");
                     let ascending = object["ascending"] as? Bool ?? false
                     sortDescriptors.append(NSSortDescriptor(key: key, ascending: ascending))
                 }
@@ -313,7 +310,6 @@ public class MediaPlugin: CAPPlugin {
         // Check if sort descriptors is empty
         // it can happen because of validations inside the previous if, in this case, set a default value
         if sortDescriptors.isEmpty {
-            print("sort descriptors is empty");
             sortDescriptors.append(NSSortDescriptor(key: "creationDate", ascending: false))
         }
         
