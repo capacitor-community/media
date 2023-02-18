@@ -37,7 +37,28 @@ export interface MediaFetchOptions {
    * Which album identifier to query in (get identifier with getAlbums())
    */
   albumIdentifier?: string;
+  /**
+   * Sort order of returned assets by field and ascending/descending
+   */
+  sort?: MediaField | MediaSort[];
 }
+
+export interface MediaSort {
+  key: MediaField;
+  ascending: boolean;
+}
+
+export type MediaField =
+  | 'meidaType'
+  | 'mediaSubtypes'
+  | 'sourceType'
+  | 'pixelWidth'
+  | 'pixelHeight'
+  | 'creationDate'
+  | 'modificationDate'
+  | 'duration'
+  | 'isFavorite'
+  | 'hasAdjustments';
 
 export interface MediaResponse {
   medias: MediaAsset[];
