@@ -109,13 +109,13 @@ album: this.platform.is('ios') ? album.identifier : album.name;
 - `npx cap add ios`
 - `npx cap open ios`
 - sign your app at xcode (general tab)
-- add the following key to `Info.plist.`:
+- add the following to `Info.plist`:
 
 ```xml
 <dict>
   ...
   <key>NSPhotoLibraryUsageDescription</key>
-  <string>Describe why you need access to the library</string>
+  <string>Describe why you need access to user's photos</string>
   ...
 </dict>
 ```
