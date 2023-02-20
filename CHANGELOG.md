@@ -2,9 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## Breaking change
+## [4.1.0](https://github.com/capacitor-community/media/compare/v4.0.0-0...v4.1.0) (2023-02-20)
 
-- Android: replace `io.stewan.capacitor.media.MediaPlugin;` to `com.getcapacitor.community.media.MediaPlugin` in your `MainActivity.java`
+
+### Features
+
+* **get-medias/sort:** add option to customize sort on getMedias ([#37](https://github.com/capacitor-community/media/issues/37)) ([187b253](https://github.com/capacitor-community/media/commit/187b25308415403dc11637b0baa7bc199036735f))
 
 ### [1.0.1](https://github.com/capacitor-community/media/compare/v1.0.0...v1.0.1) (2020-07-01)
 
