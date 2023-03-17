@@ -11,15 +11,14 @@ const SavePhoto = () => {
 
     const savePhotoOnline = async () => {
         setStatus("");
-        const opts: MediaSaveOptions = { path: "https://imgs.xkcd.com/comics/tar.png" };
-        if (Capacitor.getPlatform() === "android") opts["album"] = "Demo Album";
+        let opts: MediaSaveOptions = { path: "https://imgs.xkcd.com/comics/tar.png" };
         await Media.savePhoto(opts);
         setStatus("Saved photo from URL!");
     };
 
     const savePhotoDataURI = async () => {
         setStatus("");
-        const opts: MediaSaveOptions = { path: dataURI };
+        let opts: MediaSaveOptions = { path: dataURI };
         if (Capacitor.getPlatform() === "android") opts["album"] = "Demo Album";
         await Media.savePhoto(opts);
         setStatus("Saved photo from data URI!");
@@ -32,13 +31,14 @@ const SavePhoto = () => {
         });
 
         console.log(image);
-        const opts: MediaSaveOptions = { path: image.path! };
+        let opts: MediaSaveOptions = { path: image.path! };
+        if (Capacitor.getPlatform() === "android") opts["album"] = "Demo Album";
         await Media.savePhoto(opts);
         setStatus("Saved photo from Camera!");
     };
 
     return <>
-        <IonButton onClick={savePhotoOnline}>Save Photo from online URL</IonButton>
+        { Capacitor.getPlatform() === "iOS" && <IonButton onClick={savePhotoOnline}>Save Photo from online URL (iOS only)</IonButton> }
         <IonButton onClick={savePhotoDataURI}>Save Photo from Data URI</IonButton>
         <IonButton onClick={saveTakenPhoto}>Save Photo from Camera</IonButton>
         <p>{ status }</p>

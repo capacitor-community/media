@@ -188,6 +188,7 @@ public class MediaPlugin extends Plugin {
         response.put("albums", albums);
         Log.d("DEBUG LOG", String.valueOf(response));
         Log.d("DEBUG LOG", "___GET ALBUMS FINISHED");
+        cur.close();
 
         call.resolve(response);
     }
