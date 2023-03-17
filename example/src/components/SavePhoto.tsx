@@ -44,10 +44,18 @@ const SavePhoto = () => {
         setStatus("Saved GIF from data URI!");
     };
 
+    const saveGIFOnline = async () => {
+        setStatus("");
+        let opts: MediaSaveOptions = { path: "https://i.ibb.co/Wpntz63/ship.gif" };
+        await Media.saveGif(opts);
+        setStatus("Saved GIF from data URI!");
+    };
+
     return <>
         { Capacitor.getPlatform() === "ios" && <IonButton onClick={savePhotoOnline}>Save Photo from online URL (iOS only)</IonButton> }
         <IonButton onClick={savePhotoDataURI}>Save Photo from Data URI</IonButton>
         <IonButton onClick={saveTakenPhoto}>Save Photo from Camera</IonButton>
+        { Capacitor.getPlatform() === "ios" && <IonButton onClick={saveGIFOnline}>Save GIF from online URL (iOS only)</IonButton> }
         <IonButton onClick={saveGIFDataURI}>Save GIF from Data URI</IonButton>
         <p>{ status }</p>
     </>;
