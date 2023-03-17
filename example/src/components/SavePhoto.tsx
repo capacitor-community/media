@@ -4,6 +4,7 @@ import { IonButton } from "@ionic/react";
 import { Capacitor } from "@capacitor/core";
 import { Camera, CameraResultType } from "@capacitor/camera";
 import { photoDataURI, gifDataURI } from "./data";
+import { FilePicker } from "@whiteguru/capacitor-plugin-file-picker";
 
 const SavePhoto = () => {
     const [status, setStatus] = useState<string>();
@@ -46,9 +47,23 @@ const SavePhoto = () => {
 
     const saveGIFOnline = async () => {
         setStatus("");
-        let opts: MediaSaveOptions = { path: "https://i.ibb.co/Wpntz63/ship.gif" };
+        let opts: MediaSaveOptions = { path: "https://upload.wikimedia.org/wikipedia/commons/2/2c/Rotating_earth_%28large%29.gif" };
         await Media.saveGif(opts);
         setStatus("Saved GIF from data URI!");
+    };
+
+    const saveTakenVideo = async () => {
+        setStatus("");
+        const videos = await FilePicker.pick({
+            mimes: ["video/*"],
+            multiple: false
+        });
+
+        let path = videos.files[0].path;
+        let opts: MediaSaveOptions = { path };
+        if (Capacitor.getPlatform() === "android") opts["album"] = "Demo Album";
+        await Media.saveVideo(opts);
+        setStatus("Re-saved video from camera roll!");
     };
 
     return <>
@@ -57,6 +72,7 @@ const SavePhoto = () => {
         <IonButton onClick={saveTakenPhoto}>Save Photo from Camera</IonButton>
         { Capacitor.getPlatform() === "ios" && <IonButton onClick={saveGIFOnline}>Save GIF from online URL (iOS only)</IonButton> }
         <IonButton onClick={saveGIFDataURI}>Save GIF from Data URI</IonButton>
+        <IonButton onClick={saveTakenVideo}>Save Previously Taken Video</IonButton>
         <p>{ status }</p>
     </>;
 };

@@ -21,6 +21,7 @@ const Home: React.FC = () => {
 
           <h3>Save Photo</h3>
           <SavePhoto />
+          <br /><br /><br /><br /><br /><br />
         </div>
       </IonContent>
     </IonPage>
