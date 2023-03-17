@@ -150,9 +150,27 @@ public class MediaPlugin: CAPPlugin {
         }
 
         checkAuthorization(allowed: {
+            var fileURL = URL(string: data)
+            if !data.starts(with: "file://") {
+                let directory = NSTemporaryDirectory()
+                var ext = "";
+                if data.starts(with: "data:") {
+                    ext = "." + data.split(separator: ";")[0].split(separator: "/")[1];
+                } else {
+                    ext = String(data[data.lastIndex(of: ".")!...])
+                }
+                let fileName = NSUUID().uuidString + ext;
+                print(fileName)
+                fileURL = NSURL.fileURL(withPathComponents: [directory, fileName])
+                
+                let url = URL(string: data)
+                let data = try! Data(contentsOf: url!)
+                try! data.write(to: fileURL!)
+            }
+            
             // Add it to the photo library.
             PHPhotoLibrary.shared().performChanges({
-                let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: URL(string: data)!)
+                let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: fileURL! as URL)
 
                 if let collection = targetCollection {
                     let addAssetRequest = PHAssetCollectionChangeRequest(for: collection)
@@ -160,6 +178,7 @@ public class MediaPlugin: CAPPlugin {
                 }
             }, completionHandler: {success, error in
                 if !success {
+                    print(error)
                     call.reject("Unable to save video to album")
                 } else {
                     //TODO: return fileUri
@@ -197,17 +216,20 @@ public class MediaPlugin: CAPPlugin {
         }
 
         checkAuthorization(allowed: {
-            // Add it to the photo library.
-            PHPhotoLibrary.shared().performChanges({
-                // Write to a temp location first -- required for playable GIFs
+            // Write to a temp location first if not on disk -- required for playable GIFs
+            var fileURL = URL(string: data)
+            if !data.starts(with: "file://") {
                 let directory = NSTemporaryDirectory()
                 let fileName = NSUUID().uuidString + ".gif"
-                let fileURL = NSURL.fileURL(withPathComponents: [directory, fileName])
+                fileURL = NSURL.fileURL(withPathComponents: [directory, fileName])
                 
                 let url = URL(string: data)
-                var data = try! Data(contentsOf: url!)
+                let data = try! Data(contentsOf: url!)
                 try! data.write(to: fileURL!)
-                
+            }
+            
+            // Add it to the photo library.
+            PHPhotoLibrary.shared().performChanges({
                 let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: fileURL! as URL)
 
                 if let collection = targetCollection {
