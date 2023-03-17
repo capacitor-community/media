@@ -199,8 +199,16 @@ public class MediaPlugin: CAPPlugin {
         checkAuthorization(allowed: {
             // Add it to the photo library.
             PHPhotoLibrary.shared().performChanges({
-
-                let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: URL(string: data)!)
+                // Write to a temp location first -- required for playable GIFs
+                let directory = NSTemporaryDirectory()
+                let fileName = NSUUID().uuidString + ".gif"
+                let fileURL = NSURL.fileURL(withPathComponents: [directory, fileName])
+                
+                let url = URL(string: data)
+                var data = try! Data(contentsOf: url!)
+                try! data.write(to: fileURL!)
+                
+                let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: fileURL! as URL)
 
                 if let collection = targetCollection {
                     let addAssetRequest = PHAssetCollectionChangeRequest(for: collection)
