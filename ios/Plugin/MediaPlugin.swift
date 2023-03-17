@@ -160,7 +160,6 @@ public class MediaPlugin: CAPPlugin {
                     ext = String(data[data.lastIndex(of: ".")!...])
                 }
                 let fileName = NSUUID().uuidString + ext;
-                print(fileName)
                 fileURL = NSURL.fileURL(withPathComponents: [directory, fileName])
                 
                 let url = URL(string: data)
@@ -178,7 +177,6 @@ public class MediaPlugin: CAPPlugin {
                 }
             }, completionHandler: {success, error in
                 if !success {
-                    print(error)
                     call.reject("Unable to save video to album")
                 } else {
                     //TODO: return fileUri
