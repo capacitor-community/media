@@ -88,30 +88,30 @@ public class MediaPlugin: CAPPlugin {
 
         checkAuthorization(allowed: {
             // Add it to the photo library.
-            PHPhotoLibrary.shared().performChanges({
-
-                let url = URL(string: data)
-                var data = try? Data(contentsOf: url!)
+            var image: UIImage? = nil;
+            let url = URL(string: data)
+            var data = try? Data(contentsOf: url!)
+            if (data != nil) {
+                image = UIImage(data: data!)
+                data = image?.sd_imageData(as: .PNG)
                 if (data != nil) {
-                    var image = UIImage(data: data!)
-                    data = image?.sd_imageData(as: .PNG)
-                    if (data != nil) {
-                        image = UIImage(data: data!)
-                    } else {
-                        call.reject("Image conversion failed")
-                        return
-                    }
-                    
-                    let creationRequest = PHAssetChangeRequest.creationRequestForAsset(from: image!)
-
-                    if let collection = targetCollection {
-                        let addAssetRequest = PHAssetCollectionChangeRequest(for: collection)
-                        addAssetRequest?.addAssets([creationRequest.placeholderForCreatedAsset! as Any] as NSArray)
-                    }
+                    image = UIImage(data: data!)
                 } else {
-                    call.reject("Could not convert fileURL into Data");
+                    call.reject("Image conversion failed")
+                    return
                 }
+            } else {
+                call.reject("Could not convert fileURL into Data");
+                return
+            }
+                
+            PHPhotoLibrary.shared().performChanges({
+                let creationRequest = PHAssetChangeRequest.creationRequestForAsset(from: image!)
 
+                if let collection = targetCollection {
+                    let addAssetRequest = PHAssetCollectionChangeRequest(for: collection)
+                    addAssetRequest?.addAssets([creationRequest.placeholderForCreatedAsset! as Any] as NSArray)
+                }
             }, completionHandler: {success, error in
                 if !success {
                     call.reject("Unable to save image to album")

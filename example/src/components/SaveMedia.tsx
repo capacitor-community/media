@@ -3,7 +3,7 @@ import { Media, MediaSaveOptions } from "@capacitor-community/media";
 import { IonButton } from "@ionic/react";
 import { Capacitor } from "@capacitor/core";
 import { Camera, CameraResultType } from "@capacitor/camera";
-import { photoDataURI, gifDataURI, videoDataURI } from "./data";
+import { photoDataURI, gifDataURI, videoDataURI, webpDataURI } from "./data";
 import { FilePicker } from "@whiteguru/capacitor-plugin-file-picker";
 
 const SaveMedia = () => {
@@ -23,6 +23,14 @@ const SaveMedia = () => {
         if (Capacitor.getPlatform() === "android") opts["album"] = "Demo Album";
         await Media.savePhoto(opts);
         setStatus("Saved photo from data URI!");
+    };
+
+    const saveWebPDataURI = async () => {
+        setStatus("");
+        let opts: MediaSaveOptions = { path: webpDataURI };
+        if (Capacitor.getPlatform() === "android") opts["album"] = "Demo Album";
+        await Media.savePhoto(opts);
+        setStatus("Saved WebP photo from data URI!");
     };
 
     const saveTakenPhoto = async () => {
@@ -88,6 +96,7 @@ const SaveMedia = () => {
     return <>
         <IonButton onClick={savePhotoOnline}>Save Photo from online URL</IonButton>
         <IonButton onClick={savePhotoDataURI}>Save Photo from Data URI</IonButton>
+        <IonButton onClick={saveWebPDataURI}>Save WebP from Data URI</IonButton>
         <IonButton onClick={saveTakenPhoto}>Save Photo from Camera</IonButton>
         <br />
         <IonButton onClick={saveGIFOnline}>Save GIF from online URL</IonButton>
