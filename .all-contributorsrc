@@ -98,6 +98,15 @@
         "example",
         "maintenance"
       ]
+    },
+    {
+      "login": "rdlabo",
+      "name": "Masahiko Sakakibara",
+      "avatar_url": "https://avatars.githubusercontent.com/u/9690024?v=4",
+      "profile": "https://rdlabo.jp/",
+      "contributions": [
+        "maintenance"
+      ]
     }
   ],
   "contributorsPerLine": 5

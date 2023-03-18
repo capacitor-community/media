@@ -12,7 +12,7 @@
   <a href="https://www.npmjs.com/package/@capacitor-community/media"><img src="https://img.shields.io/npm/dw/@capacitor-community/media?style=flat-square" /></a>
   <a href="https://www.npmjs.com/package/@capacitor-community/media"><img src="https://img.shields.io/npm/v/@capacitor-community/media?style=flat-square" /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-9-orange?style=flat-square" /></a>
+<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-10-orange?style=flat-square" /></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 </p>
@@ -367,6 +367,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="20%"><a href="https://github.com/Gr1zlY"><img src="https://avatars.githubusercontent.com/u/195971?v=4?s=75" width="75px;" alt="Michael"/><br /><sub><b>Michael</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=Gr1zlY" title="Code">💻</a></td>
       <td align="center" valign="top" width="20%"><a href="https://www.mtda.me/"><img src="https://avatars.githubusercontent.com/u/2229994?v=4?s=75" width="75px;" alt="Matheus Davidson"/><br /><sub><b>Matheus Davidson</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=matheusdavidson" title="Code">💻</a> <a href="https://github.com/capacitor-community/media/commits?author=matheusdavidson" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="20%"><a href="https://linkedin.com/in/nisala"><img src="https://avatars.githubusercontent.com/u/7347290?v=4?s=75" width="75px;" alt="Nisala Kalupahana"/><br /><sub><b>Nisala Kalupahana</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=nkalupahana" title="Code">💻</a> <a href="https://github.com/capacitor-community/media/commits?author=nkalupahana" title="Documentation">📖</a> <a href="#example-nkalupahana" title="Examples">💡</a> <a href="#maintenance-nkalupahana" title="Maintenance">🚧</a></td>
+      <td align="center" valign="top" width="20%"><a href="https://rdlabo.jp/"><img src="https://avatars.githubusercontent.com/u/9690024?v=4?s=75" width="75px;" alt="Masahiko Sakakibara"/><br /><sub><b>Masahiko Sakakibara</b></sub></a><br /><a href="#maintenance-rdlabo" title="Maintenance">🚧</a></td>
     </tr>
   </tbody>
 </table>
