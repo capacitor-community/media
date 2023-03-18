@@ -2,8 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [4.1.0](https://github.com/capacitor-community/media/compare/v4.0.0-0...v4.1.0) (2023-02-20)
+## [4.2.0](https://github.com/capacitor-community/media/compare/v4.1.0...4.2.0) (2023-03-17)
 
+This update:
+- Standardizes APIs: the iOS and Android versions of this plugin should have feature parity, bar `getMedias`.
+- Updates documentation: the README is now generated via `docgen`.
+- Gives code examples: almost all of the plugin's functionality can be tested using a new demo app.
+
+## [4.1.0](https://github.com/capacitor-community/media/compare/v4.0.0-0...v4.1.0) (2023-02-20)
 
 ### Features
 
