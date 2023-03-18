@@ -32,7 +32,7 @@ export interface MediaPlugin {
    * On Android and iOS, this supports web URLs, base64 encoded videos 
    * (e.g. data:image/mp4;base64,...), and local files.
    * On Android, all video formats supported by the user's photo viewer are supported.
-   * On iOS, the supported formats are based on iOS.
+   * On iOS, the supported formats are based on whatever iOS supports at the time.
    * 
    * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx#L65)
    */
@@ -41,7 +41,7 @@ export interface MediaPlugin {
    * Saves an animated GIF to the camera roll.
    * 
    * On Android and iOS, this supports web URLs, base64 encoded GIFs 
-   * (data:image/gif;base64,...), and local files.
+   * (e.g. data:image/gif;base64,...), and local files.
    * This only supports GIF files specifically.
    * 
    * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx#L49)
