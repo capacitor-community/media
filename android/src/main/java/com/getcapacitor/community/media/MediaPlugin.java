@@ -250,6 +250,7 @@ public class MediaPlugin extends Plugin {
             File fileInDownloads = new File(downloadsUri.getPath());
             inputFile = copyFile(fileInDownloads, getContext().getCacheDir());
             fileInDownloads.delete();
+            cursor.close();
         } else {
             Uri inputUri = Uri.parse(inputPath);
             inputFile = new File(inputUri.getPath());
