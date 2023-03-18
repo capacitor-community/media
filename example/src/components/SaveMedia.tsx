@@ -12,6 +12,7 @@ const SaveMedia = () => {
     const savePhotoOnline = async () => {
         setStatus("");
         let opts: MediaSaveOptions = { path: "https://imgs.xkcd.com/comics/tar.png" };
+        if (Capacitor.getPlatform() === "android") opts["album"] = "Demo Album";
         await Media.savePhoto(opts);
         setStatus("Saved photo from online source URL!");
     };
@@ -48,6 +49,7 @@ const SaveMedia = () => {
     const saveGIFOnline = async () => {
         setStatus("");
         let opts: MediaSaveOptions = { path: "https://upload.wikimedia.org/wikipedia/commons/2/2c/Rotating_earth_%28large%29.gif" };
+        if (Capacitor.getPlatform() === "android") opts["album"] = "Demo Album";
         await Media.saveGif(opts);
         setStatus("Saved GIF from online source URL!");
     };
@@ -58,6 +60,7 @@ const SaveMedia = () => {
             mimes: ["video/*"],
             multiple: false
         });
+        console.log(videos);
 
         let path = videos.files[0].path;
         let opts: MediaSaveOptions = { path };
@@ -77,19 +80,22 @@ const SaveMedia = () => {
     const saveVideoOnline = async () => {
         setStatus("");
         let opts: MediaSaveOptions = { path: "https://samplelib.com/lib/preview/mp4/sample-5s.mp4" };
+        if (Capacitor.getPlatform() === "android") opts["album"] = "Demo Album";
         await Media.saveVideo(opts);
         setStatus("Saved video from online source URL!");
     };
 
     return <>
-        { Capacitor.getPlatform() === "ios" && <IonButton onClick={savePhotoOnline}>Save Photo from online URL (iOS only)</IonButton> }
+        <IonButton onClick={savePhotoOnline}>Save Photo from online URL</IonButton>
         <IonButton onClick={savePhotoDataURI}>Save Photo from Data URI</IonButton>
         <IonButton onClick={saveTakenPhoto}>Save Photo from Camera</IonButton>
-        { Capacitor.getPlatform() === "ios" && <IonButton onClick={saveGIFOnline}>Save GIF from online URL (iOS only)</IonButton> }
+        <br />
+        <IonButton onClick={saveGIFOnline}>Save GIF from online URL</IonButton>
         <IonButton onClick={saveGIFDataURI}>Save GIF from Data URI</IonButton>
-        <IonButton onClick={saveTakenVideo}>Save Previously Taken Video</IonButton>
+        <br />
+        <IonButton onClick={saveVideoOnline}>Save Video from online URL</IonButton>
         <IonButton onClick={saveVideoURI}>Save Video from Data URI</IonButton>
-        { Capacitor.getPlatform() === "ios" && <IonButton onClick={saveVideoOnline}>Save Video from online URL (iOS only)</IonButton> }
+        <IonButton onClick={saveTakenVideo}>Save Previously Taken Video</IonButton>
         <p>{ status }</p>
     </>;
 };

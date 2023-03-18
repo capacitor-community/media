@@ -1,10 +1,13 @@
 package com.getcapacitor.community.media;
 
 import android.Manifest;
+import android.app.DownloadManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.SystemClock;
 import android.util.Base64;
 import android.os.Build;
 import android.os.Environment;
@@ -226,6 +229,27 @@ public class MediaPlugin extends Plugin {
                 call.reject("Temporary file creation from data URL failed");
                 return;
             }
+        } else if (inputPath.startsWith("http://") || inputPath.startsWith("https://")) {
+            DownloadManager manager = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
+            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(inputPath));
+            Uri inputUri = Uri.parse(inputPath);
+            String filename = inputUri.getLastPathSegment();
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename);
+
+            long requestID = manager.enqueue(request);
+            Uri result = null;
+            while (result == null) {
+                SystemClock.sleep(100);
+                result = manager.getUriForDownloadedFile(requestID);
+            }
+
+            final Cursor cursor = manager.query(new DownloadManager.Query().setFilterById(requestID));
+            cursor.moveToFirst();
+            inputPath = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
+            Uri downloadsUri = Uri.parse(inputPath);
+            File fileInDownloads = new File(downloadsUri.getPath());
+            inputFile = copyFile(fileInDownloads, getContext().getCacheDir());
+            fileInDownloads.delete();
         } else {
             Uri inputUri = Uri.parse(inputPath);
             inputFile = new File(inputUri.getPath());
