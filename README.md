@@ -12,7 +12,7 @@
   <a href="https://www.npmjs.com/package/@capacitor-community/media"><img src="https://img.shields.io/npm/dw/@capacitor-community/media?style=flat-square" /></a>
   <a href="https://www.npmjs.com/package/@capacitor-community/media"><img src="https://img.shields.io/npm/v/@capacitor-community/media?style=flat-square" /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-8-orange?style=flat-square" /></a>
+<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-10-orange?style=flat-square" /></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 </p>
@@ -39,8 +39,8 @@
 
 | Maintainer   | GitHub                                | Social                                          |
 | ------------ | ------------------------------------- | ----------------------------------------------- |
-| Stewan Silva | [stewones](https://github.com/stewones) | [@StewanSilva](https://twitter.com/stewones) |
 | Nisala Kalupahana | [nkalupahana](https://github.com/nkalupahana) | |
+| Stewan Silva | [stewones](https://github.com/stewones) | [@StewanSilva](https://twitter.com/stewones) |
 
 ## Notice 🚀
 
@@ -48,69 +48,275 @@ We're starting fresh under an official org. If you were using the previous npm p
 
 ## Installation
 
-Using npm:
+Run one of the following commands, based on what you're using:
 
 ```bash
-npm install @capacitor-community/media
+npm install @capacitor-community/media # NPM
+yarn add @capacitor-community/media # Yarn
 ```
 
-Using yarn:
-
-```bash
-yarn add @capacitor-community/media
-```
-
-Sync native files:
-
-```bash
-npx cap sync
-```
+After installing, be sure to sync by running `ionic cap sync`.
 
 ## API
 
-- savePhoto
-- saveVideo
-- saveGif
-- createAlbum
-- getAlbums
-- getMedias `only ios for now`
+Unless otherwise noted, there should be full feature parity between iOS and Android. Web is not supported.
 
-## Usage
+<docgen-index>
 
-```js
-import { Media } from '@capacitor-community/media';
+* [`getMedias(...)`](#getmedias)
+* [`getAlbums()`](#getalbums)
+* [`savePhoto(...)`](#savephoto)
+* [`saveVideo(...)`](#savevideo)
+* [`saveGif(...)`](#savegif)
+* [`createAlbum(...)`](#createalbum)
+* [Interfaces](#interfaces)
+* [Enums](#enums)
 
-//
-// Save video to a specific album
-Media.saveVideo({ path: '/path/to/the/file', album: 'My Album' })
-  .then(console.log) // on android it returns {filePath: 'uri to media'}
-  .catch(console.log);
+</docgen-index>
 
-//
-// Get a list of user albums
-Media.getAlbums()
-  .then(console.log) // -> { albums: [{name:'My Album', identifier:'A1-B2-C3-D4'}, {name:'My Another Album', identifier:'E5-F6-G7-H8'}]}
-  .catch(console.log);
+<docgen-api>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
+
+### getMedias(...)
+
+```typescript
+getMedias(options?: MediaFetchOptions | undefined) => Promise<MediaResponse>
 ```
 
-## Disclaimer
+Get filtered media from camera roll (pictures only currently). iOS only.
 
-Make sure you pass the correct album parameter according to the platform
+[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetMedias.tsx)
 
-```js
-album: this.platform.is('ios') ? album.identifier : album.name;
+| Param         | Type                                                            |
+| ------------- | --------------------------------------------------------------- |
+| **`options`** | <code><a href="#mediafetchoptions">MediaFetchOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#mediaresponse">MediaResponse</a>&gt;</code>
+
+--------------------
+
+
+### getAlbums()
+
+```typescript
+getAlbums() => Promise<MediaAlbumResponse>
 ```
 
-## iOS setup
+Get list of albums. 
 
-- `ionic start my-cap-app --capacitor`
-- `cd my-cap-app`
-- `npm install —-save @capacitor-community/media`
-- `mkdir www && touch www/index.html`
-- `npx cap add ios`
-- `npx cap open ios`
-- sign your app at xcode (general tab)
-- add the following to `Info.plist`:
+On Android, albums may only return if they have a photo in them.
+
+[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetAlbums.tsx)
+
+**Returns:** <code>Promise&lt;<a href="#mediaalbumresponse">MediaAlbumResponse</a>&gt;</code>
+
+--------------------
+
+
+### savePhoto(...)
+
+```typescript
+savePhoto(options?: MediaSaveOptions | undefined) => Promise<PhotoResponse>
+```
+
+Saves a photo to the camera roll.
+
+On Android and iOS, this supports web URLs, base64 encoded images 
+(e.g. data:image/jpeg;base64,...), and local files.
+On Android, all image formats supported by the user's photo viewer are supported.
+
+On iOS, [all image formats supported by SDWebImage are supported.](https://github.com/SDWebImage/SDWebImage#supported-image-formats)
+All images on iOS are converted to PNG for system compatability. 
+
+[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx#L12)
+
+| Param         | Type                                                          |
+| ------------- | ------------------------------------------------------------- |
+| **`options`** | <code><a href="#mediasaveoptions">MediaSaveOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#photoresponse">PhotoResponse</a>&gt;</code>
+
+--------------------
+
+
+### saveVideo(...)
+
+```typescript
+saveVideo(options?: MediaSaveOptions | undefined) => Promise<PhotoResponse>
+```
+
+Saves a video to the camera roll.
+
+On Android and iOS, this supports web URLs, base64 encoded videos 
+(e.g. data:image/mp4;base64,...), and local files.
+On Android, all video formats supported by the user's photo viewer are supported.
+On iOS, the supported formats are based on whatever iOS supports at the time.
+
+[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx#L65)
+
+| Param         | Type                                                          |
+| ------------- | ------------------------------------------------------------- |
+| **`options`** | <code><a href="#mediasaveoptions">MediaSaveOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#photoresponse">PhotoResponse</a>&gt;</code>
+
+--------------------
+
+
+### saveGif(...)
+
+```typescript
+saveGif(options?: MediaSaveOptions | undefined) => Promise<PhotoResponse>
+```
+
+Saves an animated GIF to the camera roll.
+
+On Android and iOS, this supports web URLs, base64 encoded GIFs 
+(e.g. data:image/gif;base64,...), and local files.
+This only supports GIF files specifically.
+
+[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx#L49)
+
+| Param         | Type                                                          |
+| ------------- | ------------------------------------------------------------- |
+| **`options`** | <code><a href="#mediasaveoptions">MediaSaveOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#photoresponse">PhotoResponse</a>&gt;</code>
+
+--------------------
+
+
+### createAlbum(...)
+
+```typescript
+createAlbum(options: MediaAlbumCreate) => Promise<void>
+```
+
+Creates an album.
+
+On Android, the album may only show up in `getAlbums()` 
+if it has a photo in it.
+
+[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/CreateDemoAlbum.tsx)
+
+| Param         | Type                                                          |
+| ------------- | ------------------------------------------------------------- |
+| **`options`** | <code><a href="#mediaalbumcreate">MediaAlbumCreate</a></code> |
+
+--------------------
+
+
+### Interfaces
+
+
+#### MediaResponse
+
+| Prop         | Type                      |
+| ------------ | ------------------------- |
+| **`medias`** | <code>MediaAsset[]</code> |
+
+
+#### MediaAsset
+
+| Prop                  | Type                                                    | Description                                                             |
+| --------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------- |
+| **`identifier`**      | <code>string</code>                                     | Platform-specific identifier                                            |
+| **`data`**            | <code>string</code>                                     | Data for a photo asset as a base64 encoded string (JPEG only supported) |
+| **`creationDate`**    | <code>string</code>                                     | ISO date string for creation date of asset                              |
+| **`fullWidth`**       | <code>number</code>                                     | Full width of original asset                                            |
+| **`fullHeight`**      | <code>number</code>                                     | Full height of original asset                                           |
+| **`thumbnailWidth`**  | <code>number</code>                                     | Width of thumbnail preview                                              |
+| **`thumbnailHeight`** | <code>number</code>                                     | Height of thumbnail preview                                             |
+| **`location`**        | <code><a href="#medialocation">MediaLocation</a></code> | Location metadata for the asset                                         |
+
+
+#### MediaLocation
+
+| Prop            | Type                | Description                              |
+| --------------- | ------------------- | ---------------------------------------- |
+| **`latitude`**  | <code>number</code> | GPS latitude image was taken at          |
+| **`longitude`** | <code>number</code> | GPS longitude image was taken at         |
+| **`heading`**   | <code>number</code> | Heading of user at time image was taken  |
+| **`altitude`**  | <code>number</code> | Altitude of user at time image was taken |
+| **`speed`**     | <code>number</code> | Speed of user at time image was taken    |
+
+
+#### MediaFetchOptions
+
+| Prop                   | Type                                                                                                                                                                                     | Description                                                           |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| **`quantity`**         | <code>number</code>                                                                                                                                                                      | The number of photos to fetch, sorted by last created date descending |
+| **`thumbnailWidth`**   | <code>number</code>                                                                                                                                                                      | The width of thumbnail to return                                      |
+| **`thumbnailHeight`**  | <code>number</code>                                                                                                                                                                      | The height of thumbnail to return                                     |
+| **`thumbnailQuality`** | <code>number</code>                                                                                                                                                                      | The quality of thumbnail to return as JPEG (0-100)                    |
+| **`types`**            | <code>"photos"</code>                                                                                                                                                                    | Which types of assets to return. Only photos supported currently.     |
+| **`albumIdentifier`**  | <code>string</code>                                                                                                                                                                      | Which album identifier to query in (get identifier with getAlbums())  |
+| **`sort`**             | <code>"mediaType" \| "mediaSubtypes" \| "sourceType" \| "pixelWidth" \| "pixelHeight" \| "creationDate" \| "modificationDate" \| "isFavorite" \| "burstIdentifier" \| MediaSort[]</code> | Sort order of returned assets by field and ascending/descending       |
+
+
+#### MediaSort
+
+| Prop            | Type                                                                                                                                                                      |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`key`**       | <code>"mediaType" \| "mediaSubtypes" \| "sourceType" \| "pixelWidth" \| "pixelHeight" \| "creationDate" \| "modificationDate" \| "isFavorite" \| "burstIdentifier"</code> |
+| **`ascending`** | <code>boolean</code>                                                                                                                                                      |
+
+
+#### MediaAlbumResponse
+
+| Prop         | Type                      |
+| ------------ | ------------------------- |
+| **`albums`** | <code>MediaAlbum[]</code> |
+
+
+#### MediaAlbum
+
+| Prop             | Type                                                      |
+| ---------------- | --------------------------------------------------------- |
+| **`identifier`** | <code>string</code>                                       |
+| **`name`**       | <code>string</code>                                       |
+| **`count`**      | <code>number</code>                                       |
+| **`type`**       | <code><a href="#mediaalbumtype">MediaAlbumType</a></code> |
+
+
+#### PhotoResponse
+
+| Prop           | Type                |
+| -------------- | ------------------- |
+| **`filePath`** | <code>string</code> |
+
+
+#### MediaSaveOptions
+
+| Prop        | Type                | Description                                                                       |
+| ----------- | ------------------- | --------------------------------------------------------------------------------- |
+| **`path`**  | <code>string</code> | Web URL, base64 encoded URI, or local file path to save.                          |
+| **`album`** | <code>string</code> | Album ID. On iOS, this is the album identifier. On Android, it is the album name. |
+
+
+#### MediaAlbumCreate
+
+| Prop       | Type                |
+| ---------- | ------------------- |
+| **`name`** | <code>string</code> |
+
+
+### Enums
+
+
+#### MediaAlbumType
+
+| Members      | Value                 | Description                                                    |
+| ------------ | --------------------- | -------------------------------------------------------------- |
+| **`Smart`**  | <code>'smart'</code>  | Album is a "smart" album (such as Favorites or Recently Added) |
+| **`Shared`** | <code>'shared'</code> | Album is a cloud-shared album                                  |
+| **`User`**   | <code>'user'</code>   | Album is a user-created album                                  |
+
+</docgen-api>
+
+## iOS
+
+You'll need to add the following to your app's `Info.plist` file:
 
 ```xml
 <dict>
@@ -120,34 +326,25 @@ album: this.platform.is('ios') ? album.identifier : album.name;
   ...
 </dict>
 ```
+## Android
 
-> Tip: every time you change a native code you may need to clean up the cache (Product > Clean build folder) and then run the app again.
+You'll need to add the following to your app's `AndroidManifest.xml` file:
 
-## Android setup
+```xml
+<manifest>
+  ...
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  ...
+</manifest>
+```
 
-- `ionic start my-cap-app --capacitor`
-- `cd my-cap-app`
-- `npm install —-save @capacitor-community/media`
-- `mkdir www && touch www/index.html`
-- `npx cap add android`
-- `npx cap open android`
-- `[extra step]` in android case we need to tell Capacitor to initialise the plugin:
+## Demo
 
-> on your `MainActivity.java` file add `import com.getcapacitor.community.media.MediaPlugin;` and then inside the init callback `add(MediaPlugin.class);`
+Go the the `example/` folder to play with an example app that should show all functionality of this plugin.
 
-Now you should be set to go. Try to run your client using `ionic cap run android --livereload`.
-
-> Tip: every time you change a native code you may need to clean up the cache (Build > Clean Project | Build > Rebuild Project) and then run the app again.
-
-## Example
-
-Still WIP. Please send your PR with more examples!
-
-- https://github.com/capacitor-community/media/blob/master/example
-
-## License
-
-MIT
+<img style="max-width: 250px" src="https://github.com/capacitor-community/media/blob/master/example_app.png?raw=true" />
 
 ## Contributors ✨
 
@@ -157,18 +354,22 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
-  <tr>
-    <td align="center"><a href="https://twitter.com/StewanSilva"><img src="https://avatars1.githubusercontent.com/u/719763?v=4?s=75" width="75px;" alt=""/><br /><sub><b>Stew</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=stewwan" title="Code">💻</a> <a href="https://github.com/capacitor-community/media/commits?author=stewwan" title="Documentation">📖</a> <a href="#maintenance-stewwan" title="Maintenance">🚧</a></td>
-    <td align="center"><a href="https://github.com/zakton5"><img src="https://avatars1.githubusercontent.com/u/7013396?v=4?s=75" width="75px;" alt=""/><br /><sub><b>Zachary Keeton</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=zakton5" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/pgrimaud"><img src="https://avatars.githubusercontent.com/u/1866496?v=4?s=75" width="75px;" alt=""/><br /><sub><b>Pierre Grimaud</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=pgrimaud" title="Documentation">📖</a></td>
-    <td align="center"><a href="https://www.kuau.com.br/"><img src="https://avatars.githubusercontent.com/u/14003158?v=4?s=75" width="75px;" alt=""/><br /><sub><b>Talles Alves</b></sub></a><br /><a href="#maintenance-tallesventura" title="Maintenance">🚧</a></td>
-    <td align="center"><a href="https://www.zyadyasser.net/"><img src="https://avatars.githubusercontent.com/u/38470992?v=4?s=75" width="75px;" alt=""/><br /><sub><b>Zyad Yasser</b></sub></a><br /><a href="#maintenance-zyad-yasser" title="Maintenance">🚧</a></td>
-  </tr>
-  <tr>
-    <td align="center"><a href="https://github.com/dragermrb"><img src="https://avatars.githubusercontent.com/u/11479696?v=4?s=75" width="75px;" alt=""/><br /><sub><b>Manuel Rodríguez</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=dragermrb" title="Code">💻</a> <a href="#maintenance-dragermrb" title="Maintenance">🚧</a></td>
-    <td align="center"><a href="https://github.com/Gr1zlY"><img src="https://avatars.githubusercontent.com/u/195971?v=4?s=75" width="75px;" alt=""/><br /><sub><b>Michael</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=Gr1zlY" title="Code">💻</a></td>
-    <td align="center"><a href="https://www.mtda.me/"><img src="https://avatars.githubusercontent.com/u/2229994?v=4?s=75" width="75px;" alt=""/><br /><sub><b>Matheus Davidson</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=matheusdavidson" title="Code">💻</a> <a href="https://github.com/capacitor-community/media/commits?author=matheusdavidson" title="Documentation">📖</a></td>
-  </tr>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://twitter.com/StewanSilva"><img src="https://avatars1.githubusercontent.com/u/719763?v=4?s=75" width="75px;" alt="Stew"/><br /><sub><b>Stew</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=stewwan" title="Code">💻</a> <a href="https://github.com/capacitor-community/media/commits?author=stewwan" title="Documentation">📖</a> <a href="#maintenance-stewwan" title="Maintenance">🚧</a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/zakton5"><img src="https://avatars1.githubusercontent.com/u/7013396?v=4?s=75" width="75px;" alt="Zachary Keeton"/><br /><sub><b>Zachary Keeton</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=zakton5" title="Code">💻</a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/pgrimaud"><img src="https://avatars.githubusercontent.com/u/1866496?v=4?s=75" width="75px;" alt="Pierre Grimaud"/><br /><sub><b>Pierre Grimaud</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=pgrimaud" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="20%"><a href="https://www.kuau.com.br/"><img src="https://avatars.githubusercontent.com/u/14003158?v=4?s=75" width="75px;" alt="Talles Alves"/><br /><sub><b>Talles Alves</b></sub></a><br /><a href="#maintenance-tallesventura" title="Maintenance">🚧</a></td>
+      <td align="center" valign="top" width="20%"><a href="https://www.zyadyasser.net/"><img src="https://avatars.githubusercontent.com/u/38470992?v=4?s=75" width="75px;" alt="Zyad Yasser"/><br /><sub><b>Zyad Yasser</b></sub></a><br /><a href="#maintenance-zyad-yasser" title="Maintenance">🚧</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/dragermrb"><img src="https://avatars.githubusercontent.com/u/11479696?v=4?s=75" width="75px;" alt="Manuel Rodríguez"/><br /><sub><b>Manuel Rodríguez</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=dragermrb" title="Code">💻</a> <a href="#maintenance-dragermrb" title="Maintenance">🚧</a></td>
+      <td align="center" valign="top" width="20%"><a href="https://github.com/Gr1zlY"><img src="https://avatars.githubusercontent.com/u/195971?v=4?s=75" width="75px;" alt="Michael"/><br /><sub><b>Michael</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=Gr1zlY" title="Code">💻</a></td>
+      <td align="center" valign="top" width="20%"><a href="https://www.mtda.me/"><img src="https://avatars.githubusercontent.com/u/2229994?v=4?s=75" width="75px;" alt="Matheus Davidson"/><br /><sub><b>Matheus Davidson</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=matheusdavidson" title="Code">💻</a> <a href="https://github.com/capacitor-community/media/commits?author=matheusdavidson" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="20%"><a href="https://linkedin.com/in/nisala"><img src="https://avatars.githubusercontent.com/u/7347290?v=4?s=75" width="75px;" alt="Nisala Kalupahana"/><br /><sub><b>Nisala Kalupahana</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=nkalupahana" title="Code">💻</a> <a href="https://github.com/capacitor-community/media/commits?author=nkalupahana" title="Documentation">📖</a> <a href="#example-nkalupahana" title="Examples">💡</a> <a href="#maintenance-nkalupahana" title="Maintenance">🚧</a></td>
+      <td align="center" valign="top" width="20%"><a href="https://rdlabo.jp/"><img src="https://avatars.githubusercontent.com/u/9690024?v=4?s=75" width="75px;" alt="Masahiko Sakakibara"/><br /><sub><b>Masahiko Sakakibara</b></sub></a><br /><a href="#maintenance-rdlabo" title="Maintenance">🚧</a></td>
+    </tr>
+  </tbody>
 </table>
 
 <!-- markdownlint-restore -->

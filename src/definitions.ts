@@ -1,14 +1,72 @@
 export interface MediaPlugin {
+  /**
+    * Get filtered media from camera roll (pictures only currently). iOS only.
+    * 
+    * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetMedias.tsx)
+    */
   getMedias(options?: MediaFetchOptions): Promise<MediaResponse>;
+  /**
+    * Get list of albums. 
+    * 
+    * On Android, albums may only return if they have a photo in them.
+    * 
+    * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetAlbums.tsx)
+    */
   getAlbums(): Promise<MediaAlbumResponse>;
+  /**
+   * Saves a photo to the camera roll.
+   * 
+   * On Android and iOS, this supports web URLs, base64 encoded images 
+   * (e.g. data:image/jpeg;base64,...), and local files.
+   * On Android, all image formats supported by the user's photo viewer are supported.
+   * 
+   * On iOS, [all image formats supported by SDWebImage are supported.](https://github.com/SDWebImage/SDWebImage#supported-image-formats)
+   * All images on iOS are converted to PNG for system compatability. 
+   * 
+   * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx#L12)
+   */
   savePhoto(options?: MediaSaveOptions): Promise<PhotoResponse>;
+  /**
+   * Saves a video to the camera roll.
+   * 
+   * On Android and iOS, this supports web URLs, base64 encoded videos 
+   * (e.g. data:image/mp4;base64,...), and local files.
+   * On Android, all video formats supported by the user's photo viewer are supported.
+   * On iOS, the supported formats are based on whatever iOS supports at the time.
+   * 
+   * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx#L65)
+   */
   saveVideo(options?: MediaSaveOptions): Promise<PhotoResponse>;
+  /**
+   * Saves an animated GIF to the camera roll.
+   * 
+   * On Android and iOS, this supports web URLs, base64 encoded GIFs 
+   * (e.g. data:image/gif;base64,...), and local files.
+   * This only supports GIF files specifically.
+   * 
+   * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx#L49)
+   */
   saveGif(options?: MediaSaveOptions): Promise<PhotoResponse>;
+  /**
+   * Creates an album.
+   * 
+   * On Android, the album may only show up in `getAlbums()` 
+   * if it has a photo in it.
+   * 
+   * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/CreateDemoAlbum.tsx)
+   */
   createAlbum(options: MediaAlbumCreate): Promise<void>;
 }
 
 export interface MediaSaveOptions {
+  /**
+   * Web URL, base64 encoded URI, or local file path to save.
+   */
   path: string;
+  /**
+   * Album ID. On iOS, this is the album identifier. 
+   * On Android, it is the album name.
+   */
   album?: string;
 }
 
@@ -30,9 +88,9 @@ export interface MediaFetchOptions {
    */
   thumbnailQuality?: number;
   /**
-   * Which types of assets to return (currently only supports "photos")
+   * Which types of assets to return. Only photos supported currently.
    */
-  types?: string;
+  types?: "photos";
   /**
    * Which album identifier to query in (get identifier with getAlbums())
    */
@@ -48,7 +106,11 @@ export interface MediaSort {
   ascending: boolean;
 }
 
-// https://developer.apple.com/documentation/photokit/phfetchoptions
+/**
+ * Attributes to sort media by.
+ * 
+ * [iOS Source](https://developer.apple.com/documentation/photokit/phfetchoptions)
+ */
 export type MediaField =
   | 'mediaType'
   | 'mediaSubtypes'
