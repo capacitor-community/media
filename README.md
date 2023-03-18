@@ -344,7 +344,7 @@ You'll need to add the following to your app's `AndroidManifest.xml` file:
 
 Go the the `example/` folder to play with an example app that should show all functionality of this plugin.
 
-<img style="max-width: 250px" src="https://github.com/capacitor-community/media/blob/master/example_app.png?raw=true" />
+<img style="width: 250px" src="https://github.com/capacitor-community/media/blob/master/example_app.png?raw=true" />
 
 ## Contributors ✨
 
