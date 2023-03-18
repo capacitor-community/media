@@ -40,6 +40,7 @@
 | Maintainer   | GitHub                                | Social                                          |
 | ------------ | ------------------------------------- | ----------------------------------------------- |
 | Stewan Silva | [stewones](https://github.com/stewones) | [@StewanSilva](https://twitter.com/stewones) |
+| Nisala Kalupahana | [nkalupahana](https://github.com/nkalupahana) | |
 
 ## Notice 🚀
 

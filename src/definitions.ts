@@ -48,17 +48,17 @@ export interface MediaSort {
   ascending: boolean;
 }
 
+// https://developer.apple.com/documentation/photokit/phfetchoptions
 export type MediaField =
-  | 'meidaType'
+  | 'mediaType'
   | 'mediaSubtypes'
   | 'sourceType'
   | 'pixelWidth'
   | 'pixelHeight'
   | 'creationDate'
   | 'modificationDate'
-  | 'duration'
   | 'isFavorite'
-  | 'hasAdjustments';
+  | 'burstIdentifier';
 
 export interface MediaResponse {
   medias: MediaAsset[];

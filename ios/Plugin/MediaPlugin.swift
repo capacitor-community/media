@@ -88,30 +88,30 @@ public class MediaPlugin: CAPPlugin {
 
         checkAuthorization(allowed: {
             // Add it to the photo library.
-            PHPhotoLibrary.shared().performChanges({
-
-                let url = URL(string: data)
-                var data = try? Data(contentsOf: url!)
+            var image: UIImage? = nil;
+            let url = URL(string: data)
+            var data = try? Data(contentsOf: url!)
+            if (data != nil) {
+                image = UIImage(data: data!)
+                data = image?.sd_imageData(as: .PNG)
                 if (data != nil) {
-                    var image = UIImage(data: data!)
-                    data = image?.sd_imageData(as: .PNG)
-                    if (data != nil) {
-                        image = UIImage(data: data!)
-                    } else {
-                        call.reject("Image conversion failed")
-                        return
-                    }
-                    
-                    let creationRequest = PHAssetChangeRequest.creationRequestForAsset(from: image!)
-
-                    if let collection = targetCollection {
-                        let addAssetRequest = PHAssetCollectionChangeRequest(for: collection)
-                        addAssetRequest?.addAssets([creationRequest.placeholderForCreatedAsset! as Any] as NSArray)
-                    }
+                    image = UIImage(data: data!)
                 } else {
-                    call.reject("Could not convert fileURL into Data");
+                    call.reject("Image conversion failed")
+                    return
                 }
+            } else {
+                call.reject("Could not convert fileURL into Data");
+                return
+            }
+                
+            PHPhotoLibrary.shared().performChanges({
+                let creationRequest = PHAssetChangeRequest.creationRequestForAsset(from: image!)
 
+                if let collection = targetCollection {
+                    let addAssetRequest = PHAssetCollectionChangeRequest(for: collection)
+                    addAssetRequest?.addAssets([creationRequest.placeholderForCreatedAsset! as Any] as NSArray)
+                }
             }, completionHandler: {success, error in
                 if !success {
                     call.reject("Unable to save image to album")
@@ -150,9 +150,26 @@ public class MediaPlugin: CAPPlugin {
         }
 
         checkAuthorization(allowed: {
+            var fileURL = URL(string: data)
+            if !data.starts(with: "file://") {
+                let directory = NSTemporaryDirectory()
+                var ext = "";
+                if data.starts(with: "data:") {
+                    ext = "." + data.split(separator: ";")[0].split(separator: "/")[1];
+                } else {
+                    ext = String(data[data.lastIndex(of: ".")!...])
+                }
+                let fileName = NSUUID().uuidString + ext;
+                fileURL = NSURL.fileURL(withPathComponents: [directory, fileName])
+                
+                let url = URL(string: data)
+                let data = try! Data(contentsOf: url!)
+                try! data.write(to: fileURL!)
+            }
+            
             // Add it to the photo library.
             PHPhotoLibrary.shared().performChanges({
-                let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: URL(string: data)!)
+                let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: fileURL! as URL)
 
                 if let collection = targetCollection {
                     let addAssetRequest = PHAssetCollectionChangeRequest(for: collection)
@@ -197,10 +214,21 @@ public class MediaPlugin: CAPPlugin {
         }
 
         checkAuthorization(allowed: {
+            // Write to a temp location first if not on disk -- required for playable GIFs
+            var fileURL = URL(string: data)
+            if !data.starts(with: "file://") {
+                let directory = NSTemporaryDirectory()
+                let fileName = NSUUID().uuidString + ".gif"
+                fileURL = NSURL.fileURL(withPathComponents: [directory, fileName])
+                
+                let url = URL(string: data)
+                let data = try! Data(contentsOf: url!)
+                try! data.write(to: fileURL!)
+            }
+            
             // Add it to the photo library.
             PHPhotoLibrary.shared().performChanges({
-
-                let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: URL(string: data)!)
+                let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: fileURL! as URL)
 
                 if let collection = targetCollection {
                     let addAssetRequest = PHAssetCollectionChangeRequest(for: collection)
