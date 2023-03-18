@@ -59,6 +59,8 @@ After installing, be sure to sync by running `ionic cap sync`.
 
 ## API
 
+Unless otherwise noted, there should be full feature parity between iOS and Android. Web is not supported.
+
 <docgen-index>
 
 * [`getMedias(...)`](#getmedias)
@@ -344,7 +346,7 @@ You'll need to add the following to your app's `AndroidManifest.xml` file:
 
 Go the the `example/` folder to play with an example app that should show all functionality of this plugin.
 
-<img src="https://github.com/capacitor-community/media/blob/master/example_app.png?raw=true" />
+<img style="max-width: 250px" src="https://github.com/capacitor-community/media/blob/master/example_app.png?raw=true" />
 
 ## Contributors ✨
 
