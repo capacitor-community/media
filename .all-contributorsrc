@@ -86,6 +86,21 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "nkalupahana",
+      "name": "Nisala Kalupahana",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7347290?v=4",
+      "profile": "https://linkedin.com/in/nisala",
+      "contributions": [
+        "question",
+        "code",
+        "doc",
+        "example",
+        "maintenance",
+        "review",
+        "userTesting"
+      ]
     }
   ],
   "contributorsPerLine": 5
