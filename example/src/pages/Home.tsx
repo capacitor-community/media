@@ -1,7 +1,9 @@
+import { Capacitor } from '@capacitor/core';
 import { IonPage, IonContent } from '@ionic/react';
 import CreateDemoAlbum from '../components/CreateDemoAlbum';
 import GetAlbums from '../components/GetAlbums';
-import SavePhoto from '../components/SavePhoto';
+import GetMedias from '../components/GetMedias';
+import SaveMedia from '../components/SaveMedia';
 import './Home.css';
 
 const Home: React.FC = () => {
@@ -19,8 +21,13 @@ const Home: React.FC = () => {
           <h3>Create Album</h3>
           <CreateDemoAlbum />
 
-          <h3>Save Photo</h3>
-          <SavePhoto />
+          <h3>Save Media</h3>
+          <SaveMedia />
+
+          { Capacitor.getPlatform() === "ios" && <>
+            <h3>Get Images</h3>
+            <GetMedias />
+          </> }
           <br /><br /><br /><br /><br /><br />
         </div>
       </IonContent>

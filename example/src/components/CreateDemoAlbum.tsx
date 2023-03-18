@@ -6,6 +6,7 @@ const CreateDemoAlbum = () => {
     const [status, setStatus] = useState<string>();
 
     const createAlbum = async () => {
+        setStatus("");
         const random = Math.random();
         await Media.createAlbum({ name: `Demo Album ${random}` });
         setStatus(`Created album: Demo Album ${random}`);

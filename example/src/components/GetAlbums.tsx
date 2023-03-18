@@ -6,6 +6,7 @@ const GetAlbums = () => {
     const [albums, setAlbums] = useState<MediaAlbum[]>([]);
 
     const getAlbums = async () => {
+        setAlbums([]);
         const { albums } = await Media.getAlbums();
         setAlbums(albums);
     };

@@ -6,7 +6,7 @@ import { Camera, CameraResultType } from "@capacitor/camera";
 import { photoDataURI, gifDataURI, videoDataURI } from "./data";
 import { FilePicker } from "@whiteguru/capacitor-plugin-file-picker";
 
-const SavePhoto = () => {
+const SaveMedia = () => {
     const [status, setStatus] = useState<string>();
 
     const savePhotoOnline = async () => {
@@ -94,4 +94,4 @@ const SavePhoto = () => {
     </>;
 };
 
-export default SavePhoto;
+export default SaveMedia;
