@@ -4,7 +4,7 @@ import { IonButton } from "@ionic/react";
 import { Capacitor } from "@capacitor/core";
 import { Camera, CameraResultType } from "@capacitor/camera";
 import { photoDataURI, gifDataURI, videoDataURI, webpDataURI } from "./data";
-import { FilePicker } from "@whiteguru/capacitor-plugin-file-picker";
+//import { FilePicker } from "@whiteguru/capacitor-plugin-file-picker";
 
 const SaveMedia = () => {
     const [status, setStatus] = useState<string>();
@@ -63,8 +63,8 @@ const SaveMedia = () => {
     };
 
     const saveTakenVideo = async () => {
-        setStatus("");
-        const videos = await FilePicker.pick({
+        setStatus("Waiting for Capacitor 5 upgrade!");
+        /*const videos = await FilePicker.pick({
             mimes: ["video/*"],
             multiple: false
         });
@@ -74,7 +74,7 @@ const SaveMedia = () => {
         let opts: MediaSaveOptions = { path };
         if (Capacitor.getPlatform() === "android") opts["album"] = "Demo Album";
         await Media.saveVideo(opts);
-        setStatus("Re-saved video from camera roll!");
+        setStatus("Re-saved video from camera roll!");*/
     };
 
     const saveVideoURI = async () => {
