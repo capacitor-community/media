@@ -50,9 +50,6 @@ public class MediaPlugin extends Plugin {
 
     private static final String PERMISSION_DENIED_ERROR = "Unable to access media, user denied permission request";
 
-    private static final String MOVIES = "MOVIES";
-    private static final String PICTURES = "PICTURES";
-
     private static final Integer API_LEVEL_29 = 29;
 
     // @todo
@@ -79,7 +76,7 @@ public class MediaPlugin extends Plugin {
         Log.d("DEBUG LOG", "SAVE PHOTO TO ALBUM");
         if (isStoragePermissionGranted()) {
             Log.d("DEBUG LOG", "HAS PERMISSION");
-            _saveMedia(call, PICTURES);
+            _saveMedia(call);
         } else {
             Log.d("DEBUG LOG", "NOT ALLOWED");
             this.bridge.saveCall(call);
@@ -93,7 +90,7 @@ public class MediaPlugin extends Plugin {
         Log.d("DEBUG LOG", "SAVE VIDEO TO ALBUM");
         if (isStoragePermissionGranted()) {
             Log.d("DEBUG LOG", "HAS PERMISSION");
-            _saveMedia(call, MOVIES);
+            _saveMedia(call);
         } else {
             Log.d("DEBUG LOG", "NOT ALLOWED");
             this.bridge.saveCall(call);
@@ -106,7 +103,7 @@ public class MediaPlugin extends Plugin {
         Log.d("DEBUG LOG", "SAVE GIF TO ALBUM");
         if (isStoragePermissionGranted()) {
             Log.d("DEBUG LOG", "HAS PERMISSION");
-            _saveMedia(call, PICTURES);
+            _saveMedia(call);
         } else {
             Log.d("DEBUG LOG", "NOT ALLOWED");
             this.bridge.saveCall(call);
@@ -136,24 +133,10 @@ public class MediaPlugin extends Plugin {
         }
 
         switch (call.getMethodName()) {
-            case "getMedias":
-                call.unimplemented();
-                break;
-            case "getAlbums":
-                _getAlbums(call);
-                break;
-            case "savePhoto":
-                _saveMedia(call, "PICTURES");
-                break;
-            case "saveVideo":
-                _saveMedia(call, "MOVIES");
-                break;
-            case "saveGif":
-                _saveMedia(call, "PICTURES");
-                break;
-            case "createAlbum":
-                _createAlbum(call);
-                break;
+            case "getMedias" -> call.unimplemented();
+            case "getAlbums" -> _getAlbums(call);
+            case "savePhoto", "saveVideo", "saveGif" -> _saveMedia(call);
+            case "createAlbum" -> _createAlbum(call);
         }
     }
 
@@ -196,14 +179,7 @@ public class MediaPlugin extends Plugin {
         call.resolve(response);
     }
 
-    private void _saveMedia(PluginCall call, String destination) {
-        String dest;
-        if (destination == MOVIES) {
-            dest = Environment.DIRECTORY_MOVIES;
-        } else {
-            dest = Environment.DIRECTORY_PICTURES;
-        }
-
+    private void _saveMedia(PluginCall call) {
         Log.d("DEBUG LOG", "___SAVE MEDIA TO ALBUM");
         String inputPath = call.getString("path");
         if (inputPath == null) {
@@ -264,10 +240,8 @@ public class MediaPlugin extends Plugin {
         if (Build.VERSION.SDK_INT >= API_LEVEL_29) {
             albumPath = getContext().getExternalMediaDirs()[0].getAbsolutePath();
         } else {
-            albumPath = Environment.getExternalStoragePublicDirectory(dest).getAbsolutePath();
+            albumPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
         }
-
-        // Log.d("ENV LOG", String.valueOf(getContext().getExternalMediaDirs()));
 
         if (album != null) {
             albumDir = new File(albumPath, album);
