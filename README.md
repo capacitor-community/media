@@ -288,10 +288,10 @@ if it has a photo in it.
 
 #### MediaSaveOptions
 
-| Prop        | Type                | Description                                                                       |
-| ----------- | ------------------- | --------------------------------------------------------------------------------- |
-| **`path`**  | <code>string</code> | Web URL, base64 encoded URI, or local file path to save.                          |
-| **`album`** | <code>string</code> | Album ID. On iOS, this is the album identifier. On Android, it is the album name. |
+| Prop                  | Type                | Description                                                                                                                                 |
+| --------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`path`**            | <code>string</code> | Web URL, base64 encoded URI, or local file path to save.                                                                                    |
+| **`albumIdentifier`** | <code>string</code> | Album identifier from getAlbums(). Since 5.0, identifier is used on both Android and iOS. Identifier is required on Android but not on iOS. |
 
 
 #### MediaAlbumCreate

@@ -64,10 +64,11 @@ export interface MediaSaveOptions {
    */
   path: string;
   /**
-   * Album ID. On iOS, this is the album identifier. 
-   * On Android, it is the album name.
+   * Album identifier from getAlbums().
+   * Since 5.0, identifier is used on both Android and iOS.
+   * Identifier is required on Android but not on iOS.
    */
-  album?: string;
+  albumIdentifier?: string;
 }
 
 export interface MediaFetchOptions {

@@ -13,7 +13,7 @@ const GetMedias = () => {
 
     const getNineMedias = async () => {
         setMedias([]);
-        const medias = await Media.getMedias({ quantity: 9, types: "videos" });
+        const medias = await Media.getMedias({ quantity: 9, types: "photos" });
         setMedias(medias.medias);
     };
 

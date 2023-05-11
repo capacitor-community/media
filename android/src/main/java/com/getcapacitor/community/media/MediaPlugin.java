@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.SystemClock;
@@ -152,8 +151,9 @@ public class MediaPlugin extends Plugin {
         Set<String> bucketIds = new HashSet<String>();
 
         String[] projection = new String[] {
-          MediaStore.MediaColumns.BUCKET_DISPLAY_NAME,
-          MediaStore.MediaColumns.BUCKET_ID
+            MediaStore.MediaColumns.BUCKET_DISPLAY_NAME,
+            MediaStore.MediaColumns.BUCKET_ID,
+            MediaStore.MediaColumns.DATA
         };
         Cursor cur = getActivity().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, null);
 
@@ -161,13 +161,27 @@ public class MediaPlugin extends Plugin {
             String albumName = cur.getString((cur.getColumnIndex(MediaStore.MediaColumns.BUCKET_DISPLAY_NAME)));
             String bucketId = cur.getString((cur.getColumnIndex(MediaStore.MediaColumns.BUCKET_ID)));
 
-            if (!bucketIds.contains(bucketId)){
-              JSObject album = new JSObject();
+            if (!bucketIds.contains(bucketId)) {
+                String path = cur.getString((cur.getColumnIndex(MediaStore.MediaColumns.DATA)));
+                File fileForPath = new File(path);
+                JSObject album = new JSObject();
 
-              album.put("name", albumName);
-              albums.put(album);
+                album.put("name", albumName);
+                album.put("identifier", fileForPath.getParent());
+                albums.put(album);
 
-              bucketIds.add(bucketId);
+                bucketIds.add(bucketId);
+            }
+        }
+
+        File albumPath = new File(getAlbumPath());
+        for (File sub : albumPath.listFiles()) {
+            if (sub.isDirectory() && sub.listFiles().length == 0) {
+                JSObject album = new JSObject();
+
+                album.put("name", sub.getName());
+                album.put("identifier", sub.getAbsolutePath());
+                albums.put(album);
             }
         }
 
@@ -177,6 +191,14 @@ public class MediaPlugin extends Plugin {
         cur.close();
 
         call.resolve(response);
+    }
+
+    private String getAlbumPath() {
+        if (Build.VERSION.SDK_INT >= API_LEVEL_29) {
+            return getContext().getExternalMediaDirs()[0].getAbsolutePath();
+        } else {
+            return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
+        }
     }
 
     private void _saveMedia(PluginCall call) {
@@ -234,19 +256,18 @@ public class MediaPlugin extends Plugin {
 
         String album = call.getString("album");
         File albumDir = null;
-        String albumPath;
         Log.d("SDK BUILD VERSION", String.valueOf(Build.VERSION.SDK_INT));
 
-        if (Build.VERSION.SDK_INT >= API_LEVEL_29) {
-            albumPath = getContext().getExternalMediaDirs()[0].getAbsolutePath();
+        if (album != null) {
+            albumDir = new File(album);
         } else {
-            albumPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
+            call.error("Album identifier required");
+            return;
         }
 
-        if (album != null) {
-            albumDir = new File(albumPath, album);
-        } else {
-            call.error("album name required");
+        if (!albumDir.exists() || !albumDir.isDirectory()) {
+            call.error("Album identifier does not exist, use getAlbums() to get");
+            return;
         }
 
         Log.d("ENV LOG - ALBUM DIR", String.valueOf(albumDir));

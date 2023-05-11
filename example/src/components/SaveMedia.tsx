@@ -63,12 +63,11 @@ const SaveMedia = () => {
     };
 
     const saveTakenVideo = async () => {
-        setStatus("Waiting for Capacitor 5 upgrade!");
+        setStatus("");
         const videos = await FilePicker.pick({
             mimes: ["video/*"],
             multiple: false
         });
-        console.log(videos);
 
         let path = videos.files[0].path;
         let opts: MediaSaveOptions = { path };
