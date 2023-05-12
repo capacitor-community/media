@@ -8,8 +8,6 @@ export interface MediaPlugin {
   /**
     * Get list of albums. 
     * 
-    * On Android, albums may only return if they have a photo in them.
-    * 
     * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetAlbums.tsx)
     */
   getAlbums(): Promise<MediaAlbumResponse>;
@@ -50,9 +48,6 @@ export interface MediaPlugin {
   /**
    * Creates an album.
    * 
-   * On Android, the album may only show up in `getAlbums()` 
-   * if it has a photo in it.
-   * 
    * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/CreateDemoAlbum.tsx)
    */
   createAlbum(options: MediaAlbumCreate): Promise<void>;
@@ -64,10 +59,11 @@ export interface MediaSaveOptions {
    */
   path: string;
   /**
-   * Album ID. On iOS, this is the album identifier. 
-   * On Android, it is the album name.
+   * Album identifier from getAlbums().
+   * Since 5.0, identifier is used on both Android and iOS.
+   * Identifier is required on Android but not on iOS.
    */
-  album?: string;
+  albumIdentifier?: string;
 }
 
 export interface MediaFetchOptions {
@@ -189,9 +185,8 @@ export interface MediaAlbumResponse {
 }
 
 export interface MediaAlbum {
-  identifier?: string;
+  identifier: string;
   name: string;
-  count?: number;
   type?: MediaAlbumType;
 }
 

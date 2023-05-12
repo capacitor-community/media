@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.0](https://github.com/capacitor-community/media/compare/4.2.0...v5.0.0) (2023-05-11)
+- Updates to Capacitor 5
+- Returns album identifiers on Android
+- BREAKING: Requires album identifiers instead of album name to add media to albums on Android
+- Returns empty album names on Android
+
 ## [4.2.0](https://github.com/capacitor-community/media/compare/v4.1.0...4.2.0) (2023-03-17)
 
 This update:

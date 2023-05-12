@@ -34,17 +34,12 @@
   </tr>
 </table>
 
-
 ## Maintainers
 
 | Maintainer   | GitHub                                | Social                                          |
 | ------------ | ------------------------------------- | ----------------------------------------------- |
 | Nisala Kalupahana | [nkalupahana](https://github.com/nkalupahana) | |
 | Stewan Silva | [stewones](https://github.com/stewones) | [@StewanSilva](https://twitter.com/stewones) |
-
-## Notice 🚀
-
-We're starting fresh under an official org. If you were using the previous npm package `capacitor-media`, please update your package.json to `@capacitor-community/media`. Check out [changelog](/CHANGELOG.md) for more info.
 
 ## Installation
 
@@ -55,7 +50,13 @@ npm install @capacitor-community/media # NPM
 yarn add @capacitor-community/media # Yarn
 ```
 
+This plugin is currently for Capacitor 5. Add an `@4` at the end to install for Capacitor 4.
+
 After installing, be sure to sync by running `ionic cap sync`.
+
+## Migrating to Capacitor 5
+
+**A major breaking change has been made to this plugin:** Saving media on Android now takes an album identifier instead of an album name. The album identifier, like on iOS, can be obtained using `getAlbums()`. (This call will now also return empty albums made by the plugin.) To ensure people notice this significant change, the property has been renamed from `album` to `albumIdentifier`, which will need to be updated in your code. It is still optional on iOS.
 
 ## API
 
@@ -104,8 +105,6 @@ getAlbums() => Promise<MediaAlbumResponse>
 
 Get list of albums. 
 
-On Android, albums may only return if they have a photo in them.
-
 [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetAlbums.tsx)
 
 **Returns:** <code>Promise&lt;<a href="#mediaalbumresponse">MediaAlbumResponse</a>&gt;</code>
@@ -128,7 +127,7 @@ On Android, all image formats supported by the user's photo viewer are supported
 On iOS, [all image formats supported by SDWebImage are supported.](https://github.com/SDWebImage/SDWebImage#supported-image-formats)
 All images on iOS are converted to PNG for system compatability. 
 
-[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx#L12)
+[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx#L21)
 
 | Param         | Type                                                          |
 | ------------- | ------------------------------------------------------------- |
@@ -152,7 +151,7 @@ On Android and iOS, this supports web URLs, base64 encoded videos
 On Android, all video formats supported by the user's photo viewer are supported.
 On iOS, the supported formats are based on whatever iOS supports at the time.
 
-[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx#L65)
+[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx#L68)
 
 | Param         | Type                                                          |
 | ------------- | ------------------------------------------------------------- |
@@ -175,7 +174,7 @@ On Android and iOS, this supports web URLs, base64 encoded GIFs
 (e.g. data:image/gif;base64,...), and local files.
 This only supports GIF files specifically.
 
-[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx#L49)
+[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx#L54)
 
 | Param         | Type                                                          |
 | ------------- | ------------------------------------------------------------- |
@@ -193,9 +192,6 @@ createAlbum(options: MediaAlbumCreate) => Promise<void>
 ```
 
 Creates an album.
-
-On Android, the album may only show up in `getAlbums()` 
-if it has a photo in it.
 
 [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/CreateDemoAlbum.tsx)
 
@@ -275,7 +271,6 @@ if it has a photo in it.
 | ---------------- | --------------------------------------------------------- |
 | **`identifier`** | <code>string</code>                                       |
 | **`name`**       | <code>string</code>                                       |
-| **`count`**      | <code>number</code>                                       |
 | **`type`**       | <code><a href="#mediaalbumtype">MediaAlbumType</a></code> |
 
 
@@ -288,10 +283,10 @@ if it has a photo in it.
 
 #### MediaSaveOptions
 
-| Prop        | Type                | Description                                                                       |
-| ----------- | ------------------- | --------------------------------------------------------------------------------- |
-| **`path`**  | <code>string</code> | Web URL, base64 encoded URI, or local file path to save.                          |
-| **`album`** | <code>string</code> | Album ID. On iOS, this is the album identifier. On Android, it is the album name. |
+| Prop                  | Type                | Description                                                                                                                                 |
+| --------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`path`**            | <code>string</code> | Web URL, base64 encoded URI, or local file path to save.                                                                                    |
+| **`albumIdentifier`** | <code>string</code> | Album identifier from getAlbums(). Since 5.0, identifier is used on both Android and iOS. Identifier is required on Android but not on iOS. |
 
 
 #### MediaAlbumCreate
