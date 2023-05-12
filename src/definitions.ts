@@ -190,9 +190,8 @@ export interface MediaAlbumResponse {
 }
 
 export interface MediaAlbum {
-  identifier?: string;
+  identifier: string;
   name: string;
-  count?: number;
   type?: MediaAlbumType;
 }
 

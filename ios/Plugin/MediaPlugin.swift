@@ -68,7 +68,7 @@ public class MediaPlugin: CAPPlugin {
             return
         }
 
-        let albumId = call.getString("album")
+        let albumId = call.getString("albumIdentifier")
         var targetCollection: PHAssetCollection?
 
         if albumId != nil {
@@ -131,7 +131,7 @@ public class MediaPlugin: CAPPlugin {
             return
         }
 
-        let albumId = call.getString("album")
+        let albumId = call.getString("albumIdentifier")
         var targetCollection: PHAssetCollection?
 
         if albumId != nil {
@@ -195,7 +195,7 @@ public class MediaPlugin: CAPPlugin {
             return
         }
 
-        let albumId = call.getString("album")
+        let albumId = call.getString("albumIdentifier")
         var targetCollection: PHAssetCollection?
 
         if albumId != nil {

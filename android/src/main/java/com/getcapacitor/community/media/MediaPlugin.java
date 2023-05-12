@@ -254,7 +254,7 @@ public class MediaPlugin extends Plugin {
             inputFile = new File(inputUri.getPath());
         }
 
-        String album = call.getString("album");
+        String album = call.getString("albumIdentifier");
         File albumDir = null;
         Log.d("SDK BUILD VERSION", String.valueOf(Build.VERSION.SDK_INT));
 
@@ -287,17 +287,13 @@ public class MediaPlugin extends Plugin {
     private void _createAlbum(PluginCall call) {
         Log.d("DEBUG LOG", "___CREATE ALBUM");
         String folderName = call.getString("name");
-        String folder;
 
-        if (Build.VERSION.SDK_INT >= 29) {
-            folder = getContext().getExternalMediaDirs()[0].getAbsolutePath() + "/" + folderName;
-        } else {
-            folder = Environment.getExternalStoragePublicDirectory(folderName).toString();
+        if (folderName == null) {
+            call.reject("Album name must be given!");
+            return;
         }
 
-        Log.d("ENV STORAGE", folder);
-
-        File f = new File(folder);
+        File f = new File(getAlbumPath(), folderName);
 
         if (!f.exists()) {
             if (!f.mkdir()) {

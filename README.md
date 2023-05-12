@@ -275,7 +275,6 @@ if it has a photo in it.
 | ---------------- | --------------------------------------------------------- |
 | **`identifier`** | <code>string</code>                                       |
 | **`name`**       | <code>string</code>                                       |
-| **`count`**      | <code>number</code>                                       |
 | **`type`**       | <code><a href="#mediaalbumtype">MediaAlbumType</a></code> |
 
 
