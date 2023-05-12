@@ -8,8 +8,6 @@ export interface MediaPlugin {
   /**
     * Get list of albums. 
     * 
-    * On Android, albums may only return if they have a photo in them.
-    * 
     * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetAlbums.tsx)
     */
   getAlbums(): Promise<MediaAlbumResponse>;
@@ -49,9 +47,6 @@ export interface MediaPlugin {
   saveGif(options?: MediaSaveOptions): Promise<PhotoResponse>;
   /**
    * Creates an album.
-   * 
-   * On Android, the album may only show up in `getAlbums()` 
-   * if it has a photo in it.
    * 
    * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/CreateDemoAlbum.tsx)
    */

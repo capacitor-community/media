@@ -34,17 +34,12 @@
   </tr>
 </table>
 
-
 ## Maintainers
 
 | Maintainer   | GitHub                                | Social                                          |
 | ------------ | ------------------------------------- | ----------------------------------------------- |
 | Nisala Kalupahana | [nkalupahana](https://github.com/nkalupahana) | |
 | Stewan Silva | [stewones](https://github.com/stewones) | [@StewanSilva](https://twitter.com/stewones) |
-
-## Notice 🚀
-
-We're starting fresh under an official org. If you were using the previous npm package `capacitor-media`, please update your package.json to `@capacitor-community/media`. Check out [changelog](/CHANGELOG.md) for more info.
 
 ## Installation
 
@@ -55,7 +50,13 @@ npm install @capacitor-community/media # NPM
 yarn add @capacitor-community/media # Yarn
 ```
 
+This plugin is currently for Capacitor 5. Add an `@4` at the end to install for Capacitor 4.
+
 After installing, be sure to sync by running `ionic cap sync`.
+
+## Migrating to Capacitor 5
+
+**A major breaking change has been made to this plugin:** Saving media on Android now takes an album identifier instead of an album name. The album identifier, like on iOS, can be obtained using `getAlbums()`. (This call will now also return empty albums made by the plugin.) To ensure people notice this significant change, the property has been renamed from `album` to `albumIdentifier`, which will need to be updated in your code. It is still optional on iOS.
 
 ## API
 
@@ -103,8 +104,6 @@ getAlbums() => Promise<MediaAlbumResponse>
 ```
 
 Get list of albums. 
-
-On Android, albums may only return if they have a photo in them.
 
 [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetAlbums.tsx)
 
@@ -193,9 +192,6 @@ createAlbum(options: MediaAlbumCreate) => Promise<void>
 ```
 
 Creates an album.
-
-On Android, the album may only show up in `getAlbums()` 
-if it has a photo in it.
 
 [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/CreateDemoAlbum.tsx)
 
