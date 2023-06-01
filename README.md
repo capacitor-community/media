@@ -331,9 +331,13 @@ You'll need to add the following to your app's `AndroidManifest.xml` file:
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+  <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
   ...
 </manifest>
 ```
+
+Note the READ_MEDIA permissions -- these are **new in Android 13**!
 
 ## Demo
 
