@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.1](https://github.com/capacitor-community/media/compare/v5.0.0...v5.0.1) (2023-06-01)
+- Fixes permissions on Android 13 (API 33+)
+
 ## [5.0.0](https://github.com/capacitor-community/media/compare/4.2.0...v5.0.0) (2023-05-11)
 - Updates to Capacitor 5
 - Returns album identifiers on Android
