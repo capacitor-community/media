@@ -42,6 +42,10 @@ import java.util.Set;
         @Permission(
             strings = { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE },
             alias = "publicStorage"
+        ),
+        @Permission(
+            strings = { Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VIDEO },
+            alias = "publicStorage13Plus"
         )
     }
 )
@@ -49,7 +53,8 @@ public class MediaPlugin extends Plugin {
 
     private static final String PERMISSION_DENIED_ERROR = "Unable to access media, user denied permission request";
 
-    private static final Integer API_LEVEL_29 = 29;
+    private static final int API_LEVEL_29 = 29;
+    private static final int API_LEVEL_33 = 33;
 
     // @todo
     @PluginMethod
@@ -140,7 +145,12 @@ public class MediaPlugin extends Plugin {
     }
 
     private boolean isStoragePermissionGranted() {
-        return getPermissionState("publicStorage") == PermissionState.GRANTED;
+        String permissionSet = "publicStorage";
+        if (Build.VERSION.SDK_INT >= API_LEVEL_33) {
+            permissionSet = "publicStorage13Plus";
+        }
+
+        return getPermissionState(permissionSet) == PermissionState.GRANTED;
     }
 
     private void _getAlbums(PluginCall call) {
