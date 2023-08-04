@@ -91,22 +91,48 @@ public class MediaPlugin: CAPPlugin {
             var image: UIImage? = nil;
             let url = URL(string: data)
             var data = try? Data(contentsOf: url!)
+            let mutableData = NSMutableData() // Output data buffer
             if (data != nil) {
+                // Get image metadata
+                let imgSource = CGImageSourceCreateWithData(data! as CFData, .none)
+                if (imgSource == nil) {
+                    call.reject("Loading image data failed!")
+                    return
+                }
+                
+                let metadata = CGImageSourceCopyPropertiesAtIndex(imgSource!, 0, .none)
+                
+                // Convert image to PNG
                 image = UIImage(data: data!)
                 data = image?.sd_imageData(as: .PNG)
                 if (data != nil) {
                     image = UIImage(data: data!)
                 } else {
-                    call.reject("Image conversion failed")
+                    call.reject("Image conversion to PNG failed!")
+                    return
+                }
+                
+                // Create data buffer with image and metadata
+                let imgDest = CGImageDestinationCreateWithData(mutableData as CFMutableData, "public.png" as CFString, 1, nil)
+                if (imgDest == nil) {
+                    call.reject("Creating output image data buffer failed!")
+                    return
+                }
+                
+                CGImageDestinationAddImage(imgDest!, image!.cgImage!, metadata)
+                let finished = CGImageDestinationFinalize(imgDest!)
+                if (!finished) {
+                    call.reject("Saving output image failed!")
                     return
                 }
             } else {
                 call.reject("Could not convert fileURL into Data");
                 return
             }
-                
+            
             PHPhotoLibrary.shared().performChanges({
-                let creationRequest = PHAssetChangeRequest.creationRequestForAsset(from: image!)
+                let creationRequest = PHAssetCreationRequest.forAsset()
+                creationRequest.addResource(with: .photo, data: mutableData as Data, options: .none)
 
                 if let collection = targetCollection {
                     let addAssetRequest = PHAssetCollectionChangeRequest(for: collection)
