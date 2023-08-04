@@ -91,12 +91,12 @@ public class MediaPlugin: CAPPlugin {
             var image: UIImage? = nil;
             let url = URL(string: data)
             var data = try? Data(contentsOf: url!)
-            let mutableData = NSMutableData()
+            let mutableData = NSMutableData() // Output data buffer
             if (data != nil) {
                 // Get image metadata
                 let imgSource = CGImageSourceCreateWithData(data! as CFData, .none)
                 if (imgSource == nil) {
-                    call.reject("1")
+                    call.reject("Loading image data failed!")
                     return
                 }
                 
@@ -108,21 +108,21 @@ public class MediaPlugin: CAPPlugin {
                 if (data != nil) {
                     image = UIImage(data: data!)
                 } else {
-                    call.reject("Image conversion failed")
+                    call.reject("Image conversion to PNG failed!")
                     return
                 }
                 
-                // Re-apply metadata to image
+                // Create data buffer with image and metadata
                 let imgDest = CGImageDestinationCreateWithData(mutableData as CFMutableData, "public.png" as CFString, 1, nil)
                 if (imgDest == nil) {
-                    call.reject("2")
+                    call.reject("Creating output image data buffer failed!")
                     return
                 }
                 
                 CGImageDestinationAddImage(imgDest!, image!.cgImage!, metadata)
                 let finished = CGImageDestinationFinalize(imgDest!)
                 if (!finished) {
-                    call.reject("3")
+                    call.reject("Saving output image failed!")
                     return
                 }
             } else {
