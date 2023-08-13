@@ -188,15 +188,15 @@ public class MediaPlugin extends Plugin {
         for (File sub : albumPath.listFiles()) {
             if (sub.isDirectory()) {
                 // Exclude hidden (trashed) files from count
-                int files = 0;
+                boolean hasFiles = false;
                 for (File file : sub.listFiles()) {
                     if (!file.isHidden()) {
-                        files++;
+                        hasFiles = true;
                         break;
                     }
                 }
 
-                if (files == 0) {
+                if (!hasFiles) {
                     JSObject album = new JSObject();
 
                     album.put("name", sub.getName());
