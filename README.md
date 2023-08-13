@@ -283,10 +283,10 @@ Creates an album.
 
 #### MediaSaveOptions
 
-| Prop                  | Type                | Description                                                                                                                                 |
-| --------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`path`**            | <code>string</code> | Web URL, base64 encoded URI, or local file path to save.                                                                                    |
-| **`albumIdentifier`** | <code>string</code> | Album identifier from getAlbums(). Since 5.0, identifier is used on both Android and iOS. Identifier is required on Android but not on iOS. |
+| Prop                  | Type                | Description                                                                                                                                                                                                                                                                                                                                                              |
+| --------------------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **`path`**            | <code>string</code> | Web URL, base64 encoded URI, or local file path to save.                                                                                                                                                                                                                                                                                                                 |
+| **`albumIdentifier`** | <code>string</code> | Album identifier from getAlbums(). Since 5.0, identifier is used on both Android and iOS. Identifier is required on Android but not on iOS. On iOS 14+, if the identifier is not specified and no permissions have been requested yet, add-only permissions will be requested instead of full permissions (assuming NSPhotoLibraryAddUsageDescription is in Info.plist). |
 
 
 #### MediaAlbumCreate
@@ -317,7 +317,9 @@ You'll need to add the following to your app's `Info.plist` file:
 <dict>
   ...
   <key>NSPhotoLibraryUsageDescription</key>
-  <string>Describe why you need access to user's photos</string>
+  <string>Describe why you need access to user's photos (getting albums and media)</string>
+  <key>NSPhotoLibraryAddUsageDescription</key>
+  <string>Describe why you need to add photos to user's photo library</string>
   ...
 </dict>
 ```

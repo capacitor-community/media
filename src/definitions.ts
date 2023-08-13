@@ -62,6 +62,10 @@ export interface MediaSaveOptions {
    * Album identifier from getAlbums().
    * Since 5.0, identifier is used on both Android and iOS.
    * Identifier is required on Android but not on iOS.
+   * On iOS 14+, if the identifier is not specified and no permissions
+   * have been requested yet, add-only permissions will be requested instead
+   * of full permissions (assuming NSPhotoLibraryAddUsageDescription
+   * is in Info.plist).
    */
   albumIdentifier?: string;
 }
