@@ -127,7 +127,7 @@ On Android, all image formats supported by the user's photo viewer are supported
 On iOS, [all image formats supported by SDWebImage are supported.](https://github.com/SDWebImage/SDWebImage#supported-image-formats)
 All images on iOS are converted to PNG for system compatability. 
 
-[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx#L21)
+[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
 
 | Param         | Type                                                          |
 | ------------- | ------------------------------------------------------------- |
@@ -151,7 +151,7 @@ On Android and iOS, this supports web URLs, base64 encoded videos
 On Android, all video formats supported by the user's photo viewer are supported.
 On iOS, the supported formats are based on whatever iOS supports at the time.
 
-[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx#L68)
+[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
 
 | Param         | Type                                                          |
 | ------------- | ------------------------------------------------------------- |
@@ -174,7 +174,7 @@ On Android and iOS, this supports web URLs, base64 encoded GIFs
 (e.g. data:image/gif;base64,...), and local files.
 This only supports GIF files specifically.
 
-[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx#L54)
+[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
 
 | Param         | Type                                                          |
 | ------------- | ------------------------------------------------------------- |

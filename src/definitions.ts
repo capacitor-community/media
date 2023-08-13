@@ -21,7 +21,7 @@ export interface MediaPlugin {
    * On iOS, [all image formats supported by SDWebImage are supported.](https://github.com/SDWebImage/SDWebImage#supported-image-formats)
    * All images on iOS are converted to PNG for system compatability. 
    * 
-   * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx#L21)
+   * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
    */
   savePhoto(options?: MediaSaveOptions): Promise<PhotoResponse>;
   /**
@@ -32,7 +32,7 @@ export interface MediaPlugin {
    * On Android, all video formats supported by the user's photo viewer are supported.
    * On iOS, the supported formats are based on whatever iOS supports at the time.
    * 
-   * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx#L68)
+   * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
    */
   saveVideo(options?: MediaSaveOptions): Promise<PhotoResponse>;
   /**
@@ -42,7 +42,7 @@ export interface MediaPlugin {
    * (e.g. data:image/gif;base64,...), and local files.
    * This only supports GIF files specifically.
    * 
-   * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx#L54)
+   * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
    */
   saveGif(options?: MediaSaveOptions): Promise<PhotoResponse>;
   /**
