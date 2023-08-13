@@ -68,6 +68,11 @@ export interface MediaSaveOptions {
    * is in Info.plist).
    */
   albumIdentifier?: string;
+  /**
+   * File name to save the image as in the album.
+   * Do not include extension. Android only.
+   */
+  fileName?: string;
 }
 
 export interface MediaFetchOptions {
