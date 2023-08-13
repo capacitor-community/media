@@ -186,12 +186,23 @@ public class MediaPlugin extends Plugin {
 
         File albumPath = new File(getAlbumPath());
         for (File sub : albumPath.listFiles()) {
-            if (sub.isDirectory() && sub.listFiles().length == 0) {
-                JSObject album = new JSObject();
+            if (sub.isDirectory()) {
+                // Exclude hidden (trashed) files from count
+                boolean hasFiles = false;
+                for (File file : sub.listFiles()) {
+                    if (!file.isHidden()) {
+                        hasFiles = true;
+                        break;
+                    }
+                }
 
-                album.put("name", sub.getName());
-                album.put("identifier", sub.getAbsolutePath());
-                albums.put(album);
+                if (!hasFiles) {
+                    JSObject album = new JSObject();
+
+                    album.put("name", sub.getName());
+                    album.put("identifier", sub.getAbsolutePath());
+                    albums.put(album);
+                }
             }
         }
 
@@ -256,7 +267,8 @@ public class MediaPlugin extends Plugin {
             inputPath = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
             Uri downloadsUri = Uri.parse(inputPath);
             File fileInDownloads = new File(downloadsUri.getPath());
-            inputFile = copyFile(fileInDownloads, getContext().getCacheDir());
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmssSSS").format(new Date());
+            inputFile = copyFile(fileInDownloads, getContext().getCacheDir(), "IMG_" + timeStamp);
             fileInDownloads.delete();
             cursor.close();
         } else {
@@ -283,7 +295,10 @@ public class MediaPlugin extends Plugin {
         Log.d("ENV LOG - ALBUM DIR", String.valueOf(albumDir));
 
         try {
-            File expFile = copyFile(inputFile, albumDir);
+            // generate image file name using current date and time
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmssSSS").format(new Date());
+            String fileName = call.getString("fileName", "IMG_" + timeStamp);
+            File expFile = copyFile(inputFile, albumDir, fileName);
             scanPhoto(expFile);
 
             JSObject result = new JSObject();
@@ -319,7 +334,7 @@ public class MediaPlugin extends Plugin {
         }
     }
 
-    private File copyFile(File inputFile, File albumDir) {
+    private File copyFile(File inputFile, File albumDir, String fileName) {
         // if destination folder does not exist, create it
         if (!albumDir.exists()) {
             if (!albumDir.mkdir()) {
@@ -330,9 +345,7 @@ public class MediaPlugin extends Plugin {
         String absolutePath = inputFile.getAbsolutePath();
         String extension = absolutePath.substring(absolutePath.lastIndexOf("."));
 
-        // generate image file name using current date and time
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmssSSS").format(new Date());
-        File newFile = new File(albumDir, "IMG_" + timeStamp + extension);
+        File newFile = new File(albumDir, fileName + extension);
 
         // Read and write image files
         FileChannel inChannel = null;

@@ -35,7 +35,7 @@ const SaveMedia = () => {
 
     const savePhotoDataURI = async () => {
         setStatus("");
-        let opts: MediaSaveOptions = { path: photoDataURI, albumIdentifier: await ensureDemoAlbum() };
+        let opts: MediaSaveOptions = { path: photoDataURI, albumIdentifier: await ensureDemoAlbum(), fileName: "fromDataURI" };
         await Media.savePhoto(opts);
         setStatus("Saved photo from data URI!");
     };
