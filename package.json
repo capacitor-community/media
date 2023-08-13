@@ -1,6 +1,6 @@
 {
   "name": "@capacitor-community/media",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "description": "Enable some media features for Capacitor such as create albums, save videos, gifs and more.",
   "author": "Stewan Silva",
   "license": "MIT",
