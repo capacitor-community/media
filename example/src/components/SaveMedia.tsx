@@ -4,6 +4,7 @@ import { IonButton } from "@ionic/react";
 import { Camera, CameraResultType } from "@capacitor/camera";
 import { photoDataURI, gifDataURI, videoDataURI, webpDataURI } from "./data";
 import { FilePicker } from "@whiteguru/capacitor-plugin-file-picker";
+import { Capacitor } from "@capacitor/core";
 
 const SaveMedia = () => {
     const [status, setStatus] = useState<string>();
@@ -17,6 +18,13 @@ const SaveMedia = () => {
 
         return demoAlbum.identifier;
     };
+
+    const savePhotoOnlineNoAlbum = async () => {
+        setStatus("");
+        let opts: MediaSaveOptions = { path: "https://imgs.xkcd.com/comics/tar.png" };
+        await Media.savePhoto(opts);
+        setStatus("Saved photo from online source URL to library!");
+    }
 
     const savePhotoOnline = async () => {
         setStatus("");
@@ -93,6 +101,7 @@ const SaveMedia = () => {
     };
 
     return <>
+        { Capacitor.getPlatform() === "ios" && <IonButton onClick={savePhotoOnlineNoAlbum}>Save Photo to Library (No Album)</IonButton> }
         <IonButton onClick={savePhotoOnline}>Save Photo from online URL</IonButton>
         <IonButton onClick={savePhotoDataURI}>Save Photo from Data URI</IonButton>
         <IonButton onClick={saveWebPDataURI}>Save WebP from Data URI</IonButton>
