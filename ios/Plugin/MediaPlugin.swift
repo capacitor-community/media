@@ -10,6 +10,11 @@ public class JSDate {
     }
 }
 
+enum AccessLevel {
+    case addOnly
+    case readWrite
+}
+
 /**
  * Please read the Capacitor iOS Plugin Development Guide
  * here: https://capacitorjs.com/docs/plugins/ios
@@ -26,7 +31,7 @@ public class MediaPlugin: CAPPlugin {
     lazy var imageManager = PHCachingImageManager()
 
     @objc func getAlbums(_ call: CAPPluginCall) {
-        checkAuthorization(allowed: {
+        checkAuthorization(permission: .readWrite, allowed: {
             self.fetchAlbumsToJs(call)
         }, notAllowed: {
             call.reject("Access to photos not allowed by user")
@@ -34,7 +39,7 @@ public class MediaPlugin: CAPPlugin {
     }
 
     @objc func getMedias(_ call: CAPPluginCall) {
-        checkAuthorization(allowed: {
+        checkAuthorization(permission: .readWrite, allowed: {
             self.fetchResultAssetsToJs(call)
         }, notAllowed: {
             call.reject("Access to photos not allowed by user")
@@ -47,7 +52,7 @@ public class MediaPlugin: CAPPlugin {
             return
         }
 
-        checkAuthorization(allowed: {
+        checkAuthorization(permission: .readWrite, allowed: {
             PHPhotoLibrary.shared().performChanges({
                 PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: name)
             }, completionHandler: { success, error in
@@ -86,7 +91,7 @@ public class MediaPlugin: CAPPlugin {
             }
         }
 
-        checkAuthorization(allowed: {
+        checkAuthorization(permission: .addOnly, allowed: {
             // Add it to the photo library.
             var image: UIImage? = nil;
             let url = URL(string: data)
@@ -175,7 +180,7 @@ public class MediaPlugin: CAPPlugin {
             }
         }
 
-        checkAuthorization(allowed: {
+        checkAuthorization(permission: .addOnly, allowed: {
             var fileURL = URL(string: data)
             if !data.starts(with: "file://") {
                 let directory = NSTemporaryDirectory()
@@ -239,7 +244,7 @@ public class MediaPlugin: CAPPlugin {
             }
         }
 
-        checkAuthorization(allowed: {
+        checkAuthorization(permission: .addOnly, allowed: {
             // Write to a temp location first if not on disk -- required for playable GIFs
             var fileURL = URL(string: data)
             if !data.starts(with: "file://") {
@@ -273,19 +278,41 @@ public class MediaPlugin: CAPPlugin {
             call.reject("Access to photos not allowed by user")
         })
     }
+    
+    @available(iOS 14, *)
+    func getPHAccessLevel(permission: AccessLevel) -> PHAccessLevel {
+        switch (permission) {
+        case .addOnly:
+            return PHAccessLevel.addOnly
+        case .readWrite:
+            return PHAccessLevel.readWrite
+        }
+    }
 
-    func checkAuthorization(allowed: @escaping () -> Void, notAllowed: @escaping () -> Void) {
-        let status = PHPhotoLibrary.authorizationStatus()
+    func checkAuthorization(permission: AccessLevel, allowed: @escaping () -> Void, notAllowed: @escaping () -> Void) {
+        var status = PHAuthorizationStatus.notDetermined
+        if #available(iOS 14, *) {
+            status = PHPhotoLibrary.authorizationStatus(for: getPHAccessLevel(permission: permission))
+        } else {
+            status = PHPhotoLibrary.authorizationStatus()
+        }
+        
         if status == PHAuthorizationStatus.authorized {
             allowed()
         } else {
-            PHPhotoLibrary.requestAuthorization({ (newStatus) in
+            let handler = { (newStatus) in
                 if newStatus == PHAuthorizationStatus.authorized {
                     allowed()
                 } else {
                     notAllowed()
                 }
-            })
+            }
+            
+            if #available(iOS 14, *) {
+                PHPhotoLibrary.requestAuthorization(for: getPHAccessLevel(permission: permission), handler: handler)
+            } else {
+                PHPhotoLibrary.requestAuthorization(handler)
+            }
         }
     }
 
