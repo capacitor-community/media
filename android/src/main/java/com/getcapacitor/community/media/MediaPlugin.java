@@ -159,57 +159,55 @@ public class MediaPlugin extends Plugin {
         JSObject response = new JSObject();
         JSArray albums = new JSArray();
         Set<String> bucketIds = new HashSet<String>();
+        Set<String> identifiers = new HashSet<String>();
 
         String[] projection = new String[] {
             MediaStore.MediaColumns.BUCKET_DISPLAY_NAME,
             MediaStore.MediaColumns.BUCKET_ID,
             MediaStore.MediaColumns.DATA
         };
-        Cursor cur = getActivity().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, null);
+        Cursor[] curs = {
+            getActivity().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, null),
+            getActivity().getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, projection, null, null, null)
+        };
 
-        while (cur.moveToNext()) {
-            String albumName = cur.getString((cur.getColumnIndex(MediaStore.MediaColumns.BUCKET_DISPLAY_NAME)));
-            String bucketId = cur.getString((cur.getColumnIndex(MediaStore.MediaColumns.BUCKET_ID)));
+        for (Cursor cur : curs) {
+            while (cur.moveToNext()) {
+                String albumName = cur.getString((cur.getColumnIndex(MediaStore.MediaColumns.BUCKET_DISPLAY_NAME)));
+                String bucketId = cur.getString((cur.getColumnIndex(MediaStore.MediaColumns.BUCKET_ID)));
 
-            if (!bucketIds.contains(bucketId)) {
-                String path = cur.getString((cur.getColumnIndex(MediaStore.MediaColumns.DATA)));
-                File fileForPath = new File(path);
-                JSObject album = new JSObject();
+                if (!bucketIds.contains(bucketId)) {
+                    String path = cur.getString((cur.getColumnIndex(MediaStore.MediaColumns.DATA)));
+                    File fileForPath = new File(path);
+                    JSObject album = new JSObject();
 
-                album.put("name", albumName);
-                album.put("identifier", fileForPath.getParent());
-                albums.put(album);
+                    album.put("name", albumName);
+                    album.put("identifier", fileForPath.getParent());
+                    albums.put(album);
 
-                bucketIds.add(bucketId);
+                    bucketIds.add(bucketId);
+                    identifiers.add(fileForPath.getParent());
+                }
             }
+
+            cur.close();
         }
 
         File albumPath = new File(getAlbumPath());
         for (File sub : albumPath.listFiles()) {
-            if (sub.isDirectory()) {
-                // Exclude hidden (trashed) files from count
-                boolean hasFiles = false;
-                for (File file : sub.listFiles()) {
-                    if (!file.isHidden()) {
-                        hasFiles = true;
-                        break;
-                    }
-                }
+            if (sub.isDirectory() && !identifiers.contains(sub.getAbsolutePath())) {
+                JSObject album = new JSObject();
 
-                if (!hasFiles) {
-                    JSObject album = new JSObject();
-
-                    album.put("name", sub.getName());
-                    album.put("identifier", sub.getAbsolutePath());
-                    albums.put(album);
-                }
+                album.put("name", sub.getName());
+                album.put("identifier", sub.getAbsolutePath());
+                identifiers.add(sub.getAbsolutePath());
+                albums.put(album);
             }
         }
 
         response.put("albums", albums);
         Log.d("DEBUG LOG", String.valueOf(response));
         Log.d("DEBUG LOG", "___GET ALBUMS FINISHED");
-        cur.close();
 
         call.resolve(response);
     }
