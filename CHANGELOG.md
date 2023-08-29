@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [5.2.3](https://github.com/capacitor-community/media/compare/v5.2.2...v5.2.3) (2023-08-29)
+
+
+### Bug Fixes
+
+* references ([a077100](https://github.com/capacitor-community/media/commit/a077100043d6236b172f9060b9be468541602d52))
+
 ## [5.2.2](https://github.com/capacitor-community/media/compare/v5.2.1...v5.2.2) (2023-08-23)
 - Fix bug in `getAlbums()` with only videos in albums
 
