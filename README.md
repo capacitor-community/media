@@ -64,14 +64,14 @@ Unless otherwise noted, there should be full feature parity between iOS and Andr
 
 <docgen-index>
 
-- [`getMedias(...)`](#getmedias)
-- [`getAlbums()`](#getalbums)
-- [`savePhoto(...)`](#savephoto)
-- [`saveVideo(...)`](#savevideo)
-- [`saveGif(...)`](#savegif)
-- [`createAlbum(...)`](#createalbum)
-- [Interfaces](#interfaces)
-- [Enums](#enums)
+* [`getMedias(...)`](#getmedias)
+* [`getAlbums()`](#getalbums)
+* [`savePhoto(...)`](#savephoto)
+* [`saveVideo(...)`](#savevideo)
+* [`saveGif(...)`](#savegif)
+* [`createAlbum(...)`](#createalbum)
+* [Interfaces](#interfaces)
+* [Enums](#enums)
 
 </docgen-index>
 
@@ -81,7 +81,7 @@ Unless otherwise noted, there should be full feature parity between iOS and Andr
 ### getMedias(...)
 
 ```typescript
-getMedias(options?: MediaFetchOptions | undefined) => Promise<MediaResponse>
+getMedias(options?: MediaFetchOptions | undefined) => any
 ```
 
 Get filtered media from camera roll (pictures only currently). iOS only.
@@ -92,38 +92,40 @@ Get filtered media from camera roll (pictures only currently). iOS only.
 | ------------- | --------------------------------------------------------------- |
 | **`options`** | <code><a href="#mediafetchoptions">MediaFetchOptions</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#mediaresponse">MediaResponse</a>&gt;</code>
+**Returns:** <code>any</code>
 
----
+--------------------
+
 
 ### getAlbums()
 
 ```typescript
-getAlbums() => Promise<MediaAlbumResponse>
+getAlbums() => any
 ```
 
-Get list of albums.
+Get list of albums. 
 
 [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetAlbums.tsx)
 
-**Returns:** <code>Promise&lt;<a href="#mediaalbumresponse">MediaAlbumResponse</a>&gt;</code>
+**Returns:** <code>any</code>
 
----
+--------------------
+
 
 ### savePhoto(...)
 
 ```typescript
-savePhoto(options?: MediaSaveOptions | undefined) => Promise<PhotoResponse>
+savePhoto(options?: MediaSaveOptions | undefined) => any
 ```
 
 Saves a photo to the camera roll.
 
-On Android and iOS, this supports web URLs, base64 encoded images
+On Android and iOS, this supports web URLs, base64 encoded images 
 (e.g. data:image/jpeg;base64,...), and local files.
 On Android, all image formats supported by the user's photo viewer are supported.
 
 On iOS, [all image formats supported by SDWebImage are supported.](https://github.com/SDWebImage/SDWebImage#supported-image-formats)
-All images on iOS are converted to PNG for system compatability.
+All images on iOS are converted to PNG for system compatability. 
 
 [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
 
@@ -131,19 +133,20 @@ All images on iOS are converted to PNG for system compatability.
 | ------------- | ------------------------------------------------------------- |
 | **`options`** | <code><a href="#mediasaveoptions">MediaSaveOptions</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#photoresponse">PhotoResponse</a>&gt;</code>
+**Returns:** <code>any</code>
 
----
+--------------------
+
 
 ### saveVideo(...)
 
 ```typescript
-saveVideo(options?: MediaSaveOptions | undefined) => Promise<PhotoResponse>
+saveVideo(options?: MediaSaveOptions | undefined) => any
 ```
 
 Saves a video to the camera roll.
 
-On Android and iOS, this supports web URLs, base64 encoded videos
+On Android and iOS, this supports web URLs, base64 encoded videos 
 (e.g. data:image/mp4;base64,...), and local files.
 On Android, all video formats supported by the user's photo viewer are supported.
 On iOS, the supported formats are based on whatever iOS supports at the time.
@@ -154,19 +157,20 @@ On iOS, the supported formats are based on whatever iOS supports at the time.
 | ------------- | ------------------------------------------------------------- |
 | **`options`** | <code><a href="#mediasaveoptions">MediaSaveOptions</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#photoresponse">PhotoResponse</a>&gt;</code>
+**Returns:** <code>any</code>
 
----
+--------------------
+
 
 ### saveGif(...)
 
 ```typescript
-saveGif(options?: MediaSaveOptions | undefined) => Promise<PhotoResponse>
+saveGif(options?: MediaSaveOptions | undefined) => any
 ```
 
 Saves an animated GIF to the camera roll.
 
-On Android and iOS, this supports web URLs, base64 encoded GIFs
+On Android and iOS, this supports web URLs, base64 encoded GIFs 
 (e.g. data:image/gif;base64,...), and local files.
 This only supports GIF files specifically.
 
@@ -176,14 +180,15 @@ This only supports GIF files specifically.
 | ------------- | ------------------------------------------------------------- |
 | **`options`** | <code><a href="#mediasaveoptions">MediaSaveOptions</a></code> |
 
-**Returns:** <code>Promise&lt;<a href="#photoresponse">PhotoResponse</a>&gt;</code>
+**Returns:** <code>any</code>
 
----
+--------------------
+
 
 ### createAlbum(...)
 
 ```typescript
-createAlbum(options: MediaAlbumCreate) => Promise<void>
+createAlbum(options: MediaAlbumCreate) => any
 ```
 
 Creates an album.
@@ -194,15 +199,41 @@ Creates an album.
 | ------------- | ------------------------------------------------------------- |
 | **`options`** | <code><a href="#mediaalbumcreate">MediaAlbumCreate</a></code> |
 
----
+**Returns:** <code>any</code>
+
+--------------------
+
 
 ### Interfaces
 
+
+#### MediaFetchOptions
+
+| Prop                   | Type                                                                                                                                                                            | Description                                                           |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| **`quantity`**         | <code>number</code>                                                                                                                                                             | The number of photos to fetch, sorted by last created date descending |
+| **`thumbnailWidth`**   | <code>number</code>                                                                                                                                                             | The width of thumbnail to return                                      |
+| **`thumbnailHeight`**  | <code>number</code>                                                                                                                                                             | The height of thumbnail to return                                     |
+| **`thumbnailQuality`** | <code>number</code>                                                                                                                                                             | The quality of thumbnail to return as JPEG (0-100)                    |
+| **`types`**            | <code>"photos"</code>                                                                                                                                                           | Which types of assets to return. Only photos supported currently.     |
+| **`albumIdentifier`**  | <code>string</code>                                                                                                                                                             | Which album identifier to query in (get identifier with getAlbums())  |
+| **`sort`**             | <code>{} \| "mediaType" \| "mediaSubtypes" \| "sourceType" \| "pixelWidth" \| "pixelHeight" \| "creationDate" \| "modificationDate" \| "isFavorite" \| "burstIdentifier"</code> | Sort order of returned assets by field and ascending/descending       |
+
+
+#### MediaSort
+
+| Prop            | Type                                                                                                                                                                      |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`key`**       | <code>"mediaType" \| "mediaSubtypes" \| "sourceType" \| "pixelWidth" \| "pixelHeight" \| "creationDate" \| "modificationDate" \| "isFavorite" \| "burstIdentifier"</code> |
+| **`ascending`** | <code>boolean</code>                                                                                                                                                      |
+
+
 #### MediaResponse
 
-| Prop         | Type                      |
-| ------------ | ------------------------- |
-| **`medias`** | <code>MediaAsset[]</code> |
+| Prop         | Type            |
+| ------------ | --------------- |
+| **`medias`** | <code>{}</code> |
+
 
 #### MediaAsset
 
@@ -217,6 +248,7 @@ Creates an album.
 | **`thumbnailHeight`** | <code>number</code>                                     | Height of thumbnail preview                                             |
 | **`location`**        | <code><a href="#medialocation">MediaLocation</a></code> | Location metadata for the asset                                         |
 
+
 #### MediaLocation
 
 | Prop            | Type                | Description                              |
@@ -227,30 +259,13 @@ Creates an album.
 | **`altitude`**  | <code>number</code> | Altitude of user at time image was taken |
 | **`speed`**     | <code>number</code> | Speed of user at time image was taken    |
 
-#### MediaFetchOptions
-
-| Prop                   | Type                                                                                                                                                                                     | Description                                                           |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| **`quantity`**         | <code>number</code>                                                                                                                                                                      | The number of photos to fetch, sorted by last created date descending |
-| **`thumbnailWidth`**   | <code>number</code>                                                                                                                                                                      | The width of thumbnail to return                                      |
-| **`thumbnailHeight`**  | <code>number</code>                                                                                                                                                                      | The height of thumbnail to return                                     |
-| **`thumbnailQuality`** | <code>number</code>                                                                                                                                                                      | The quality of thumbnail to return as JPEG (0-100)                    |
-| **`types`**            | <code>"photos"</code>                                                                                                                                                                    | Which types of assets to return. Only photos supported currently.     |
-| **`albumIdentifier`**  | <code>string</code>                                                                                                                                                                      | Which album identifier to query in (get identifier with getAlbums())  |
-| **`sort`**             | <code>"mediaType" \| "mediaSubtypes" \| "sourceType" \| "pixelWidth" \| "pixelHeight" \| "creationDate" \| "modificationDate" \| "isFavorite" \| "burstIdentifier" \| MediaSort[]</code> | Sort order of returned assets by field and ascending/descending       |
-
-#### MediaSort
-
-| Prop            | Type                                                                                                                                                                      |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`key`**       | <code>"mediaType" \| "mediaSubtypes" \| "sourceType" \| "pixelWidth" \| "pixelHeight" \| "creationDate" \| "modificationDate" \| "isFavorite" \| "burstIdentifier"</code> |
-| **`ascending`** | <code>boolean</code>                                                                                                                                                      |
 
 #### MediaAlbumResponse
 
-| Prop         | Type                      |
-| ------------ | ------------------------- |
-| **`albums`** | <code>MediaAlbum[]</code> |
+| Prop         | Type            |
+| ------------ | --------------- |
+| **`albums`** | <code>{}</code> |
+
 
 #### MediaAlbum
 
@@ -260,11 +275,6 @@ Creates an album.
 | **`name`**       | <code>string</code>                                       |
 | **`type`**       | <code><a href="#mediaalbumtype">MediaAlbumType</a></code> |
 
-#### PhotoResponse
-
-| Prop           | Type                |
-| -------------- | ------------------- |
-| **`filePath`** | <code>string</code> |
 
 #### MediaSaveOptions
 
@@ -274,13 +284,23 @@ Creates an album.
 | **`albumIdentifier`** | <code>string</code> | Album identifier from getAlbums(). Since 5.0, identifier is used on both Android and iOS. Identifier is required on Android but not on iOS. On iOS 14+, if the identifier is not specified and no permissions have been requested yet, add-only permissions will be requested instead of full permissions (assuming NSPhotoLibraryAddUsageDescription is in Info.plist). |
 | **`fileName`**        | <code>string</code> | File name to save the image as in the album. Do not include extension. Android only.                                                                                                                                                                                                                                                                                     |
 
+
+#### PhotoResponse
+
+| Prop           | Type                |
+| -------------- | ------------------- |
+| **`filePath`** | <code>string</code> |
+
+
 #### MediaAlbumCreate
 
 | Prop       | Type                |
 | ---------- | ------------------- |
 | **`name`** | <code>string</code> |
 
+
 ### Enums
+
 
 #### MediaAlbumType
 
