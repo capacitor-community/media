@@ -1,6 +1,6 @@
 {
   "name": "@capacitor-community/media",
-  "version": "5.2.5",
+  "version": "5.2.6",
   "description": "Enable some media features for Capacitor such as create albums, save videos, gifs and more.",
   "author": "Stewan Silva",
   "license": "MIT",
@@ -30,7 +30,7 @@
     "eslint": "eslint . --ext ts",
     "prettier": "prettier \"**/*.{css,html,ts,js,java}\"",
     "swiftlint": "node-swiftlint",
-    "docgen": "docgen --api MediaPlugin --output-readme README.md --output-json dist/docs.json",
+    "docgen": "docgen --api MediaPlugin --output-readme README.md --output-json dist/docs.json && cp -rf README.md dist",
     "build": "npm run clean && npm run docgen && tsc && rollup -c rollup.config.js",
     "clean": "rimraf ./dist",
     "watch": "tsc --watch",
