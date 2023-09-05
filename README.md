@@ -276,9 +276,9 @@ Creates an album.
 
 #### PhotoResponse
 
-| Prop           | Type                |
-| -------------- | ------------------- |
-| **`filePath`** | <code>string</code> |
+| Prop           | Type                | Description                |
+| -------------- | ------------------- | -------------------------- |
+| **`filePath`** | <code>string</code> | Available on Android only. |
 
 
 #### MediaSaveOptions

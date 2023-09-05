@@ -219,5 +219,8 @@ export interface MediaAlbumCreate {
 }
 
 export interface PhotoResponse {
-  filePath: string;
+  /**
+   * Available on Android only.
+   */
+  filePath?: string;
 }
