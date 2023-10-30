@@ -272,6 +272,7 @@ public class MediaPlugin extends Plugin {
                 cursor.close();
             } catch (RuntimeException e) {
                 call.reject("RuntimeException occurred", e);
+                return;
             }
         } else {
             Uri inputUri = Uri.parse(inputPath);
@@ -308,6 +309,7 @@ public class MediaPlugin extends Plugin {
             call.resolve(result);
         } catch (RuntimeException e) {
             call.reject("RuntimeException occurred", e);
+            return;
         }
     }
 
