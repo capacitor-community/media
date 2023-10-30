@@ -2,20 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-### [5.2.7](https://github.com/capacitor-community/media/compare/v5.2.6...v5.2.7) (2023-08-29)
-
-### [5.2.6](https://github.com/capacitor-community/media/compare/v5.2.5...v5.2.6) (2023-08-29)
-
-### [5.2.5](https://github.com/capacitor-community/media/compare/v5.2.4...v5.2.5) (2023-08-29)
-
-### [5.2.4](https://github.com/capacitor-community/media/compare/v5.2.3...v5.2.4) (2023-08-29)
-
-### [5.2.3](https://github.com/capacitor-community/media/compare/v5.2.2...v5.2.3) (2023-08-29)
-
-
-### Bug Fixes
-
-* references ([a077100](https://github.com/capacitor-community/media/commit/a077100043d6236b172f9060b9be468541602d52))
+## [5.3.0](https://github.com/capacitor-community/media/compare/v5.2.2...v5.3.0) (2023-10-30)
+- Catch `copyFile()` crash when downloading file from the Internet
 
 ## [5.2.2](https://github.com/capacitor-community/media/compare/v5.2.1...v5.2.2) (2023-08-23)
 - Fix bug in `getAlbums()` with only videos in albums
