@@ -45,7 +45,7 @@ const GetMedias = () => {
         <IonButton onClick={getMediasFavorites}>Get 9 Favorites</IonButton>
         <IonButton onClick={getMediasSortedFavorites}>Get 9 Images Last Created in Favorites</IonButton>
         <br />
-        { medias?.map(media => <img style={{"width": "50px"}} src={"data:image/jpeg;base64," + media.data} />) }
+        { medias?.map(media => <img key={media.identifier} alt="Result Image" style={{"width": "50px"}} src={"data:image/jpeg;base64," + media.data} />) }
     </>
 };
 
