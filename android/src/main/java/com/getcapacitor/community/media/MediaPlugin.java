@@ -263,12 +263,16 @@ public class MediaPlugin extends Plugin {
             final Cursor cursor = manager.query(new DownloadManager.Query().setFilterById(requestID));
             cursor.moveToFirst();
             inputPath = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
-            Uri downloadsUri = Uri.parse(inputPath);
-            File fileInDownloads = new File(downloadsUri.getPath());
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmssSSS").format(new Date());
-            inputFile = copyFile(fileInDownloads, getContext().getCacheDir(), "IMG_" + timeStamp);
-            fileInDownloads.delete();
-            cursor.close();
+            try {
+                Uri downloadsUri = Uri.parse(inputPath);
+                File fileInDownloads = new File(downloadsUri.getPath());
+                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmssSSS").format(new Date());
+                inputFile = copyFile(fileInDownloads, getContext().getCacheDir(), "IMG_" + timeStamp);
+                fileInDownloads.delete();
+                cursor.close();
+            } catch (RuntimeException e) {
+                call.reject("RuntimeException occurred", e);
+            }
         } else {
             Uri inputUri = Uri.parse(inputPath);
             inputFile = new File(inputUri.getPath());
