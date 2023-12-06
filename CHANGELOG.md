@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.3.1](https://github.com/capacitor-community/media/compare/v5.3.0...v5.3.1) (2023-12-05)
+- Fix runtime error when downloading file from the Internet on older Android versions
+
 ## [5.3.0](https://github.com/capacitor-community/media/compare/v5.2.2...v5.3.0) (2023-10-30)
 - Catch `copyFile()` crash when downloading file from the Internet
 
