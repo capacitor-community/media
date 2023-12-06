@@ -251,7 +251,7 @@ public class MediaPlugin extends Plugin {
             DownloadManager.Request request = new DownloadManager.Request(Uri.parse(inputPath));
             Uri inputUri = Uri.parse(inputPath);
             String filename = inputUri.getLastPathSegment();
-            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, filename);
+            request.setDestinationInExternalFilesDir(getContext(), null, filename);
 
             long requestID = manager.enqueue(request);
             Uri result = null;
