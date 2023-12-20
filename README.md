@@ -70,6 +70,7 @@ Unless otherwise noted, there should be full feature parity between iOS and Andr
 * [`saveVideo(...)`](#savevideo)
 * [`saveGif(...)`](#savegif)
 * [`createAlbum(...)`](#createalbum)
+* [`getAlbumsPath()`](#getalbumspath)
 * [Interfaces](#interfaces)
 * [Enums](#enums)
 
@@ -202,6 +203,28 @@ Creates an album.
 --------------------
 
 
+### getAlbumsPath()
+
+```typescript
+getAlbumsPath() => Promise<AlbumsPathResponse>
+```
+
+Gets the path where album folders and their corresponding photos
+are stored on the Android filesystem. This can be used to identify
+your album by more than just its name on Android, in case there
+are multiple albums with the same name, which is possible on Android.
+Just compare the albums path to the start of the album identifier when
+getting albums.
+
+Only available on Android.
+
+Code Examples: [basic](https://github.com/capacitor-community/media/blob/master/example/src/components/CreateDemoAlbum.tsx), [when saving media](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
+
+**Returns:** <code>Promise&lt;<a href="#albumspathresponse">AlbumsPathResponse</a>&gt;</code>
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -295,6 +318,13 @@ Creates an album.
 | Prop       | Type                |
 | ---------- | ------------------- |
 | **`name`** | <code>string</code> |
+
+
+#### AlbumsPathResponse
+
+| Prop       | Type                |
+| ---------- | ------------------- |
+| **`path`** | <code>string</code> |
 
 
 ### Enums

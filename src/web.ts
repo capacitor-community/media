@@ -1,6 +1,7 @@
 import { WebPlugin } from '@capacitor/core';
 
 import type {
+  AlbumsPathResponse,
   MediaAlbumCreate,
   MediaAlbumResponse,
   MediaFetchOptions,
@@ -33,5 +34,9 @@ export class MediaWeb extends WebPlugin implements MediaPlugin {
   createAlbum(options: MediaAlbumCreate): Promise<void> {
     console.log('createAlbum', options);
     throw this.unimplemented('Not implemented on web.');
+  }
+  getAlbumsPath(): Promise<AlbumsPathResponse> {
+      console.log('getAlbumsPath');
+      throw this.unimplemented('Not implemented on web.');
   }
 }

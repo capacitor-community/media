@@ -10,7 +10,15 @@ const SaveMedia = () => {
     const [status, setStatus] = useState<string>();
     const ensureDemoAlbum = async () => {
         const { albums } = await Media.getAlbums();
-        const demoAlbum = albums.find(a => a.name === "Media Demo Album");
+        let demoAlbum = undefined;
+        if (Capacitor.getPlatform() === "android") {
+            const albumsPath = (await Media.getAlbumsPath()).path
+            demoAlbum = albums.find(a => a.name === "Media Demo Album" && a.identifier.startsWith(albumsPath));
+            console.log(demoAlbum);
+        } else {
+            demoAlbum = albums.find(a => a.name === "Media Demo Album");
+        }
+
         if (!demoAlbum) {
             setStatus(`Demo album does not exist; create it first using the "Create Demo Album" button above.`);
             throw new Error("Demo album does not exist");

@@ -51,6 +51,19 @@ export interface MediaPlugin {
    * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/CreateDemoAlbum.tsx)
    */
   createAlbum(options: MediaAlbumCreate): Promise<void>;
+  /**
+   * Gets the path where album folders and their corresponding photos
+   * are stored on the Android filesystem. This can be used to identify
+   * your album by more than just its name on Android, in case there
+   * are multiple albums with the same name, which is possible on Android.
+   * Just compare the albums path to the start of the album identifier when
+   * getting albums.
+   * 
+   * Only available on Android.
+   * 
+   * Code Examples: [basic](https://github.com/capacitor-community/media/blob/master/example/src/components/CreateDemoAlbum.tsx), [when saving media](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
+   */
+  getAlbumsPath(): Promise<AlbumsPathResponse>;
 }
 
 export interface MediaSaveOptions {
@@ -129,6 +142,10 @@ export type MediaField =
 
 export interface MediaResponse {
   medias: MediaAsset[];
+}
+
+export interface AlbumsPathResponse {
+  path: string;
 }
 
 export interface MediaAsset {
