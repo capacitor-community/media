@@ -25,9 +25,20 @@ const CreateDemoAlbum = () => {
         setStatus("Created demo album");
     }
 
+    const getAlbumsPath = async () => {
+        setStatus("");
+        try {
+            const { path } = await Media.getAlbumsPath();
+            setStatus(`Albums path: ${path}`);
+        } catch (e: any) {
+            setStatus(`Error: ${e.message}`);
+        }
+    };
+
     return <>
         <IonButton onClick={createRandomAlbum}>Create Random Demo Album</IonButton>
         <IonButton onClick={createDemoAlbum}>Create Demo Album</IonButton>
+        <IonButton onClick={getAlbumsPath}>Get Albums Path (Android)</IonButton>
         <p>{ status }</p>
     </>;
 }

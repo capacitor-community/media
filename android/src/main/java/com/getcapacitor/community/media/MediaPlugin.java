@@ -193,7 +193,7 @@ public class MediaPlugin extends Plugin {
             cur.close();
         }
 
-        File albumPath = new File(getAlbumPath());
+        File albumPath = new File(_getAlbumsPath());
         for (File sub : albumPath.listFiles()) {
             if (sub.isDirectory() && !identifiers.contains(sub.getAbsolutePath())) {
                 JSObject album = new JSObject();
@@ -212,7 +212,14 @@ public class MediaPlugin extends Plugin {
         call.resolve(response);
     }
 
-    private String getAlbumPath() {
+    @PluginMethod
+    public void getAlbumsPath(PluginCall call) {
+        JSObject data = new JSObject();
+        data.put("path", _getAlbumsPath());
+        call.resolve(data);
+    }
+
+    private String _getAlbumsPath() {
         if (Build.VERSION.SDK_INT >= API_LEVEL_29) {
             return getContext().getExternalMediaDirs()[0].getAbsolutePath();
         } else {
@@ -322,7 +329,7 @@ public class MediaPlugin extends Plugin {
             return;
         }
 
-        File f = new File(getAlbumPath(), folderName);
+        File f = new File(_getAlbumsPath(), folderName);
 
         if (!f.exists()) {
             if (!f.mkdir()) {

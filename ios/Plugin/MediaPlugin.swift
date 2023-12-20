@@ -279,6 +279,10 @@ public class MediaPlugin: CAPPlugin {
         })
     }
     
+    @objc func getAlbumsPath(_ call: CAPPluginCall) {
+        call.unimplemented("Not implemented on iOS.")
+    }
+    
     @available(iOS 14, *)
     func getPHAccessLevel(permission: AccessLevel) -> PHAccessLevel {
         switch (permission) {
