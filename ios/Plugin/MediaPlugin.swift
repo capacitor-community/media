@@ -2,7 +2,6 @@ import Foundation
 import Photos
 import Capacitor
 import SDWebImage
-import MobileCoreServices
 
 public class JSDate {
     static func toString(_ date: Date) -> String {
