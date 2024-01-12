@@ -2,6 +2,7 @@ import Foundation
 import Photos
 import Capacitor
 import SDWebImage
+import MobileCoreServices
 
 public class JSDate {
     static func toString(_ date: Date) -> String {
@@ -93,7 +94,6 @@ public class MediaPlugin: CAPPlugin {
 
         checkAuthorization(permission: .addOnly, allowed: {
             // Add it to the photo library.
-            var image: UIImage? = nil;
             let url = URL(string: data)
             let data = try? Data(contentsOf: url!)
             let mutableData = NSMutableData() // Output data buffer
@@ -105,19 +105,26 @@ public class MediaPlugin: CAPPlugin {
                     return
                 }
                 
-                let metadata = CGImageSourceCopyPropertiesAtIndex(imgSource!, 0, .none)
-                image = UIImage(data: data!)
-
                 let sourceType = CGImageSourceGetType(imgSource!)
-                
+                let frameCount = CGImageSourceGetCount(imgSource!)
+
                 // Create data buffer with image and metadata
-                let imgDest = CGImageDestinationCreateWithData(mutableData as CFMutableData, sourceType!, 1, nil)
+                let imgDest = CGImageDestinationCreateWithData(mutableData as CFMutableData, sourceType!, frameCount, nil)
+                
                 if (imgDest == nil) {
                     call.reject("Creating output image data buffer failed!")
                     return
                 }
                 
-                CGImageDestinationAddImage(imgDest!, image!.cgImage!, metadata)
+                let cfProperties = CGImageSourceCopyProperties(imgSource!, nil)
+                CGImageDestinationSetProperties(imgDest!, cfProperties)
+                
+                for i in 0 ..< frameCount {
+                    let frame = CGImageSourceCreateImageAtIndex(imgSource!, i, nil)
+                    let frameProperties = CGImageSourceCopyPropertiesAtIndex(imgSource!, i, nil)
+                    CGImageDestinationAddImage(imgDest!, frame!, frameProperties)
+                }
+                
                 let finished = CGImageDestinationFinalize(imgDest!)
                 if (!finished) {
                     call.reject("Saving output image failed!")
