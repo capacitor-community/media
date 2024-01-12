@@ -95,7 +95,7 @@ public class MediaPlugin: CAPPlugin {
             // Add it to the photo library.
             var image: UIImage? = nil;
             let url = URL(string: data)
-            var data = try? Data(contentsOf: url!)
+            let data = try? Data(contentsOf: url!)
             let mutableData = NSMutableData() // Output data buffer
             if (data != nil) {
                 // Get image metadata
@@ -106,19 +106,12 @@ public class MediaPlugin: CAPPlugin {
                 }
                 
                 let metadata = CGImageSourceCopyPropertiesAtIndex(imgSource!, 0, .none)
-                
-                // Convert image to PNG
                 image = UIImage(data: data!)
-                data = image?.sd_imageData(as: .PNG)
-                if (data != nil) {
-                    image = UIImage(data: data!)
-                } else {
-                    call.reject("Image conversion to PNG failed!")
-                    return
-                }
+
+                let sourceType = CGImageSourceGetType(imgSource!)
                 
                 // Create data buffer with image and metadata
-                let imgDest = CGImageDestinationCreateWithData(mutableData as CFMutableData, "public.png" as CFString, 1, nil)
+                let imgDest = CGImageDestinationCreateWithData(mutableData as CFMutableData, sourceType!, 1, nil)
                 if (imgDest == nil) {
                     call.reject("Creating output image data buffer failed!")
                     return

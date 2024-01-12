@@ -19,7 +19,6 @@ export interface MediaPlugin {
    * On Android, all image formats supported by the user's photo viewer are supported.
    * 
    * On iOS, [all image formats supported by SDWebImage are supported.](https://github.com/SDWebImage/SDWebImage#supported-image-formats)
-   * All images on iOS are converted to PNG for system compatability. 
    * 
    * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
    */
