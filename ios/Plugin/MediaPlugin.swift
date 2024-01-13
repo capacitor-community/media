@@ -93,62 +93,30 @@ public class MediaPlugin: CAPPlugin {
 
         checkAuthorization(permission: .addOnly, allowed: {
             // Add it to the photo library.
-            let url = URL(string: data)
-            let data = try? Data(contentsOf: url!)
-            let mutableData = NSMutableData() // Output data buffer
-            if (data != nil) {
-                // Get image metadata
-                let imgSource = CGImageSourceCreateWithData(data! as CFData, .none)
-                if (imgSource == nil) {
-                    call.reject("Loading image data failed!")
-                    return
-                }
-                
-                let sourceType = CGImageSourceGetType(imgSource!)
-                let frameCount = CGImageSourceGetCount(imgSource!)
+            let imageUrl = URL(string: data)
 
-                // Create data buffer with image and metadata
-                let imgDest = CGImageDestinationCreateWithData(mutableData as CFMutableData, sourceType!, frameCount, nil)
-                
-                if (imgDest == nil) {
-                    call.reject("Creating output image data buffer failed!")
-                    return
-                }
-                
-                let cfProperties = CGImageSourceCopyProperties(imgSource!, nil)
-                CGImageDestinationSetProperties(imgDest!, cfProperties)
-                
-                for i in 0 ..< frameCount {
-                    let frame = CGImageSourceCreateImageAtIndex(imgSource!, i, nil)
-                    let frameProperties = CGImageSourceCopyPropertiesAtIndex(imgSource!, i, nil)
-                    CGImageDestinationAddImage(imgDest!, frame!, frameProperties)
-                }
-                
-                let finished = CGImageDestinationFinalize(imgDest!)
-                if (!finished) {
-                    call.reject("Saving output image failed!")
-                    return
-                }
-            } else {
-                call.reject("Could not convert fileURL into Data");
-                return
-            }
-            
-            PHPhotoLibrary.shared().performChanges({
-                let creationRequest = PHAssetCreationRequest.forAsset()
-                creationRequest.addResource(with: .photo, data: mutableData as Data, options: .none)
+            SDWebImageDownloader.shared.downloadImage(with: imageUrl, options: [], progress: nil) { (image, data, error, finished) in
+               guard let imageData = data, finished else {
+                   call.reject("Unable to download image from url")
+                   return
+               }
 
-                if let collection = targetCollection {
-                    let addAssetRequest = PHAssetCollectionChangeRequest(for: collection)
-                    addAssetRequest?.addAssets([creationRequest.placeholderForCreatedAsset! as Any] as NSArray)
-                }
-            }, completionHandler: {success, error in
-                if !success {
-                    call.reject("Unable to save image to album")
-                } else {
-                    call.resolve()
-                }
-            })
+                PHPhotoLibrary.shared().performChanges({
+                    let creationRequest = PHAssetCreationRequest.forAsset()
+                    creationRequest.addResource(with: .photo, data: imageData as Data, options: .none)
+
+                    if let collection = targetCollection {
+                        let addAssetRequest = PHAssetCollectionChangeRequest(for: collection)
+                        addAssetRequest?.addAssets([creationRequest.placeholderForCreatedAsset! as Any] as NSArray)
+                    }
+                }, completionHandler: {success, error in
+                    if !success {
+                        call.reject("Unable to save image to album")
+                    } else {
+                        call.resolve()
+                    }
+                })
+           }
         }, notAllowed: {
             call.reject("Access to photos not allowed by user")
         })
@@ -220,64 +188,9 @@ public class MediaPlugin: CAPPlugin {
     }
 
     @objc func saveGif(_ call: CAPPluginCall) {
-        guard let data = call.getString("path") else {
-            call.reject("Must provide the data path")
-            return
-        }
-
-        let albumId = call.getString("albumIdentifier")
-        var targetCollection: PHAssetCollection?
-
-        if albumId != nil {
-            let albumFetchResult = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [albumId!], options: nil)
-            albumFetchResult.enumerateObjects({ (collection, count, _) in
-                targetCollection = collection
-            })
-            if targetCollection == nil {
-                call.reject("Unable to find that album")
-                return
-            }
-            if !targetCollection!.canPerform(.addContent) {
-                call.reject("Album doesn't support adding content (is this a smart album?)")
-                return
-            }
-        }
-
-        checkAuthorization(permission: .addOnly, allowed: {
-            // Write to a temp location first if not on disk -- required for playable GIFs
-            var fileURL = URL(string: data)
-            if !data.starts(with: "file://") {
-                let directory = NSTemporaryDirectory()
-                let fileName = NSUUID().uuidString + ".gif"
-                fileURL = NSURL.fileURL(withPathComponents: [directory, fileName])
-                
-                let url = URL(string: data)
-                let data = try! Data(contentsOf: url!)
-                try! data.write(to: fileURL!)
-            }
-            
-            // Add it to the photo library.
-            PHPhotoLibrary.shared().performChanges({
-                let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: fileURL! as URL)
-
-                if let collection = targetCollection {
-                    let addAssetRequest = PHAssetCollectionChangeRequest(for: collection)
-                    addAssetRequest?.addAssets([creationRequest?.placeholderForCreatedAsset! as Any] as NSArray)
-                }
-
-            }, completionHandler: {success, error in
-                if !success {
-                    call.reject("Unable to save gif to album")
-                } else {
-                    //TODO: return fileUri
-                    call.resolve()
-                }
-            })
-        }, notAllowed: {
-            call.reject("Access to photos not allowed by user")
-        })
+        savePhoto(call)
     }
-    
+        
     @objc func getAlbumsPath(_ call: CAPPluginCall) {
         call.unimplemented("Not implemented on iOS.")
     }
