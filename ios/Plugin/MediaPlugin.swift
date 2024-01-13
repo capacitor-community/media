@@ -96,10 +96,10 @@ public class MediaPlugin: CAPPlugin {
             let imageUrl = URL(string: data)
 
             SDWebImageDownloader.shared.downloadImage(with: imageUrl, options: [], progress: nil) { (image, data, error, finished) in
-               guard let imageData = data, finished else {
+                guard let imageData = data, finished else {
                    call.reject("Unable to download image from url")
                    return
-               }
+                }
 
                 PHPhotoLibrary.shared().performChanges({
                     let creationRequest = PHAssetCreationRequest.forAsset()
