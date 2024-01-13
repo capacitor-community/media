@@ -94,8 +94,9 @@ public class MediaPlugin: CAPPlugin {
         checkAuthorization(permission: .addOnly, allowed: {
             // Add it to the photo library.
             let imageUrl = URL(string: data)
+            let downloaderOptions: SDWebImageDownloaderOptions = [.ignoreCachedResponse]
 
-            SDWebImageDownloader.shared.downloadImage(with: imageUrl, options: [], progress: nil) { (image, data, error, finished) in
+            SDWebImageDownloader.shared.downloadImage(with: imageUrl, options: downloaderOptions, progress: nil) { (image, data, error, finished) in
                 guard let imageData = data, finished else {
                    call.reject("Unable to download image from url")
                    return
