@@ -85,7 +85,7 @@ Unless otherwise noted, there should be full feature parity between iOS and Andr
 getMedias(options?: MediaFetchOptions | undefined) => Promise<MediaResponse>
 ```
 
-Get filtered media from camera roll (pictures only currently). iOS only.
+Get filtered thumbnails from camera roll. iOS only.
 
 [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetMedias.tsx)
 
@@ -262,15 +262,15 @@ Code Examples: [basic](https://github.com/capacitor-community/media/blob/master/
 
 #### MediaFetchOptions
 
-| Prop                   | Type                                                                                                                                                                                     | Description                                                           |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| **`quantity`**         | <code>number</code>                                                                                                                                                                      | The number of photos to fetch, sorted by last created date descending |
-| **`thumbnailWidth`**   | <code>number</code>                                                                                                                                                                      | The width of thumbnail to return                                      |
-| **`thumbnailHeight`**  | <code>number</code>                                                                                                                                                                      | The height of thumbnail to return                                     |
-| **`thumbnailQuality`** | <code>number</code>                                                                                                                                                                      | The quality of thumbnail to return as JPEG (0-100)                    |
-| **`types`**            | <code>"photos"</code>                                                                                                                                                                    | Which types of assets to return. Only photos supported currently.     |
-| **`albumIdentifier`**  | <code>string</code>                                                                                                                                                                      | Which album identifier to query in (get identifier with getAlbums())  |
-| **`sort`**             | <code>"mediaType" \| "mediaSubtypes" \| "sourceType" \| "pixelWidth" \| "pixelHeight" \| "creationDate" \| "modificationDate" \| "isFavorite" \| "burstIdentifier" \| MediaSort[]</code> | Sort order of returned assets by field and ascending/descending       |
+| Prop                   | Type                                                                                                                                                                                     | Description                                                                                                                                                              |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **`quantity`**         | <code>number</code>                                                                                                                                                                      | The number of photos to fetch, sorted by last created date descending. To paginate, just request a higher quantity -- OS caching should make this relatively performant. |
+| **`thumbnailWidth`**   | <code>number</code>                                                                                                                                                                      | The width of thumbnail to return                                                                                                                                         |
+| **`thumbnailHeight`**  | <code>number</code>                                                                                                                                                                      | The height of thumbnail to return                                                                                                                                        |
+| **`thumbnailQuality`** | <code>number</code>                                                                                                                                                                      | The quality of thumbnail to return as JPEG (0-100)                                                                                                                       |
+| **`types`**            | <code>"photos" \| "videos" \| "all"</code>                                                                                                                                               | Which types of assets to return thumbnails for.                                                                                                                          |
+| **`albumIdentifier`**  | <code>string</code>                                                                                                                                                                      | Which album identifier to query in (get identifier with getAlbums())                                                                                                     |
+| **`sort`**             | <code>"mediaType" \| "mediaSubtypes" \| "sourceType" \| "pixelWidth" \| "pixelHeight" \| "creationDate" \| "modificationDate" \| "isFavorite" \| "burstIdentifier" \| MediaSort[]</code> | Sort order of returned assets by field and ascending/descending                                                                                                          |
 
 
 #### MediaSort

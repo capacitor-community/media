@@ -372,6 +372,15 @@ public class MediaPlugin: CAPPlugin {
         let options = PHFetchOptions()
         options.fetchLimit = quantity
         
+        let types = call.getString("types") ?? MediaPlugin.DEFAULT_TYPES
+        if types == "photos" {
+            options.predicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.image.rawValue)
+        } else if types == "videos" {
+            options.predicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.video.rawValue)
+        } else if types == "all" {
+            options.predicate = NSPredicate(format: "(mediaType == %d) || (mediaType == %d)", argumentArray: [PHAssetMediaType.image.rawValue, PHAssetMediaType.video.rawValue])
+        }
+        
         // Set sort
         var sortDescriptors = [] as [NSSortDescriptor];
         
@@ -415,9 +424,6 @@ public class MediaPlugin: CAPPlugin {
             fetchResult = PHAsset.fetchAssets(with: options)
         }
 
-        //let after = call.getString("after")
-
-        let types = call.getString("types") ?? MediaPlugin.DEFAULT_TYPES
         let thumbnailWidth = call.getInt("thumbnailWidth", MediaPlugin.DEFAULT_THUMBNAIL_WIDTH)
         let thumbnailHeight = call.getInt("thumbnailHeight", MediaPlugin.DEFAULT_THUMBNAIL_HEIGHT)
         let thumbnailSize = CGSize(width: thumbnailWidth, height: thumbnailHeight)
@@ -429,14 +435,6 @@ public class MediaPlugin: CAPPlugin {
         requestOptions.isSynchronous = true
 
         fetchResult.enumerateObjects({ (asset, count: Int, stop: UnsafeMutablePointer<ObjCBool>) in
-
-            if asset.mediaType == .image && types == "videos" {
-                return
-            }
-            if asset.mediaType == .video && types == "photos" {
-                return
-            }
-
             var a = JSObject()
 
             self.imageManager.requestImage(for: asset, targetSize: thumbnailSize, contentMode: .aspectFill, options: requestOptions, resultHandler: { (fetchedImage, _) in
@@ -446,7 +444,6 @@ public class MediaPlugin: CAPPlugin {
 
                 a["identifier"] = asset.localIdentifier
 
-                // TODO: We need to know original type
                 a["data"] = image.jpegData(compressionQuality: CGFloat(thumbnailQuality) / 100.0)?.base64EncodedString()
 
                 if asset.creationDate != nil {
@@ -457,6 +454,7 @@ public class MediaPlugin: CAPPlugin {
                 a["thumbnailWidth"] = image.size.width
                 a["thumbnailHeight"] = image.size.height
                 a["location"] = self.makeLocation(asset)
+                a["type"] = asset.mediaType == .image ? "photo" : "video"
 
                 assets.append(a)
             })
