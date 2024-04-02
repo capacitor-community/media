@@ -1,6 +1,6 @@
 export interface MediaPlugin {
   /**
-    * Get filtered media from camera roll (pictures only currently). iOS only.
+    * Get filtered thumbnails from camera roll. iOS only.
     * 
     * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetMedias.tsx)
     */
@@ -90,7 +90,7 @@ export interface MediaSaveOptions {
 
 export interface MediaFetchOptions {
   /**
-   * The number of photos to fetch, sorted by last created date descending
+   * The number of photos to fetch, sorted by last created date descending. To paginate, just request a higher quantity -- OS caching should make this relatively performant.
    */
   quantity?: number;
   /**
@@ -106,9 +106,9 @@ export interface MediaFetchOptions {
    */
   thumbnailQuality?: number;
   /**
-   * Which types of assets to return. Only photos supported currently.
+   * Which types of assets to return thumbnails for.
    */
-  types?: "photos";
+  types?: "photos" | "videos" | "all";
   /**
    * Which album identifier to query in (get identifier with getAlbums())
    */
