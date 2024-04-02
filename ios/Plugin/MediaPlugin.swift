@@ -436,7 +436,7 @@ public class MediaPlugin: CAPPlugin {
 
         fetchResult.enumerateObjects({ (asset, count: Int, stop: UnsafeMutablePointer<ObjCBool>) in
             var a = JSObject()
-                        
+
             self.imageManager.requestImage(for: asset, targetSize: thumbnailSize, contentMode: .aspectFill, options: requestOptions, resultHandler: { (fetchedImage, _) in
                 guard let image = fetchedImage else {
                     return
