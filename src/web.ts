@@ -8,6 +8,7 @@ import type {
   MediaPlugin,
   MediaResponse,
   MediaSaveOptions,
+  MediasIdentifiersResponse,
   PhotoResponse,
 } from './definitions';
 
@@ -38,5 +39,9 @@ export class MediaWeb extends WebPlugin implements MediaPlugin {
   getAlbumsPath(): Promise<AlbumsPathResponse> {
       console.log('getAlbumsPath');
       throw this.unimplemented('Not implemented on web.');
+  }
+  getMediasFromIdentifiers(): Promise<MediasIdentifiersResponse> {
+    console.log('getMediasFromIdentifiers');
+    throw this.unimplemented('Not implemented on web.');
   }
 }

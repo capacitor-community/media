@@ -195,6 +195,14 @@ public class MediaPlugin: CAPPlugin {
     @objc func getAlbumsPath(_ call: CAPPluginCall) {
         call.unimplemented("Not implemented on iOS.")
     }
+
+    @objc func getMediasFromIdentifiers(_ call: CAPPluginCall) {
+        checkAuthorization(permission: .readWrite, allowed: {
+            self.fetchMediasFromIdentifiers(call)
+        }, notAllowed: {
+            call.reject("Access to photos not allowed by user")
+        })
+    }
     
     @available(iOS 14, *)
     func getPHAccessLevel(permission: AccessLevel) -> PHAccessLevel {
@@ -378,6 +386,27 @@ public class MediaPlugin: CAPPlugin {
             ])
     }
 
+    func fetchMediasFromIdentifiers(_ call: CAPPluginCall) {
+        let identifiers: Array<String> = call.getArray("identifiers")
+        let results: PHFetchResult<PHAsset> = PHAsset.fetchAssets(withLocalIdentifiers: identifiers, options: nil)
+        var returnedAssets: [JSObject] = []
+
+        fetchResult.enumerateObjects({ (asset, count: Int, stop: UnsafeMutablePointer<ObjCBool>) in
+            asset.requestContentEditingInput(with: PHContentEditingInputRequestOptions()) { (eidtingInput, info) in
+                var a = JSObject()
+
+                if let input = eidtingInput, let photoUrl = input.fullSizeImageURL {
+                    a["identifier"] = identifiers[count]
+                    a["path"] = photoUrl
+                    returnedAssets.append(a)
+                }
+            }
+        })
+        
+        call.resolve([
+            "medias": returnedAssets
+        ])
+    }
 
     func makeLocation(_ asset: PHAsset) -> JSObject {
         var loc = JSObject()

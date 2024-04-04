@@ -11,4 +11,5 @@ CAP_PLUGIN(MediaPlugin, "Media",
     CAP_PLUGIN_METHOD(saveVideo, CAPPluginReturnPromise);
     CAP_PLUGIN_METHOD(saveGif, CAPPluginReturnPromise);
     CAP_PLUGIN_METHOD(getAlbumsPath, CAPPluginReturnPromise);
+    CAP_PLUGIN_METHOD(getMediasFromIdentifiers, CAPPluginReturnPromise);
 )

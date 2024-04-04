@@ -71,6 +71,7 @@ Unless otherwise noted, there should be full feature parity between iOS and Andr
 * [`saveGif(...)`](#savegif)
 * [`createAlbum(...)`](#createalbum)
 * [`getAlbumsPath()`](#getalbumspath)
+* [`getMediasFromIdentifiers()`](#getmediasfromidentifiers)
 * [Interfaces](#interfaces)
 * [Enums](#enums)
 
@@ -224,6 +225,27 @@ Code Examples: [basic](https://github.com/capacitor-community/media/blob/master/
 --------------------
 
 
+### getMediasFromIdentifiers()
+
+```typescript
+getMediasFromIdentifiers(options: MediasIdentifiersOptions) => Promise<MediasIdentifiersResponse>
+```
+
+Get the image path from one or multiple image identifiers (retrieved using getMedias() on iOS)
+
+Only available on iOS.
+
+Code Examples: // TO DO
+
+| Param         | Type                                                            |
+| ------------- | --------------------------------------------------------------- |
+| **`options`** | <code><a href="#mediasidentifiersoptions">MediasIdentifiersOptions</a></code> |
+
+**Returns:** <code>Promise&lt;<a href="#mediasidentifiersresponse">MediasIdentifiersResponse</a>&gt;</code>
+
+--------------------
+
+
 ### Interfaces
 
 
@@ -246,6 +268,15 @@ Code Examples: [basic](https://github.com/capacitor-community/media/blob/master/
 | **`thumbnailWidth`**  | <code>number</code>                                     | Width of thumbnail preview                                              |
 | **`thumbnailHeight`** | <code>number</code>                                     | Height of thumbnail preview                                             |
 | **`location`**        | <code><a href="#medialocation">MediaLocation</a></code> | Location metadata for the asset                                         |
+
+
+#### MediasIdentifierAsset
+
+| Prop                  | Type                                                    | Description                                                             |
+| --------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------- |
+| **`identifier`**      | <code>string</code>                                     | Identifier linked to the path                                           |
+| **`path`**            | <code>string</code>                                     | IOS path of the asset                                                   |
+
 
 
 #### MediaLocation

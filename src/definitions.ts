@@ -63,6 +63,14 @@ export interface MediaPlugin {
    * Code Examples: [basic](https://github.com/capacitor-community/media/blob/master/example/src/components/CreateDemoAlbum.tsx), [when saving media](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
    */
   getAlbumsPath(): Promise<AlbumsPathResponse>;
+  /**
+   * Get the image path from one or multiple image identifiers (retrieved using getMedias() on iOS)
+   * 
+   * Only available on iOS.
+   * 
+   * Code Examples: // TO DO
+   */
+  getMediasFromIdentifiers(options: MediasIdentifiersOptions): Promise<MediasIdentifiersResponse>;
 }
 
 export interface MediaSaveOptions {
@@ -118,6 +126,13 @@ export interface MediaFetchOptions {
   sort?: MediaField | MediaSort[];
 }
 
+export interface MediasIdentifiersOptions {
+  /**
+   * An array of one or multiple image identifiers to return their full path.
+   */
+  identifiers?: string[];
+}
+
 export interface MediaSort {
   key: MediaField;
   ascending: boolean;
@@ -145,6 +160,10 @@ export interface MediaResponse {
 
 export interface AlbumsPathResponse {
   path: string;
+}
+
+export interface MediasIdentifiersResponse {
+  medias: MediasIdentifierAsset[];
 }
 
 export interface MediaAsset {
@@ -180,6 +199,18 @@ export interface MediaAsset {
    * Location metadata for the asset
    */
   location: MediaLocation;
+}
+
+export interface MediasIdentifierAsset {
+  /**
+   * Identifier linked to the path
+  */
+  identifier: string;
+
+  /**
+   * IOS path of the asset
+  */
+  path: string;
 }
 
 export interface MediaLocation {
