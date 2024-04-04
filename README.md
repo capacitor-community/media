@@ -270,6 +270,13 @@ Code Examples: // TO DO
 | **`location`**        | <code><a href="#medialocation">MediaLocation</a></code> | Location metadata for the asset                                         |
 
 
+#### MediasIdentifiersResponse
+
+| Prop         | Type                      |
+| ------------ | ------------------------- |
+| **`medias`** | <code>MediasIdentifierAsset[]</code> |
+
+
 #### MediasIdentifierAsset
 
 | Prop                  | Type                                                    | Description                                                             |
@@ -301,6 +308,13 @@ Code Examples: // TO DO
 | **`types`**            | <code>"photos" \| "videos" \| "all"</code>                                                                                                                                               | Which types of assets to return thumbnails for.                                                                                                                          |
 | **`albumIdentifier`**  | <code>string</code>                                                                                                                                                                      | Which album identifier to query in (get identifier with getAlbums())                                                                                                     |
 | **`sort`**             | <code>"mediaType" \| "mediaSubtypes" \| "sourceType" \| "pixelWidth" \| "pixelHeight" \| "creationDate" \| "modificationDate" \| "isFavorite" \| "burstIdentifier" \| MediaSort[]</code> | Sort order of returned assets by field and ascending/descending                                                                                                          |
+
+
+#### MediasIdentifiersOptions
+
+| Prop            | Type                | Description                              |
+| --------------- | ------------------- | ---------------------------------------- |
+| **`identifiers`**  | <code>string[]</code> | An array of media identifiers          |
 
 
 #### MediaSort
