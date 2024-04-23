@@ -3,7 +3,7 @@ import { Media, MediaSaveOptions } from "@capacitor-community/media";
 import { IonButton } from "@ionic/react";
 import { Camera, CameraResultType } from "@capacitor/camera";
 import { photoDataURI, gifDataURI, videoDataURI, webpDataURI } from "./data";
-import { FilePicker } from "@whiteguru/capacitor-plugin-file-picker";
+import { FilePicker } from '@capawesome/capacitor-file-picker';
 import { Capacitor } from "@capacitor/core";
 
 const SaveMedia = () => {
@@ -83,13 +83,16 @@ const SaveMedia = () => {
 
     const saveTakenVideo = async () => {
         setStatus("");
-        const videos = await FilePicker.pick({
-            mimes: ["video/*"],
-            multiple: false
-        });
+        const videos = await FilePicker.pickVideos({ readData: true });
+        let data = videos.files[0].data;
+        let mimeType = videos.files[0].mimeType;
 
-        let path = videos.files[0].path;
-        let opts: MediaSaveOptions = { path, albumIdentifier: await ensureDemoAlbum() };
+        if (!data) {
+            throw new Error("video data does not exist");
+        }
+
+        var blobUrl = "data:" + mimeType + ";base64," + data;
+        let opts: MediaSaveOptions = { path: blobUrl, albumIdentifier: await ensureDemoAlbum() };
         await Media.saveVideo(opts);
         setStatus("Re-saved video from camera roll!");
     };

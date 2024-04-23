@@ -4,14 +4,15 @@
   "private": true,
   "dependencies": {
     "@capacitor-community/media": "file:../",
-    "@capacitor/android": "^5.0.0",
-    "@capacitor/app": "^5.0.0",
-    "@capacitor/camera": "^5.0.0",
-    "@capacitor/core": "^5.0.0",
-    "@capacitor/haptics": "^5.0.0",
-    "@capacitor/ios": "^5.0.0",
-    "@capacitor/keyboard": "^5.0.0",
-    "@capacitor/status-bar": "^5.0.0",
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/app": "^6.0.0",
+    "@capacitor/camera": "^6.0.0",
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/haptics": "^6.0.0",
+    "@capacitor/ios": "^6.0.0",
+    "@capacitor/keyboard": "^6.0.0",
+    "@capacitor/status-bar": "^6.0.0",
+    "@capawesome/capacitor-file-picker": "^6.0.0",
     "@ionic/react": "^6.0.0",
     "@ionic/react-router": "^6.0.0",
     "@testing-library/jest-dom": "^5.11.9",
@@ -23,7 +24,6 @@
     "@types/react-dom": "^18.0.6",
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
-    "@whiteguru/capacitor-plugin-file-picker": "^5.0.1",
     "history": "^4.9.0",
     "ionicons": "^6.0.3",
     "react": "^18.2.0",
@@ -71,7 +71,7 @@
     ]
   },
   "devDependencies": {
-    "@capacitor/cli": "^5.0.0"
+    "@capacitor/cli": "^6.0.0"
   },
   "description": "An Ionic project"
 }

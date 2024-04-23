@@ -20,5 +20,5 @@ project(':capacitor-keyboard').projectDir = new File('../node_modules/@capacitor
 include ':capacitor-status-bar'
 project(':capacitor-status-bar').projectDir = new File('../node_modules/@capacitor/status-bar/android')
 
-include ':whiteguru-capacitor-plugin-file-picker'
-project(':whiteguru-capacitor-plugin-file-picker').projectDir = new File('../node_modules/@whiteguru/capacitor-plugin-file-picker/android')
+include ':capawesome-capacitor-file-picker'
+project(':capawesome-capacitor-file-picker').projectDir = new File('../node_modules/@capawesome/capacitor-file-picker/android')
