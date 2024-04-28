@@ -103,19 +103,6 @@ public class MediaPlugin extends Plugin {
     }
 
     @PluginMethod
-    public void saveGif(PluginCall call) {
-        Log.d("DEBUG LOG", "SAVE GIF TO ALBUM");
-        if (isStoragePermissionGranted()) {
-            Log.d("DEBUG LOG", "HAS PERMISSION");
-            _saveMedia(call);
-        } else {
-            Log.d("DEBUG LOG", "NOT ALLOWED");
-            this.bridge.saveCall(call);
-            requestAllPermissions(call, "permissionCallback");
-        }
-    }
-
-    @PluginMethod
     public void createAlbum(PluginCall call) {
         Log.d("DEBUG LOG", "CREATE ALBUM");
         if (isStoragePermissionGranted()) {
@@ -139,7 +126,7 @@ public class MediaPlugin extends Plugin {
         switch (call.getMethodName()) {
             case "getMedias" -> call.unimplemented();
             case "getAlbums" -> _getAlbums(call);
-            case "savePhoto", "saveVideo", "saveGif" -> _saveMedia(call);
+            case "savePhoto", "saveVideo" -> _saveMedia(call);
             case "createAlbum" -> _createAlbum(call);
         }
     }

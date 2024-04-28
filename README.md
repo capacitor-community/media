@@ -68,7 +68,6 @@ Unless otherwise noted, there should be full feature parity between iOS and Andr
 * [`getAlbums()`](#getalbums)
 * [`savePhoto(...)`](#savephoto)
 * [`saveVideo(...)`](#savevideo)
-* [`saveGif(...)`](#savegif)
 * [`createAlbum(...)`](#createalbum)
 * [`getAlbumsPath()`](#getalbumspath)
 * [Interfaces](#interfaces)
@@ -119,13 +118,12 @@ Get list of albums.
 savePhoto(options?: MediaSaveOptions | undefined) => Promise<PhotoResponse>
 ```
 
-Saves a photo to the camera roll.
+Saves a still photo or GIF to the camera roll.
 
 On Android and iOS, this supports web URLs, base64 encoded images 
 (e.g. data:image/jpeg;base64,...), and local files.
 On Android, all image formats supported by the user's photo viewer are supported.
-
-On iOS, [all image formats supported by SDWebImage are supported.](https://github.com/SDWebImage/SDWebImage#supported-image-formats)
+On iOS, most common image formats are supported.
 
 [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
 
@@ -150,29 +148,6 @@ On Android and iOS, this supports web URLs, base64 encoded videos
 (e.g. data:image/mp4;base64,...), and local files.
 On Android, all video formats supported by the user's photo viewer are supported.
 On iOS, the supported formats are based on whatever iOS supports at the time.
-
-[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
-
-| Param         | Type                                                          |
-| ------------- | ------------------------------------------------------------- |
-| **`options`** | <code><a href="#mediasaveoptions">MediaSaveOptions</a></code> |
-
-**Returns:** <code>Promise&lt;<a href="#photoresponse">PhotoResponse</a>&gt;</code>
-
---------------------
-
-
-### saveGif(...)
-
-```typescript
-saveGif(options?: MediaSaveOptions | undefined) => Promise<PhotoResponse>
-```
-
-Saves an animated GIF to the camera roll.
-
-On Android and iOS, this supports web URLs, base64 encoded GIFs 
-(e.g. data:image/gif;base64,...), and local files.
-This only supports GIF files specifically.
 
 [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
 

@@ -12,13 +12,12 @@ export interface MediaPlugin {
     */
   getAlbums(): Promise<MediaAlbumResponse>;
   /**
-   * Saves a photo to the camera roll.
+   * Saves a still photo or GIF to the camera roll.
    * 
    * On Android and iOS, this supports web URLs, base64 encoded images 
    * (e.g. data:image/jpeg;base64,...), and local files.
    * On Android, all image formats supported by the user's photo viewer are supported.
-   * 
-   * On iOS, [all image formats supported by SDWebImage are supported.](https://github.com/SDWebImage/SDWebImage#supported-image-formats)
+   * On iOS, most common image formats are supported.
    * 
    * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
    */
@@ -34,16 +33,6 @@ export interface MediaPlugin {
    * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
    */
   saveVideo(options?: MediaSaveOptions): Promise<PhotoResponse>;
-  /**
-   * Saves an animated GIF to the camera roll.
-   * 
-   * On Android and iOS, this supports web URLs, base64 encoded GIFs 
-   * (e.g. data:image/gif;base64,...), and local files.
-   * This only supports GIF files specifically.
-   * 
-   * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
-   */
-  saveGif(options?: MediaSaveOptions): Promise<PhotoResponse>;
   /**
    * Creates an album.
    * 

@@ -27,10 +27,6 @@ export class MediaWeb extends WebPlugin implements MediaPlugin {
     console.log('saveVideo', options);
     throw this.unimplemented('Not implemented on web.');
   }
-  saveGif(options?: MediaSaveOptions): Promise<PhotoResponse> {
-    console.log('saveGif', options);
-    throw this.unimplemented('Not implemented on web.');
-  }
   createAlbum(options: MediaAlbumCreate): Promise<void> {
     console.log('createAlbum', options);
     throw this.unimplemented('Not implemented on web.');
