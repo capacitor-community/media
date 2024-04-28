@@ -185,11 +185,6 @@ public class MediaPlugin: CAPPlugin {
         }, notAllowed: {
             call.reject("Access to photos not allowed by user")
         })
-
-    }
-
-    @objc func saveGif(_ call: CAPPluginCall) {
-        savePhoto(call)
     }
         
     @objc func getAlbumsPath(_ call: CAPPluginCall) {

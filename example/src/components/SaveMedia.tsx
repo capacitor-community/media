@@ -70,14 +70,14 @@ const SaveMedia = () => {
     const saveGIFDataURI = async () => {
         setStatus("");
         let opts: MediaSaveOptions = { path: gifDataURI, albumIdentifier: await ensureDemoAlbum() };
-        await Media.saveGif(opts);
+        await Media.savePhoto(opts);
         setStatus("Saved GIF from data URI!");
     };
 
     const saveGIFOnline = async () => {
         setStatus("");
         let opts: MediaSaveOptions = { path: "https://upload.wikimedia.org/wikipedia/commons/2/2c/Rotating_earth_%28large%29.gif", albumIdentifier: await ensureDemoAlbum() };
-        await Media.saveGif(opts);
+        await Media.savePhoto(opts);
         setStatus("Saved GIF from online source URL!");
     };
 
@@ -91,7 +91,7 @@ const SaveMedia = () => {
             throw new Error("video data does not exist");
         }
 
-        var blobUrl = "data:" + mimeType + ";base64," + data;
+        const blobUrl = "data:" + mimeType + ";base64," + data;
         let opts: MediaSaveOptions = { path: blobUrl, albumIdentifier: await ensureDemoAlbum() };
         await Media.saveVideo(opts);
         setStatus("Re-saved video from camera roll!");
