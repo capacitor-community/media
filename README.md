@@ -50,7 +50,7 @@ npm install @capacitor-community/media # NPM
 yarn add @capacitor-community/media # Yarn
 ```
 
-This plugin is currently for Capacitor 5. Add an `@4` at the end to install for Capacitor 4.
+This plugin is currently for Capacitor 6. Add an `@5` at the end to install for Capacitor 5.
 
 After installing, be sure to sync by running `ionic cap sync`.
 

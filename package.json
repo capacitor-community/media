@@ -1,6 +1,6 @@
 {
   "name": "@capacitor-community/media",
-  "version": "5.4.1",
+  "version": "6.0.0",
   "description": "Enable some media features for Capacitor such as create albums, save videos, gifs and more.",
   "author": "Stewan Silva",
   "license": "MIT",
@@ -39,10 +39,10 @@
     "contributors:gen": "all-contributors generate"
   },
   "devDependencies": {
-    "@capacitor/android": "^5.0.0",
-    "@capacitor/core": "^5.0.0",
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/core": "^6.0.0",
     "@capacitor/docgen": "^0.0.10",
-    "@capacitor/ios": "^5.0.0",
+    "@capacitor/ios": "^6.0.0",
     "@ionic/eslint-config": "^0.3.0",
     "@ionic/prettier-config": "^1.0.1",
     "@ionic/swiftlint-config": "^1.1.2",
@@ -56,7 +56,7 @@
     "typescript": "~4.1.5"
   },
   "peerDependencies": {
-    "@capacitor/core": "^5.0.0"
+    "@capacitor/core": "^6.0.0"
   },
   "prettier": "@ionic/prettier-config",
   "swiftlint": "@ionic/swiftlint-config",
