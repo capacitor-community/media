@@ -15,6 +15,11 @@ enum AccessLevel {
     case readWrite
 }
 
+let EC_ACCESS_DENIED = "accessDenied";
+let EC_ARG_ERROR = "argumentError";
+let EC_DOWNLOAD_ERROR = "downloadError";
+let EC_FS_ERROR = "filesystemError";
+
 /**
  * Please read the Capacitor iOS Plugin Development Guide
  * here: https://capacitorjs.com/docs/plugins/ios
@@ -34,7 +39,7 @@ public class MediaPlugin: CAPPlugin {
         checkAuthorization(permission: .readWrite, allowed: {
             self.fetchAlbumsToJs(call)
         }, notAllowed: {
-            call.reject("Access to photos not allowed by user", "accessDenied")
+            call.reject("Access to photos not allowed by user", EC_ACCESS_DENIED)
         })
     }
 
@@ -42,13 +47,13 @@ public class MediaPlugin: CAPPlugin {
         checkAuthorization(permission: .readWrite, allowed: {
             self.fetchResultAssetsToJs(call)
         }, notAllowed: {
-            call.reject("Access to photos not allowed by user", "accessDenied")
+            call.reject("Access to photos not allowed by user", EC_ACCESS_DENIED)
         })
     }
 
     @objc func createAlbum(_ call: CAPPluginCall) {
         guard let name = call.getString("name") else {
-            call.reject("Must provide a name", "argumentError")
+            call.reject("Must provide a name", EC_ARG_ERROR)
             return
         }
 
@@ -57,19 +62,19 @@ public class MediaPlugin: CAPPlugin {
                 PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: name)
             }, completionHandler: { success, error in
                 if !success {
-                    call.reject("Unable to create album: \(error?.localizedDescription ?? "Unknown error")", "filesystemError")
+                    call.reject("Unable to create album: \(error?.localizedDescription ?? "Unknown error")", EC_FS_ERROR)
                     return
                 }
                 call.resolve()
             })
         }, notAllowed: {
-            call.reject("Access to photos not allowed by user", "accessDenied")
+            call.reject("Access to photos not allowed by user", EC_ACCESS_DENIED)
         })
     }
 
     @objc func savePhoto(_ call: CAPPluginCall) {
         guard let data = call.getString("path") else {
-            call.reject("Must provide the data path", "argumentError")
+            call.reject("Must provide the data path", EC_ARG_ERROR)
             return
         }
 
@@ -82,11 +87,11 @@ public class MediaPlugin: CAPPlugin {
                 targetCollection = collection
             })
             if targetCollection == nil {
-                call.reject("Unable to find that album", "notFound")
+                call.reject("Unable to find that album", EC_ARG_ERROR)
                 return
             }
             if !targetCollection!.canPerform(.addContent) {
-                call.reject("Album doesn't support adding content (is this a smart album?)", "invalidAction")
+                call.reject("Album doesn't support adding content (is this a smart album?)", EC_ARG_ERROR)
                 return
             }
         }
@@ -98,7 +103,7 @@ public class MediaPlugin: CAPPlugin {
 
             SDWebImageDownloader.shared.downloadImage(with: imageUrl, options: downloaderOptions, progress: nil) { (image, data, error, finished) in
                 guard let imageData = data, finished else {
-                   call.reject("Unable to download image from URL", "downloadError")
+                   call.reject("Unable to download image from URL", EC_DOWNLOAD_ERROR)
                    return
                 }
 
@@ -112,21 +117,21 @@ public class MediaPlugin: CAPPlugin {
                     }
                 }, completionHandler: {success, error in
                     if !success {
-                        call.reject("Unable to save image to album", "filesystemError")
+                        call.reject("Unable to save image to album", EC_FS_ERROR)
                     } else {
                         call.resolve()
                     }
                 })
            }
         }, notAllowed: {
-            call.reject("Access to photos not allowed by user", "accessDenied")
+            call.reject("Access to photos not allowed by user", EC_ACCESS_DENIED)
         })
 
     }
 
     @objc func saveVideo(_ call: CAPPluginCall) {
         guard let data = call.getString("path") else {
-            call.reject("Must provide the data path", "missingArgument")
+            call.reject("Must provide the data path", EC_ARG_ERROR)
             return
         }
 
@@ -139,11 +144,11 @@ public class MediaPlugin: CAPPlugin {
                 targetCollection = collection
             })
             if targetCollection == nil {
-                call.reject("Unable to find that album", "notFound")
+                call.reject("Unable to find that album", EC_ARG_ERROR)
                 return
             }
             if !targetCollection!.canPerform(.addContent) {
-                call.reject("Album doesn't support adding content (is this a smart album?)", "invalidAction")
+                call.reject("Album doesn't support adding content (is this a smart album?)", EC_ARG_ERROR)
                 return
             }
         }
@@ -176,13 +181,13 @@ public class MediaPlugin: CAPPlugin {
                 }
             }, completionHandler: {success, error in
                 if !success {
-                    call.reject("Unable to save video to album", "filesystemError")
+                    call.reject("Unable to save video to album", EC_FS_ERROR)
                 } else {
                     call.resolve()
                 }
             })
         }, notAllowed: {
-            call.reject("Access to photos not allowed by user", "accessDenied")
+            call.reject("Access to photos not allowed by user", EC_ACCESS_DENIED)
         })
     }
         
