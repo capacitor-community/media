@@ -78,16 +78,6 @@
       ]
     },
     {
-      "login": "matheusdavidson",
-      "name": "Matheus Davidson",
-      "avatar_url": "https://avatars.githubusercontent.com/u/2229994?v=4",
-      "profile": "https://www.mtda.me/",
-      "contributions": [
-        "code",
-        "doc"
-      ]
-    },
-    {
       "login": "nkalupahana",
       "name": "Nisala Kalupahana",
       "avatar_url": "https://avatars.githubusercontent.com/u/7347290?v=4",
@@ -124,6 +114,16 @@
       "profile": "http://www.mrfischer.de/",
       "contributions": [
         "code"
+      ]
+    },
+    {
+      "login": "matheusdavidson",
+      "name": "Matheus Davidson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2229994?v=4",
+      "profile": "https://www.mtda.me/",
+      "contributions": [
+        "code",
+        "doc"
       ]
     }
   ],
