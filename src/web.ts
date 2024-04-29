@@ -5,6 +5,7 @@ import type {
   MediaAlbumCreate,
   MediaAlbumResponse,
   MediaFetchOptions,
+  MediaPath,
   MediaPlugin,
   MediaResponse,
   MediaSaveOptions,
@@ -14,6 +15,10 @@ import type {
 export class MediaWeb extends WebPlugin implements MediaPlugin {
   getMedias(options?: MediaFetchOptions): Promise<MediaResponse> {
     console.log('getMedias', options);
+    throw this.unimplemented('Not implemented on web.');
+  }
+  getMediaByIdentifier(options: any): Promise<MediaPath> {
+    console.log('getMediaByIdentifier', options);
     throw this.unimplemented('Not implemented on web.');
   }
   getAlbums(): Promise<MediaAlbumResponse> {
