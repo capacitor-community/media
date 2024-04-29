@@ -116,6 +116,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "stephan-fischer",
+      "name": "Stephan Fischer",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2657649?v=4",
+      "profile": "http://www.mrfischer.de/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 5

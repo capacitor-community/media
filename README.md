@@ -12,7 +12,7 @@
   <a href="https://www.npmjs.com/package/@capacitor-community/media"><img src="https://img.shields.io/npm/dw/@capacitor-community/media?style=flat-square" /></a>
   <a href="https://www.npmjs.com/package/@capacitor-community/media"><img src="https://img.shields.io/npm/v/@capacitor-community/media?style=flat-square" /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-11-orange?style=flat-square" /></a>
+<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-12-orange?style=flat-square" /></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 </p>
@@ -407,6 +407,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
   <tr>
     <td align="center"><a href="https://ha6-6ru.hatenablog.com/"><img src="https://avatars.githubusercontent.com/u/20640973?v=4?s=75" width="75px;" alt=""/><br /><sub><b>ha6-6ru</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=ha6-6ru" title="Code">💻</a></td>
+    <td align="center"><a href="http://www.mrfischer.de/"><img src="https://avatars.githubusercontent.com/u/2657649?v=4?s=75" width="75px;" alt=""/><br /><sub><b>Stephan Fischer</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=stephan-fischer" title="Code">💻</a></td>
   </tr>
 </table>
 
