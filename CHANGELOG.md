@@ -1,6 +1,16 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file.
+
+## [6.0.0](https://github.com/capacitor-community/media/compare/v5.4.1...v6.0.0) (2024-04-29)
+- Update to Capacitor 6
+- Fix missing source maps
+- Add `getMediaByIdentifier()` to get full-size media to web layer on iOS
+- Improve error handling on Android
+- Improve download performance on Android
+- Add error codes to promise rejections
+- Handle image URLs without extensions properly on Android
+- Remove `saveGif` -- functionality is now in `savePhoto`
 
 ## [5.4.1](https://github.com/capacitor-community/media/compare/v5.4.0...v5.4.1) (2024-04-02)
 - Update `getMedias()` to also return video thumbnails

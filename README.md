@@ -2,7 +2,7 @@
 <h3 align="center">Capacitor Media</h3>
 <p align="center"><strong><code>@capacitor-community/media</code></strong></p>
 <p align="center">
-  Capacitor community plugin for enabling extra media capabilities
+  Capacitor plugin for saving and retrieving photos and videos, and managing photo albums.
 </p>
 
 <p align="center">
@@ -43,20 +43,19 @@
 
 ## Installation
 
-Run one of the following commands, based on what you're using:
-
 ```bash
-npm install @capacitor-community/media # NPM
-yarn add @capacitor-community/media # Yarn
+npm install @capacitor-community/media
 ```
 
 This plugin is currently for Capacitor 6. Add an `@5` at the end to install for Capacitor 5.
 
 After installing, be sure to sync by running `ionic cap sync`.
 
-## Migrating to Capacitor 5
+## Migrating to Capacitor 6
 
-**A major breaking change has been made to this plugin:** Saving media on Android now takes an album identifier instead of an album name. The album identifier, like on iOS, can be obtained using `getAlbums()`. (This call will now also return empty albums made by the plugin.) To ensure people notice this significant change, the property has been renamed from `album` to `albumIdentifier`, which will need to be updated in your code. It is still optional on iOS.
+There are a few breaking changes to take note of:
+- `saveGif` no longer exists. Use `savePhoto` for images and GIFs.
+- Error text has been changed. If you were checking for specific error messages, you should now use `error.code`, which will be `accessDenied`, `argumentError`, `downloadError`, or `filesystemError`.
 
 ## API
 
