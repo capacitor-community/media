@@ -107,6 +107,15 @@
       "contributions": [
         "maintenance"
       ]
+    },
+    {
+      "login": "ha6-6ru",
+      "name": "ha6-6ru",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20640973?v=4",
+      "profile": "https://ha6-6ru.hatenablog.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 5
