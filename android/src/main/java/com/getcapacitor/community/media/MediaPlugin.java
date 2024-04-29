@@ -63,6 +63,11 @@ public class MediaPlugin extends Plugin {
     private static final int API_LEVEL_29 = 29;
     private static final int API_LEVEL_33 = 33;
 
+    public static final String EC_ACCESS_DENIED = "accessDenied";
+    public static final String EC_ARG_ERROR = "argumentError";
+    public static final String EC_DOWNLOAD_ERROR = "downloadError";
+    public static final String EC_FS_ERROR = "filesystemError";
+
     // @todo
     @PluginMethod
     public void getMedias(PluginCall call) {
@@ -126,7 +131,7 @@ public class MediaPlugin extends Plugin {
     private void permissionCallback(PluginCall call) {
         if (!isStoragePermissionGranted()) {
             Logger.debug(getLogTag(), "User denied storage permission");
-            call.reject("Unable to complete operation; user denied permission request.", "accessDenied");
+            call.reject("Unable to complete operation; user denied permission request.", EC_ACCESS_DENIED);
             return;
         }
 
@@ -225,7 +230,7 @@ public class MediaPlugin extends Plugin {
         Log.d("DEBUG LOG", "___SAVE MEDIA TO ALBUM");
         String inputPath = call.getString("path");
         if (inputPath == null) {
-            call.reject("Input file path is required", "missingArgument");
+            call.reject("Input file path is required", EC_ARG_ERROR);
             return;
         }
 
@@ -238,20 +243,25 @@ public class MediaPlugin extends Plugin {
                 String mime = inputPath.split(";", 2)[0].split(":")[1];
                 String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mime);
                 if (extension == null || extension.isEmpty()) {
-                    call.reject("Cannot identify media type to save image.", "typeError");
+                    call.reject("Cannot identify media type to save image.", EC_ARG_ERROR);
                     return;
                 }
 
-                inputFile = File.createTempFile(
-                        "tmp",
-                        "." + extension,
-                        getContext().getCacheDir()
-                );
-                OutputStream os = new FileOutputStream(inputFile);
-                os.write(decodedBytes);
-                os.close();
+                try {
+                    inputFile = File.createTempFile(
+                            "tmp",
+                            "." + extension,
+                            getContext().getCacheDir()
+                    );
+                    OutputStream os = new FileOutputStream(inputFile);
+                    os.write(decodedBytes);
+                    os.close();
+                } catch (IOException e) {
+                    call.reject("Temporary file creation from data URL failed", EC_FS_ERROR);
+                    return;
+                }
             } catch (Exception e) {
-                call.reject("Temporary file creation from data URL failed", "filesystemError");
+                call.reject("Data URL parsing failed.", EC_ARG_ERROR);
                 return;
             }
         } else if (inputPath.startsWith("http://") || inputPath.startsWith("https://")) {
@@ -271,13 +281,13 @@ public class MediaPlugin extends Plugin {
                 if (extension.isEmpty()) {
                     ResponseBody body = response.body();
                     if (body == null) {
-                        call.reject("Download failed", "downloadError");
+                        call.reject("Download failed", EC_DOWNLOAD_ERROR);
                         return;
                     }
 
                     MediaType mt = body.contentType();
                     if (mt == null) {
-                        call.reject("Cannot identify media type to save image.", "typeError");
+                        call.reject("Cannot identify media type to save image.", EC_ARG_ERROR);
                         return;
                     }
 
@@ -287,17 +297,22 @@ public class MediaPlugin extends Plugin {
 
                 // Still no extension? reject
                 if (extension == null || extension.isEmpty()) {
-                    call.reject("Cannot identify media type to save image.", "typeError");
+                    call.reject("Cannot identify media type to save image.", EC_ARG_ERROR);
                     return;
                 }
 
                 // Save to temp file
-                inputFile = File.createTempFile("tmp", "." + extension, getContext().getCacheDir());
-                OutputStream os = new FileOutputStream(inputFile);
-                os.write(response.body().bytes());
-                os.close();
+                try {
+                    inputFile = File.createTempFile("tmp", "." + extension, getContext().getCacheDir());
+                    OutputStream os = new FileOutputStream(inputFile);
+                    os.write(response.body().bytes());
+                    os.close();
+                } catch (IOException e) {
+                    call.reject("Saving download to device failed.", EC_FS_ERROR);
+                    return;
+                }
             } catch (IOException e) {
-                call.reject("Download failed", "downloadError");
+                call.reject("Download failed", EC_DOWNLOAD_ERROR);
                 return;
             }
         } else {
@@ -312,12 +327,12 @@ public class MediaPlugin extends Plugin {
         if (album != null) {
             albumDir = new File(album);
         } else {
-            call.reject("Album identifier required", "argumentError");
+            call.reject("Album identifier required", EC_ARG_ERROR);
             return;
         }
 
         if (!albumDir.exists() || !albumDir.isDirectory()) {
-            call.reject("Album identifier does not exist, use getAlbums() to get", "argumentError");
+            call.reject("Album identifier does not exist, use getAlbums() to get", EC_ARG_ERROR);
             return;
         }
 
@@ -334,7 +349,7 @@ public class MediaPlugin extends Plugin {
             result.put("filePath", expFile.toString());
             call.resolve(result);
         } catch (RuntimeException e) {
-            call.reject("Error occurred: " + e, "filesystemError");
+            call.reject("Error occurred: " + e, EC_ARG_ERROR);
             return;
         }
     }
@@ -344,7 +359,7 @@ public class MediaPlugin extends Plugin {
         String folderName = call.getString("name");
 
         if (folderName == null) {
-            call.reject("Album name must be given!", "missingArgument");
+            call.reject("Album name must be given!", EC_ARG_ERROR);
             return;
         }
 
@@ -353,14 +368,14 @@ public class MediaPlugin extends Plugin {
         if (!f.exists()) {
             if (!f.mkdir()) {
                 Log.d("DEBUG LOG", "___ERROR ALBUM");
-                call.reject("Cant create album", "filesystemError");
+                call.reject("Cant create album", EC_FS_ERROR);
             } else {
                 Log.d("DEBUG LOG", "___SUCCESS ALBUM CREATED");
                 call.success();
             }
         } else {
             Log.d("DEBUG LOG", "___ERROR ALBUM ALREADY EXISTS");
-            call.reject("Album already exists", "filesystemError");
+            call.reject("Album already exists", EC_FS_ERROR);
         }
     }
 
