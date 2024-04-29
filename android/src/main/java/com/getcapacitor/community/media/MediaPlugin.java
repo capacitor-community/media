@@ -75,6 +75,11 @@ public class MediaPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void getMediaByIdentifier(PluginCall call) {
+        call.unimplemented("No need to do this on Android -- the identifier is the file path.");
+    }
+
+    @PluginMethod
     public void getAlbums(PluginCall call) {
         Log.d("DEBUG LOG", "GET ALBUMS");
         if (isStoragePermissionGranted()) {

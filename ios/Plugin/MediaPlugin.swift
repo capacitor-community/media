@@ -2,6 +2,7 @@ import Foundation
 import Photos
 import Capacitor
 import SDWebImage
+import CoreServices
 
 public class JSDate {
     static func toString(_ date: Date) -> String {
@@ -46,6 +47,82 @@ public class MediaPlugin: CAPPlugin {
     @objc func getMedias(_ call: CAPPluginCall) {
         checkAuthorization(permission: .readWrite, allowed: {
             self.fetchResultAssetsToJs(call)
+        }, notAllowed: {
+            call.reject("Access to photos not allowed by user", EC_ACCESS_DENIED)
+        })
+    }
+
+    @objc func getMediaByIdentifier(_ call: CAPPluginCall) {
+        checkAuthorization(permission: .readWrite, allowed: {
+            guard let identifier = call.getString("identifier") else {
+                call.reject("Must provide an identifier", EC_ARG_ERROR)
+                return
+            }
+
+            let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [identifier], options: nil)
+            guard let asset = fetchResult.firstObject else {
+                call.reject("Asset with given identifier not found", EC_ARG_ERROR)
+                return
+            }
+
+            if asset.mediaType == .image {
+                let requestOptions = PHImageRequestOptions()
+                requestOptions.isNetworkAccessAllowed = true
+                PHImageManager.default().requestImageDataAndOrientation(for: asset, options: requestOptions) { imageData, uti, _, _ in
+                    guard let imageData = imageData else {
+                        call.reject("Failed to get image data for identifier", EC_ARG_ERROR)
+                        return
+                    }
+
+                    var ext = "png" // default extension
+                    // Get extension from UTI
+                    if let uti = uti {
+                       ext = UTTypeCopyPreferredTagWithClass(uti as CFString, kUTTagClassFilenameExtension)?.takeRetainedValue() as String? ?? ext
+                    }
+
+                    // Create path and save image
+                    let fileURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0].appendingPathComponent("image-\(Int.random(in: 0...100000)).\(ext)")
+                    do {
+                        try imageData.write(to: fileURL)
+                        var ret = JSObject()
+                        ret["identifier"] = identifier
+                        ret["path"] = fileURL.absoluteString
+                        call.resolve(ret)
+                    } catch {
+                        call.reject("Failed to save image to disk", EC_FS_ERROR)
+                    }
+                }
+            } else if asset.mediaType == .video {
+                let requestOptions = PHVideoRequestOptions()
+                requestOptions.isNetworkAccessAllowed = true
+                PHImageManager.default().requestAVAsset(forVideo: asset, options: requestOptions) { (avAsset, _, _) in
+                    guard let videoAsset = avAsset as? AVURLAsset else {
+                        call.reject("Failed to get video data for identifier", EC_ARG_ERROR)
+                        return
+                    }
+
+                    let videoData = try? Data(contentsOf: videoAsset.url)
+                    guard let videoData = videoData else {
+                        call.reject("Failed to extract video data for identifier", EC_FS_ERROR)
+                        return
+                    }
+                    let ext = videoAsset.url.pathExtension
+
+                    // Create path and save video data
+                    let fileURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0].appendingPathComponent("video-\(Int.random(in: 0...100000)).\(ext)")
+                    do {
+                        try videoData.write(to: fileURL)
+                        var ret = JSObject()
+                        ret["identifier"] = identifier
+                        ret["path"] = fileURL.absoluteString
+                        call.resolve(ret)
+                    } catch {
+                        call.reject("Failed to save video to disk", EC_FS_ERROR)
+                    }
+                }
+            } else {
+                call.reject("Asset type is not a photo or video.", EC_ARG_ERROR)
+            }
         }, notAllowed: {
             call.reject("Access to photos not allowed by user", EC_ACCESS_DENIED)
         })

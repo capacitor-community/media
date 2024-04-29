@@ -6,6 +6,15 @@ export interface MediaPlugin {
     */
   getMedias(options?: MediaFetchOptions): Promise<MediaResponse>;
   /**
+    * Get a filesystem path to a full-quality media asset by its identifier. iOS only.
+    * This is not included for Android because on Android, a media asset's identifier IS its path!
+    * You can simply use the Filesystem plugin to work with it. On iOS, you have to turn the identifier into a path
+    * using this function. After that, you can use the Filesystem plugin, same as Android.
+    * 
+    * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetMedias.tsx)
+    */
+  getMediaByIdentifier(options?: { identifier: string }): Promise<MediaPath>;
+  /**
     * Get list of albums. 
     * 
     * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetAlbums.tsx)
@@ -169,6 +178,17 @@ export interface MediaAsset {
    * Location metadata for the asset
    */
   location: MediaLocation;
+}
+
+export interface MediaPath {
+  /**
+   * Path to media asset
+   */
+  path: string;
+  /**
+   * Identifier for media asset
+   */
+  identifier: string;
 }
 
 export interface MediaLocation {

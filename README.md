@@ -65,6 +65,7 @@ Unless otherwise noted, there should be full feature parity between iOS and Andr
 <docgen-index>
 
 * [`getMedias(...)`](#getmedias)
+* [`getMediaByIdentifier(...)`](#getmediabyidentifier)
 * [`getAlbums()`](#getalbums)
 * [`savePhoto(...)`](#savephoto)
 * [`saveVideo(...)`](#savevideo)
@@ -93,6 +94,28 @@ Get filtered thumbnails from camera roll. iOS only.
 | **`options`** | <code><a href="#mediafetchoptions">MediaFetchOptions</a></code> |
 
 **Returns:** <code>Promise&lt;<a href="#mediaresponse">MediaResponse</a>&gt;</code>
+
+--------------------
+
+
+### getMediaByIdentifier(...)
+
+```typescript
+getMediaByIdentifier(options?: { identifier: string; } | undefined) => Promise<MediaPath>
+```
+
+Get a filesystem path to a full-quality media asset by its identifier. iOS only.
+This is not included for Android because on Android, a media asset's identifier IS its path!
+You can simply use the Filesystem plugin to work with it. On iOS, you have to turn the identifier into a path
+using this function. After that, you can use the Filesystem plugin, same as Android.
+
+[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetMedias.tsx)
+
+| Param         | Type                                 |
+| ------------- | ------------------------------------ |
+| **`options`** | <code>{ identifier: string; }</code> |
+
+**Returns:** <code>Promise&lt;<a href="#mediapath">MediaPath</a>&gt;</code>
 
 --------------------
 
@@ -253,6 +276,14 @@ Code Examples: [basic](https://github.com/capacitor-community/media/blob/master/
 | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **`key`**       | <code>"mediaType" \| "mediaSubtypes" \| "sourceType" \| "pixelWidth" \| "pixelHeight" \| "creationDate" \| "modificationDate" \| "isFavorite" \| "burstIdentifier"</code> |
 | **`ascending`** | <code>boolean</code>                                                                                                                                                      |
+
+
+#### MediaPath
+
+| Prop             | Type                | Description                |
+| ---------------- | ------------------- | -------------------------- |
+| **`path`**       | <code>string</code> | Path to media asset        |
+| **`identifier`** | <code>string</code> | Identifier for media asset |
 
 
 #### MediaAlbumResponse
