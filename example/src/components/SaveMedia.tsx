@@ -41,6 +41,24 @@ const SaveMedia = () => {
         setStatus("Saved photo from online source URL!");
     };
 
+    const savePhotoOnlineNoExt = async () => {
+        setStatus("");
+        let opts: MediaSaveOptions = { path: "https://images.unsplash.com/photo-1704072383476-edc7ad1acb84", albumIdentifier: await ensureDemoAlbum() };
+        await Media.savePhoto(opts);
+        setStatus("Saved photo from online source URL (no extension)!");
+    };
+
+    const saveInvalidPhotoOnline = async () => {
+        setStatus("");
+        let opts: MediaSaveOptions = { path: "https://example.com/invalid_image.png", albumIdentifier: await ensureDemoAlbum() };
+        try {
+            await Media.savePhoto(opts);
+            setStatus("Saved photo from online source URL (should not have worked).")
+        } catch (e: any) {
+            setStatus("Error! Got error code: " + e.code);
+        }
+    };
+
     const savePhotoDataURI = async () => {
         setStatus("");
         let opts: MediaSaveOptions = { path: photoDataURI, albumIdentifier: await ensureDemoAlbum(), fileName: "fromDataURI" };
@@ -114,6 +132,8 @@ const SaveMedia = () => {
     return <>
         { Capacitor.getPlatform() === "ios" && <IonButton onClick={savePhotoOnlineNoAlbum}>Save Photo to Library (No Album)</IonButton> }
         <IonButton onClick={savePhotoOnline}>Save Photo from online URL</IonButton>
+        <IonButton onClick={savePhotoOnlineNoExt}>Save Photo from online URL (no ext)</IonButton>
+        <IonButton onClick={saveInvalidPhotoOnline}>Try to Save Photo at Invalid URL</IonButton>
         <IonButton onClick={savePhotoDataURI}>Save Photo from Data URI</IonButton>
         <IonButton onClick={saveWebPDataURI}>Save WebP from Data URI</IonButton>
         <IonButton onClick={saveTakenPhoto}>Save Photo from Camera</IonButton>

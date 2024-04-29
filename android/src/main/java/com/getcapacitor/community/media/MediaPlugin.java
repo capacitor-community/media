@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
@@ -35,6 +36,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 @CapacitorPlugin(
     name = "Media",
@@ -119,7 +126,7 @@ public class MediaPlugin extends Plugin {
     private void permissionCallback(PluginCall call) {
         if (!isStoragePermissionGranted()) {
             Logger.debug(getLogTag(), "User denied storage permission");
-            call.reject("Unable to do file operation, user denied permission request");
+            call.reject("Unable to complete operation; user denied permission request.", "accessDenied");
             return;
         }
 
@@ -218,7 +225,7 @@ public class MediaPlugin extends Plugin {
         Log.d("DEBUG LOG", "___SAVE MEDIA TO ALBUM");
         String inputPath = call.getString("path");
         if (inputPath == null) {
-            call.reject("Input file path is required");
+            call.reject("Input file path is required", "missingArgument");
             return;
         }
 
@@ -228,44 +235,69 @@ public class MediaPlugin extends Plugin {
             try {
                 String base64EncodedString = inputPath.substring(inputPath.indexOf(",") + 1);
                 byte[] decodedBytes = Base64.decode(base64EncodedString, Base64.DEFAULT);
+                String mime = inputPath.split(";", 2)[0].split(":")[1];
+                String extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mime);
+                if (extension == null || extension.isEmpty()) {
+                    call.reject("Cannot identify media type to save image.", "typeError");
+                    return;
+                }
+
                 inputFile = File.createTempFile(
                         "tmp",
-                        "." + inputPath.split("/", 2)[1].split(";", 2)[0],
+                        "." + extension,
                         getContext().getCacheDir()
                 );
                 OutputStream os = new FileOutputStream(inputFile);
                 os.write(decodedBytes);
                 os.close();
             } catch (Exception e) {
-                call.reject("Temporary file creation from data URL failed");
+                call.reject("Temporary file creation from data URL failed", "filesystemError");
                 return;
             }
         } else if (inputPath.startsWith("http://") || inputPath.startsWith("https://")) {
-            DownloadManager manager = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
-            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(inputPath));
-            Uri inputUri = Uri.parse(inputPath);
-            String filename = inputUri.getLastPathSegment();
-            request.setDestinationInExternalFilesDir(getContext(), null, filename);
-
-            long requestID = manager.enqueue(request);
-            Uri result = null;
-            while (result == null) {
-                SystemClock.sleep(100);
-                result = manager.getUriForDownloadedFile(requestID);
-            }
-
-            final Cursor cursor = manager.query(new DownloadManager.Query().setFilterById(requestID));
-            cursor.moveToFirst();
-            inputPath = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
+            OkHttpClient client = new OkHttpClient();
+            Request okrequest = new Request.Builder().url(inputPath).build();
             try {
-                Uri downloadsUri = Uri.parse(inputPath);
-                File fileInDownloads = new File(downloadsUri.getPath());
-                String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmssSSS").format(new Date());
-                inputFile = copyFile(fileInDownloads, getContext().getCacheDir(), "IMG_" + timeStamp);
-                fileInDownloads.delete();
-                cursor.close();
-            } catch (RuntimeException e) {
-                call.reject("RuntimeException occurred", e);
+                // Download image
+                Response response = client.newCall(okrequest).execute();
+                if (!response.isSuccessful() || response.body() == null) {
+                    throw new IOException();
+                }
+
+                // Get file extension from URL
+                String extension = MimeTypeMap.getFileExtensionFromUrl(inputPath);
+                // If it doesn't have it there,
+                // attempt to pull extension from MIME type
+                if (extension.isEmpty()) {
+                    ResponseBody body = response.body();
+                    if (body == null) {
+                        call.reject("Download failed", "downloadError");
+                        return;
+                    }
+
+                    MediaType mt = body.contentType();
+                    if (mt == null) {
+                        call.reject("Cannot identify media type to save image.", "typeError");
+                        return;
+                    }
+
+                    String mime = mt.type() + "/" + mt.subtype();
+                    extension = MimeTypeMap.getSingleton().getExtensionFromMimeType(mime);
+                }
+
+                // Still no extension? reject
+                if (extension == null || extension.isEmpty()) {
+                    call.reject("Cannot identify media type to save image.", "typeError");
+                    return;
+                }
+
+                // Save to temp file
+                inputFile = File.createTempFile("tmp", "." + extension, getContext().getCacheDir());
+                OutputStream os = new FileOutputStream(inputFile);
+                os.write(response.body().bytes());
+                os.close();
+            } catch (IOException e) {
+                call.reject("Download failed", "downloadError");
                 return;
             }
         } else {
@@ -280,12 +312,12 @@ public class MediaPlugin extends Plugin {
         if (album != null) {
             albumDir = new File(album);
         } else {
-            call.error("Album identifier required");
+            call.reject("Album identifier required", "argumentError");
             return;
         }
 
         if (!albumDir.exists() || !albumDir.isDirectory()) {
-            call.error("Album identifier does not exist, use getAlbums() to get");
+            call.reject("Album identifier does not exist, use getAlbums() to get", "argumentError");
             return;
         }
 
@@ -302,7 +334,7 @@ public class MediaPlugin extends Plugin {
             result.put("filePath", expFile.toString());
             call.resolve(result);
         } catch (RuntimeException e) {
-            call.reject("RuntimeException occurred", e);
+            call.reject("Error occurred: " + e, "filesystemError");
             return;
         }
     }
@@ -312,7 +344,7 @@ public class MediaPlugin extends Plugin {
         String folderName = call.getString("name");
 
         if (folderName == null) {
-            call.reject("Album name must be given!");
+            call.reject("Album name must be given!", "missingArgument");
             return;
         }
 
@@ -321,14 +353,14 @@ public class MediaPlugin extends Plugin {
         if (!f.exists()) {
             if (!f.mkdir()) {
                 Log.d("DEBUG LOG", "___ERROR ALBUM");
-                call.error("Cant create album");
+                call.reject("Cant create album", "filesystemError");
             } else {
                 Log.d("DEBUG LOG", "___SUCCESS ALBUM CREATED");
                 call.success();
             }
         } else {
             Log.d("DEBUG LOG", "___ERROR ALBUM ALREADY EXISTS");
-            call.error("Album already exists");
+            call.reject("Album already exists", "filesystemError");
         }
     }
 

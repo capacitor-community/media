@@ -34,7 +34,7 @@ public class MediaPlugin: CAPPlugin {
         checkAuthorization(permission: .readWrite, allowed: {
             self.fetchAlbumsToJs(call)
         }, notAllowed: {
-            call.reject("Access to photos not allowed by user")
+            call.reject("Access to photos not allowed by user", "accessDenied")
         })
     }
 
@@ -42,13 +42,13 @@ public class MediaPlugin: CAPPlugin {
         checkAuthorization(permission: .readWrite, allowed: {
             self.fetchResultAssetsToJs(call)
         }, notAllowed: {
-            call.reject("Access to photos not allowed by user")
+            call.reject("Access to photos not allowed by user", "accessDenied")
         })
     }
 
     @objc func createAlbum(_ call: CAPPluginCall) {
         guard let name = call.getString("name") else {
-            call.reject("Must provide a name")
+            call.reject("Must provide a name", "argumentError")
             return
         }
 
@@ -57,19 +57,19 @@ public class MediaPlugin: CAPPlugin {
                 PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: name)
             }, completionHandler: { success, error in
                 if !success {
-                    call.reject("Unable to create album")
+                    call.reject("Unable to create album: \(error?.localizedDescription ?? "Unknown error")", "filesystemError")
                     return
                 }
                 call.resolve()
             })
         }, notAllowed: {
-            call.reject("Access to photos not allowed by user")
+            call.reject("Access to photos not allowed by user", "accessDenied")
         })
     }
 
     @objc func savePhoto(_ call: CAPPluginCall) {
         guard let data = call.getString("path") else {
-            call.reject("Must provide the data path")
+            call.reject("Must provide the data path", "argumentError")
             return
         }
 
@@ -82,11 +82,11 @@ public class MediaPlugin: CAPPlugin {
                 targetCollection = collection
             })
             if targetCollection == nil {
-                call.reject("Unable to find that album")
+                call.reject("Unable to find that album", "notFound")
                 return
             }
             if !targetCollection!.canPerform(.addContent) {
-                call.reject("Album doesn't support adding content (is this a smart album?)")
+                call.reject("Album doesn't support adding content (is this a smart album?)", "invalidAction")
                 return
             }
         }
@@ -98,7 +98,7 @@ public class MediaPlugin: CAPPlugin {
 
             SDWebImageDownloader.shared.downloadImage(with: imageUrl, options: downloaderOptions, progress: nil) { (image, data, error, finished) in
                 guard let imageData = data, finished else {
-                   call.reject("Unable to download image from url")
+                   call.reject("Unable to download image from URL", "downloadError")
                    return
                 }
 
@@ -112,21 +112,21 @@ public class MediaPlugin: CAPPlugin {
                     }
                 }, completionHandler: {success, error in
                     if !success {
-                        call.reject("Unable to save image to album")
+                        call.reject("Unable to save image to album", "filesystemError")
                     } else {
                         call.resolve()
                     }
                 })
            }
         }, notAllowed: {
-            call.reject("Access to photos not allowed by user")
+            call.reject("Access to photos not allowed by user", "accessDenied")
         })
 
     }
 
     @objc func saveVideo(_ call: CAPPluginCall) {
         guard let data = call.getString("path") else {
-            call.reject("Must provide the data path")
+            call.reject("Must provide the data path", "missingArgument")
             return
         }
 
@@ -139,11 +139,11 @@ public class MediaPlugin: CAPPlugin {
                 targetCollection = collection
             })
             if targetCollection == nil {
-                call.reject("Unable to find that album")
+                call.reject("Unable to find that album", "notFound")
                 return
             }
             if !targetCollection!.canPerform(.addContent) {
-                call.reject("Album doesn't support adding content (is this a smart album?)")
+                call.reject("Album doesn't support adding content (is this a smart album?)", "invalidAction")
                 return
             }
         }
@@ -176,14 +176,13 @@ public class MediaPlugin: CAPPlugin {
                 }
             }, completionHandler: {success, error in
                 if !success {
-                    call.reject("Unable to save video to album")
+                    call.reject("Unable to save video to album", "filesystemError")
                 } else {
-                    //TODO: return fileUri
                     call.resolve()
                 }
             })
         }, notAllowed: {
-            call.reject("Access to photos not allowed by user")
+            call.reject("Access to photos not allowed by user", "accessDenied")
         })
     }
         
