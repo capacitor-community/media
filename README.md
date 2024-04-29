@@ -86,7 +86,7 @@ getMedias(options?: MediaFetchOptions | undefined) => Promise<MediaResponse>
 
 Get filtered thumbnails from camera roll. iOS only.
 
-[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetMedias.tsx)
+[Code Examples](https://github.com/capacitor-community/media/blob/main/example/src/components/GetMedias.tsx)
 
 | Param         | Type                                                            |
 | ------------- | --------------------------------------------------------------- |
@@ -108,7 +108,7 @@ This is not included for Android because on Android, a media asset's identifier 
 You can simply use the Filesystem plugin to work with it. On iOS, you have to turn the identifier into a path
 using this function. After that, you can use the Filesystem plugin, same as Android.
 
-[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetMedias.tsx)
+[Code Examples](https://github.com/capacitor-community/media/blob/main/example/src/components/GetMedias.tsx)
 
 | Param         | Type                                 |
 | ------------- | ------------------------------------ |
@@ -127,7 +127,7 @@ getAlbums() => Promise<MediaAlbumResponse>
 
 Get list of albums. 
 
-[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetAlbums.tsx)
+[Code Examples](https://github.com/capacitor-community/media/blob/main/example/src/components/GetAlbums.tsx)
 
 **Returns:** <code>Promise&lt;<a href="#mediaalbumresponse">MediaAlbumResponse</a>&gt;</code>
 
@@ -147,7 +147,7 @@ On Android and iOS, this supports web URLs, base64 encoded images
 On Android, all image formats supported by the user's photo viewer are supported.
 On iOS, most common image formats are supported.
 
-[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
+[Code Examples](https://github.com/capacitor-community/media/blob/main/example/src/components/SaveMedia.tsx)
 
 | Param         | Type                                                          |
 | ------------- | ------------------------------------------------------------- |
@@ -171,7 +171,7 @@ On Android and iOS, this supports web URLs, base64 encoded videos
 On Android, all video formats supported by the user's photo viewer are supported.
 On iOS, the supported formats are based on whatever iOS supports at the time.
 
-[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
+[Code Examples](https://github.com/capacitor-community/media/blob/main/example/src/components/SaveMedia.tsx)
 
 | Param         | Type                                                          |
 | ------------- | ------------------------------------------------------------- |
@@ -190,7 +190,7 @@ createAlbum(options: MediaAlbumCreate) => Promise<void>
 
 Creates an album.
 
-[Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/CreateDemoAlbum.tsx)
+[Code Examples](https://github.com/capacitor-community/media/blob/main/example/src/components/CreateDemoAlbum.tsx)
 
 | Param         | Type                                                          |
 | ------------- | ------------------------------------------------------------- |
@@ -214,7 +214,7 @@ getting albums.
 
 Only available on Android.
 
-Code Examples: [basic](https://github.com/capacitor-community/media/blob/master/example/src/components/CreateDemoAlbum.tsx), [when saving media](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
+Code Examples: [basic](https://github.com/capacitor-community/media/blob/main/example/src/components/CreateDemoAlbum.tsx), [when saving media](https://github.com/capacitor-community/media/blob/main/example/src/components/SaveMedia.tsx)
 
 **Returns:** <code>Promise&lt;<a href="#albumspathresponse">AlbumsPathResponse</a>&gt;</code>
 
@@ -381,7 +381,7 @@ Note the READ_MEDIA permissions -- these are **new in Android 13**!
 
 Go the the `example/` folder to play with an example app that should show all functionality of this plugin.
 
-<img style="width: 250px" src="https://github.com/capacitor-community/media/blob/master/example_app.png?raw=true" />
+<img style="width: 250px" src="https://github.com/capacitor-community/media/blob/main/example_app.png?raw=true" />
 
 ## Contributors ✨
 
