@@ -189,6 +189,10 @@ export interface MediaPath {
    * Identifier for media asset
    */
   identifier: string;
+  /**
+   * Data URL for media asset
+   */
+  data: string;
 }
 
 export interface MediaLocation {

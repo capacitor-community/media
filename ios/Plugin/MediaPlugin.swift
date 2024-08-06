@@ -79,7 +79,25 @@ public class MediaPlugin: CAPPlugin {
                     if let uti = uti {
                        ext = UTTypeCopyPreferredTagWithClass(uti as CFString, kUTTagClassFilenameExtension)?.takeRetainedValue() as String? ?? ext
                     }
+                
+                    // Convert imageData to JPEG if it's not already in JPEG format
+                    var jpegData: Data
+                           if ext != "jpg" && ext != "jpeg" {
+                               if let image = UIImage(data: imageData),
+                                  let jpegDataConverted = image.jpegData(compressionQuality: 1.0) {
+                                   jpegData = jpegDataConverted
+                                   ext = "jpg"
+                               } else {
+                                   call.reject("Failed to convert image to JPEG", EC_ARG_ERROR)
+                                   return
+                               }
+                           } else {
+                               jpegData = imageData
+                           }
 
+                    let base64String = jpegData.base64EncodedString()
+                    let dataUrl = "data:image/jpeg;base64,\(base64String)"
+                    
                     // Create path and save image
                     let fileURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0].appendingPathComponent("image-\(Int.random(in: 0...100000)).\(ext)")
                     do {
@@ -87,6 +105,8 @@ public class MediaPlugin: CAPPlugin {
                         var ret = JSObject()
                         ret["identifier"] = identifier
                         ret["path"] = fileURL.absoluteString
+                        ret["data"] = dataUrl
+                        
                         call.resolve(ret)
                     } catch {
                         call.reject("Failed to save image to disk", EC_FS_ERROR)
@@ -433,8 +453,14 @@ public class MediaPlugin: CAPPlugin {
 
                 a["identifier"] = asset.localIdentifier
 
-                a["data"] = image.jpegData(compressionQuality: CGFloat(thumbnailQuality) / 100.0)?.base64EncodedString()
-
+                if let jpegData = image.jpegData(compressionQuality: CGFloat(thumbnailQuality) / 100.0) {
+                    let base64String = jpegData.base64EncodedString()
+                    a["data"] = "data:image/jpeg;base64,\(base64String)"
+                } else {
+                    // Handle the error case where the JPEG data couldn't be generated
+                    print("Failed to generate JPEG data")
+                }
+                
                 if asset.creationDate != nil {
                     a["creationDate"] = JSDate.toString(asset.creationDate!)
                 }
