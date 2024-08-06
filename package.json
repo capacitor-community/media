@@ -1,5 +1,5 @@
 {
-  "name": "@capacitor-community/media",
+  "name": "@west-co/capacitor-media-plugin",
   "version": "6.0.0",
   "description": "Enable some media features for Capacitor such as create albums, save videos, gifs and more.",
   "author": "Stewan Silva",
