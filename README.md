@@ -256,16 +256,16 @@ Code Examples: [basic](https://github.com/capacitor-community/media/blob/master/
 
 #### MediaAsset
 
-| Prop                  | Type                                                    | Description                                                             |
-| --------------------- | ------------------------------------------------------- | ----------------------------------------------------------------------- |
-| **`identifier`**      | <code>string</code>                                     | Platform-specific identifier                                            |
-| **`data`**            | <code>string</code>                                     | Data for a photo asset as a base64 encoded string (JPEG only supported) |
-| **`creationDate`**    | <code>string</code>                                     | ISO date string for creation date of asset                              |
-| **`fullWidth`**       | <code>number</code>                                     | Full width of original asset                                            |
-| **`fullHeight`**      | <code>number</code>                                     | Full height of original asset                                           |
-| **`thumbnailWidth`**  | <code>number</code>                                     | Width of thumbnail preview                                              |
-| **`thumbnailHeight`** | <code>number</code>                                     | Height of thumbnail preview                                             |
-| **`location`**        | <code><a href="#medialocation">MediaLocation</a></code> | Location metadata for the asset                                         |
+| Prop                  | Type                                                    | Description                                                                 |
+| --------------------- | ------------------------------------------------------- | --------------------------------------------------------------------------- |
+| **`identifier`**      | <code>string</code>                                     | Platform-specific identifier                                                |
+| **`dataUrl`**         | <code>string</code>                                     | Data URL for a photo asset as a base64 encoded string (JPEG only supported) |
+| **`creationDate`**    | <code>string</code>                                     | ISO date string for creation date of asset                                  |
+| **`fullWidth`**       | <code>number</code>                                     | Full width of original asset                                                |
+| **`fullHeight`**      | <code>number</code>                                     | Full height of original asset                                               |
+| **`thumbnailWidth`**  | <code>number</code>                                     | Width of thumbnail preview                                                  |
+| **`thumbnailHeight`** | <code>number</code>                                     | Height of thumbnail preview                                                 |
+| **`location`**        | <code><a href="#medialocation">MediaLocation</a></code> | Location metadata for the asset                                             |
 
 
 #### MediaLocation
@@ -285,7 +285,7 @@ Code Examples: [basic](https://github.com/capacitor-community/media/blob/master/
 | ---------------- | ------------------- | -------------------------- |
 | **`path`**       | <code>string</code> | Path to media asset        |
 | **`identifier`** | <code>string</code> | Identifier for media asset |
-| **`data`**       | <code>string</code> | Data URL for media asset   |
+| **`dataUrl`**    | <code>string</code> | Data URL for media asset   |
 
 
 #### MediaAlbumResponse
