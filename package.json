@@ -5,7 +5,6 @@
   "author": "Stewan Silva",
   "license": "MIT",
   "main": "dist/plugin.cjs.js",
-  "type": "module",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "unpkg": "dist/plugin.js",
