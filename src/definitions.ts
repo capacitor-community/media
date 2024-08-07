@@ -151,9 +151,9 @@ export interface MediaAsset {
    */
   identifier: string;
   /**
-   * Data for a photo asset as a base64 encoded string (JPEG only supported)
+   * Data URL for a photo asset as a base64 encoded string (JPEG only supported)
    */
-  data: string;
+  dataUrl: string;
   /**
    * ISO date string for creation date of asset
    */
@@ -192,7 +192,7 @@ export interface MediaPath {
   /**
    * Data URL for media asset
    */
-  data: string;
+  dataUrl: string;
 }
 
 export interface MediaLocation {

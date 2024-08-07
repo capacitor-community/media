@@ -105,7 +105,7 @@ public class MediaPlugin: CAPPlugin {
                         var ret = JSObject()
                         ret["identifier"] = identifier
                         ret["path"] = fileURL.absoluteString
-                        ret["data"] = dataUrl
+                        ret["dataUrl"] = dataUrl
                         
                         call.resolve(ret)
                     } catch {
@@ -455,7 +455,7 @@ public class MediaPlugin: CAPPlugin {
 
                 if let jpegData = image.jpegData(compressionQuality: CGFloat(thumbnailQuality) / 100.0) {
                     let base64String = jpegData.base64EncodedString()
-                    a["data"] = "data:image/jpeg;base64,\(base64String)"
+                    a["dataUrl"] = "data:image/jpeg;base64,\(base64String)"
                 } else {
                     // Handle the error case where the JPEG data couldn't be generated
                     print("Failed to generate JPEG data")
