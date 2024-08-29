@@ -6,14 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.SystemClock;
-import android.util.Base64;
 import android.os.Build;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
-
 import com.getcapacitor.JSArray;
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Logger;
@@ -24,7 +23,6 @@ import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
 import com.getcapacitor.annotation.Permission;
 import com.getcapacitor.annotation.PermissionCallback;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -36,7 +34,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -253,11 +250,7 @@ public class MediaPlugin extends Plugin {
                 }
 
                 try {
-                    inputFile = File.createTempFile(
-                            "tmp",
-                            "." + extension,
-                            getContext().getCacheDir()
-                    );
+                    inputFile = File.createTempFile("tmp", "." + extension, getContext().getCacheDir());
                     OutputStream os = new FileOutputStream(inputFile);
                     os.write(decodedBytes);
                     os.close();
