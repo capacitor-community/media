@@ -37,7 +37,7 @@ export class MediaWeb extends WebPlugin implements MediaPlugin {
     throw this.unimplemented('Not implemented on web.');
   }
   getAlbumsPath(): Promise<AlbumsPathResponse> {
-      console.log('getAlbumsPath');
-      throw this.unimplemented('Not implemented on web.');
+    console.log('getAlbumsPath');
+    throw this.unimplemented('Not implemented on web.');
   }
 }
