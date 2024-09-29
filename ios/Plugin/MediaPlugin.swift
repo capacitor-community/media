@@ -438,6 +438,7 @@ public class MediaPlugin: CAPPlugin {
                 if asset.creationDate != nil {
                     a["creationDate"] = JSDate.toString(asset.creationDate!)
                 }
+                a["duration"] = asset.duration
                 a["fullWidth"] = asset.pixelWidth
                 a["fullHeight"] = asset.pixelHeight
                 a["thumbnailWidth"] = image.size.width

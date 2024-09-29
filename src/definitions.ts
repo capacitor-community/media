@@ -13,7 +13,7 @@ export interface MediaPlugin {
    *
    * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetMedias.tsx)
    */
-  getMediaByIdentifier(options?: { identifier: string }): Promise<MediaPath>;
+  getMediaByIdentifier(options?: {identifier: string}): Promise<MediaPath>;
   /**
    * Get list of albums.
    *
@@ -158,6 +158,10 @@ export interface MediaAsset {
    * ISO date string for creation date of asset
    */
   creationDate: string;
+  /**
+   * duration of asset in seconds
+   */
+  duration: number;
   /**
    * Full width of original asset
    */
