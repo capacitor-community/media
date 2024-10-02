@@ -2,7 +2,7 @@ export interface MediaPlugin {
   /**
    * Get filtered thumbnails from camera roll. iOS only.
    *
-   * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetMedias.tsx)
+   * [Code Examples](https://github.com/capacitor-community/media/blob/main/example/src/components/GetMedias.tsx)
    */
   getMedias(options?: MediaFetchOptions): Promise<MediaResponse>;
   /**
@@ -11,13 +11,13 @@ export interface MediaPlugin {
    * You can simply use the Filesystem plugin to work with it. On iOS, you have to turn the identifier into a path
    * using this function. After that, you can use the Filesystem plugin, same as Android.
    *
-   * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetMedias.tsx)
+   * [Code Examples](https://github.com/capacitor-community/media/blob/main/example/src/components/GetMedias.tsx)
    */
   getMediaByIdentifier(options?: { identifier: string }): Promise<MediaPath>;
   /**
    * Get list of albums.
    *
-   * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetAlbums.tsx)
+   * [Code Examples](https://github.com/capacitor-community/media/blob/main/example/src/components/GetAlbums.tsx)
    */
   getAlbums(): Promise<MediaAlbumResponse>;
   /**
@@ -28,7 +28,7 @@ export interface MediaPlugin {
    * On Android, all image formats supported by the user's photo viewer are supported.
    * On iOS, most common image formats are supported.
    *
-   * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
+   * [Code Examples](https://github.com/capacitor-community/media/blob/main/example/src/components/SaveMedia.tsx)
    */
   savePhoto(options?: MediaSaveOptions): Promise<PhotoResponse>;
   /**
@@ -39,13 +39,13 @@ export interface MediaPlugin {
    * On Android, all video formats supported by the user's photo viewer are supported.
    * On iOS, the supported formats are based on whatever iOS supports at the time.
    *
-   * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
+   * [Code Examples](https://github.com/capacitor-community/media/blob/main/example/src/components/SaveMedia.tsx)
    */
   saveVideo(options?: MediaSaveOptions): Promise<PhotoResponse>;
   /**
    * Creates an album.
    *
-   * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/CreateDemoAlbum.tsx)
+   * [Code Examples](https://github.com/capacitor-community/media/blob/main/example/src/components/CreateDemoAlbum.tsx)
    */
   createAlbum(options: MediaAlbumCreate): Promise<void>;
   /**
@@ -58,7 +58,7 @@ export interface MediaPlugin {
    *
    * Only available on Android.
    *
-   * Code Examples: [basic](https://github.com/capacitor-community/media/blob/master/example/src/components/CreateDemoAlbum.tsx), [when saving media](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
+   * Code Examples: [basic](https://github.com/capacitor-community/media/blob/main/example/src/components/CreateDemoAlbum.tsx), [when saving media](https://github.com/capacitor-community/media/blob/main/example/src/components/SaveMedia.tsx)
    */
   getAlbumsPath(): Promise<AlbumsPathResponse>;
 }

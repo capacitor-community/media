@@ -71,6 +71,7 @@ Unless otherwise noted, there should be full feature parity between iOS and Andr
 * [`createAlbum(...)`](#createalbum)
 * [`getAlbumsPath()`](#getalbumspath)
 * [Interfaces](#interfaces)
+* [Type Aliases](#type-aliases)
 * [Enums](#enums)
 
 </docgen-index>
@@ -125,7 +126,7 @@ using this function. After that, you can use the Filesystem plugin, same as Andr
 getAlbums() => Promise<MediaAlbumResponse>
 ```
 
-Get list of albums. 
+Get list of albums.
 
 [Code Examples](https://github.com/capacitor-community/media/blob/main/example/src/components/GetAlbums.tsx)
 
@@ -142,7 +143,7 @@ savePhoto(options?: MediaSaveOptions | undefined) => Promise<PhotoResponse>
 
 Saves a still photo or GIF to the camera roll.
 
-On Android and iOS, this supports web URLs, base64 encoded images 
+On Android and iOS, this supports web URLs, base64 encoded images
 (e.g. data:image/jpeg;base64,...), and local files.
 On Android, all image formats supported by the user's photo viewer are supported.
 On iOS, most common image formats are supported.
@@ -166,7 +167,7 @@ saveVideo(options?: MediaSaveOptions | undefined) => Promise<PhotoResponse>
 
 Saves a video to the camera roll.
 
-On Android and iOS, this supports web URLs, base64 encoded videos 
+On Android and iOS, this supports web URLs, base64 encoded videos
 (e.g. data:image/mp4;base64,...), and local files.
 On Android, all video formats supported by the user's photo viewer are supported.
 On iOS, the supported formats are based on whatever iOS supports at the time.
@@ -258,23 +259,23 @@ Code Examples: [basic](https://github.com/capacitor-community/media/blob/main/ex
 
 #### MediaFetchOptions
 
-| Prop                   | Type                                                                                                                                                                                     | Description                                                                                                                                                              |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **`quantity`**         | <code>number</code>                                                                                                                                                                      | The number of photos to fetch, sorted by last created date descending. To paginate, just request a higher quantity -- OS caching should make this relatively performant. |
-| **`thumbnailWidth`**   | <code>number</code>                                                                                                                                                                      | The width of thumbnail to return                                                                                                                                         |
-| **`thumbnailHeight`**  | <code>number</code>                                                                                                                                                                      | The height of thumbnail to return                                                                                                                                        |
-| **`thumbnailQuality`** | <code>number</code>                                                                                                                                                                      | The quality of thumbnail to return as JPEG (0-100)                                                                                                                       |
-| **`types`**            | <code>"photos" \| "videos" \| "all"</code>                                                                                                                                               | Which types of assets to return thumbnails for.                                                                                                                          |
-| **`albumIdentifier`**  | <code>string</code>                                                                                                                                                                      | Which album identifier to query in (get identifier with getAlbums())                                                                                                     |
-| **`sort`**             | <code>"mediaType" \| "mediaSubtypes" \| "sourceType" \| "pixelWidth" \| "pixelHeight" \| "creationDate" \| "modificationDate" \| "isFavorite" \| "burstIdentifier" \| MediaSort[]</code> | Sort order of returned assets by field and ascending/descending                                                                                                          |
+| Prop                   | Type                                                             | Description                                                                                                                                                              |
+| ---------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **`quantity`**         | <code>number</code>                                              | The number of photos to fetch, sorted by last created date descending. To paginate, just request a higher quantity -- OS caching should make this relatively performant. |
+| **`thumbnailWidth`**   | <code>number</code>                                              | The width of thumbnail to return                                                                                                                                         |
+| **`thumbnailHeight`**  | <code>number</code>                                              | The height of thumbnail to return                                                                                                                                        |
+| **`thumbnailQuality`** | <code>number</code>                                              | The quality of thumbnail to return as JPEG (0-100)                                                                                                                       |
+| **`types`**            | <code>'photos' \| 'videos' \| 'all'</code>                       | Which types of assets to return thumbnails for.                                                                                                                          |
+| **`albumIdentifier`**  | <code>string</code>                                              | Which album identifier to query in (get identifier with getAlbums())                                                                                                     |
+| **`sort`**             | <code><a href="#mediafield">MediaField</a> \| MediaSort[]</code> | Sort order of returned assets by field and ascending/descending                                                                                                          |
 
 
 #### MediaSort
 
-| Prop            | Type                                                                                                                                                                      |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`key`**       | <code>"mediaType" \| "mediaSubtypes" \| "sourceType" \| "pixelWidth" \| "pixelHeight" \| "creationDate" \| "modificationDate" \| "isFavorite" \| "burstIdentifier"</code> |
-| **`ascending`** | <code>boolean</code>                                                                                                                                                      |
+| Prop            | Type                                              |
+| --------------- | ------------------------------------------------- |
+| **`key`**       | <code><a href="#mediafield">MediaField</a></code> |
+| **`ascending`** | <code>boolean</code>                              |
 
 
 #### MediaPath
@@ -329,6 +330,18 @@ Code Examples: [basic](https://github.com/capacitor-community/media/blob/main/ex
 | Prop       | Type                |
 | ---------- | ------------------- |
 | **`path`** | <code>string</code> |
+
+
+### Type Aliases
+
+
+#### MediaField
+
+Attributes to sort media by.
+
+[iOS Source](https://developer.apple.com/documentation/photokit/phfetchoptions)
+
+<code>'mediaType' | 'mediaSubtypes' | 'sourceType' | 'pixelWidth' | 'pixelHeight' | 'creationDate' | 'modificationDate' | 'isFavorite' | 'burstIdentifier'</code>
 
 
 ### Enums
