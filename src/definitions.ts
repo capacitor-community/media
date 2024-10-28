@@ -1,3 +1,22 @@
+/// <reference types="@capacitor/cli" />
+
+declare module '@capacitor/cli' {
+  export interface PluginsConfig {
+    MediaPlugin?: {
+      /**
+       * Enable gallery mode on Android. This is for photo gallery-style apps, which
+       * need to access images from all apps on the device. Most use cases will not
+       * need this. Defaults to false.
+       *
+       * If you enable this, you will also need to add the
+       * READ_MEDIA_IMAGES and READ_MEDIA_VIDEOS permissions
+       * to your AndroidManifest.xml.
+       */
+      androidGalleryMode?: boolean;
+    };
+  }
+}
+
 export interface MediaPlugin {
   /**
    * Get filtered thumbnails from camera roll. iOS only.
@@ -161,7 +180,7 @@ export interface MediaAsset {
   /**
    * Duration of asset in seconds
    */
-  duration: number;
+  duration?: number;
   /**
    * Full width of original asset
    */
