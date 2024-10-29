@@ -47,7 +47,7 @@
 npm install @capacitor-community/media
 ```
 
-This plugin is currently for Capacitor 6. Add an `@5` at the end to install for Capacitor 5.
+This plugin is currently for Capacitor 6. Add an `@5` at the end to install for Capacitor 5. Note that the Capacitor 5 version is no longer maintained, and cannot be published to the Google Play Store.
 
 After installing, be sure to sync by running `ionic cap sync`.
 
@@ -55,7 +55,7 @@ After installing, be sure to sync by running `ionic cap sync`.
 
 There has been a breaking change to the way permissions are handled on Android.
 - If your app is not a "gallery" app (does not need access to all photo albums on the device, just its own), you no longer need the `READ_EXTERNAL_STORAGE`, `WRITE_EXTERNAL_STORAGE`, `READ_MEDIA_IMAGES`, or `READ_MEDIA_VIDEO` permissions. You can remove them from your `AndroidManifest.xml` file. The plugin will no longer request any permissions to save images to your app's albums.
-- If your app is a gallery app and you need access to all albums on the device, you'll need to update your `capacitor.config.ts` file -- see the setup instructions below.
+- If your app is a gallery app and you need access to all albums on the device, you'll need to update your `capacitor.config.ts` file (and keep all of the above permissions) -- see the setup instructions below.
 
 You will need to update to v7 to publish an app with this plugin on the Google Play Store.
 
@@ -85,8 +85,8 @@ You'll need to add the following to your app's `Info.plist` file:
 ### Android
 
 By default, this plugin only has access to the albums associated with the
-app it's installed in. For this basic level of access, you only need to add
-the following permission:
+app it's installed in. This should be enough for most use cases.
+For this basic level of access, you only need to add the following permission:
 
 ```xml
 <manifest>
