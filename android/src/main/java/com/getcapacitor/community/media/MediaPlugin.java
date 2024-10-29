@@ -237,11 +237,7 @@ public class MediaPlugin extends Plugin {
     }
 
     private String _getAlbumsPath() {
-        if (Build.VERSION.SDK_INT >= API_LEVEL_29) {
-            return getContext().getExternalMediaDirs()[0].getAbsolutePath();
-        } else {
-            return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
-        }
+        return getContext().getExternalMediaDirs()[0].getAbsolutePath();
     }
 
     private void _saveMedia(PluginCall call) {
