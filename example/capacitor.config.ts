@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'Capacitor Community Media Example',
   webDir: 'build',
   plugins: {
-    MediaPlugin: {
+    Media: {
       androidGalleryMode: false
     }
   }
