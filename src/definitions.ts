@@ -179,7 +179,7 @@ export interface MediaAsset {
    */
   creationDate: string;
   /**
-   * Duration of asset in seconds
+   * Duration of asset in seconds, only returned for videos
    */
   duration?: number;
   /**

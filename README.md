@@ -239,7 +239,7 @@ Code Examples: [basic](https://github.com/capacitor-community/media/blob/main/ex
 | **`identifier`**      | <code>string</code>                                     | Platform-specific identifier                                            |
 | **`data`**            | <code>string</code>                                     | Data for a photo asset as a base64 encoded string (JPEG only supported) |
 | **`creationDate`**    | <code>string</code>                                     | ISO date string for creation date of asset                              |
-| **`duration`**        | <code>number</code>                                     | Duration of asset in seconds                                            |
+| **`duration`**        | <code>number</code>                                     | Duration of asset in seconds, only returned for videos                  |
 | **`fullWidth`**       | <code>number</code>                                     | Full width of original asset                                            |
 | **`fullHeight`**      | <code>number</code>                                     | Full height of original asset                                           |
 | **`thumbnailWidth`**  | <code>number</code>                                     | Width of thumbnail preview                                              |

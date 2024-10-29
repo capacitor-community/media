@@ -84,7 +84,27 @@ const GetMedias = () => {
         <IonButton onClick={getHighQualityImage}>Get Full-Size Image</IonButton>
         <IonButton onClick={getHighQualityVideo}>Get Full-Size Video</IonButton>
         <br />
-        { medias?.map(media => <img key={media.identifier} alt="Media Result" style={{"width": "50px"}} src={"data:image/jpeg;base64," + media.data} />) }
+        {medias?.map(media => (
+            <div key={media.identifier} style={{ position: "relative", display: "inline-block" }}>
+                <img
+                    alt="Media Result"
+                    style={{ width: "50px" }}
+                    src={"data:image/jpeg;base64," + media.data}
+                />
+                { media.duration && <div style={{
+                    position: "absolute",
+                    bottom: "5px",
+                    left: "5px",
+                    color: "white",
+                    backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    padding: "2px 5px",
+                    borderRadius: "3px",
+                    fontSize: "10px"
+                }}>
+                    {Math.round(media.duration)} s
+                </div> }
+            </div>
+        ))}
         { highQualityPath && <img alt="High Quality" src={highQualityPath} /> }
     </>
 };
