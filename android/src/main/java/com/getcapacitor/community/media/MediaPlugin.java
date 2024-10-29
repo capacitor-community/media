@@ -145,7 +145,14 @@ public class MediaPlugin extends Plugin {
         }
     }
 
+    private boolean isGalleryMode() {
+        return getConfig().getBoolean("androidGalleryMode", false);
+    }
+
     private boolean isStoragePermissionGranted() {
+        // If not in gallery mode, no permissions are required
+        if (!isGalleryMode()) return true;
+
         String permissionSet = "publicStorage";
         if (Build.VERSION.SDK_INT >= API_LEVEL_33) {
             permissionSet = "publicStorage13Plus";
@@ -167,9 +174,18 @@ public class MediaPlugin extends Plugin {
             MediaStore.MediaColumns.BUCKET_ID,
             MediaStore.MediaColumns.DATA
         };
+
+        Uri imageUri = isGalleryMode() ?
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI :
+                MediaStore.Images.Media.INTERNAL_CONTENT_URI;
+
+        Uri videoUri = isGalleryMode() ?
+                MediaStore.Video.Media.EXTERNAL_CONTENT_URI :
+                MediaStore.Video.Media.INTERNAL_CONTENT_URI;
+
         Cursor[] curs = {
-            getActivity().getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null, null, null),
-            getActivity().getContentResolver().query(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, projection, null, null, null)
+            getActivity().getContentResolver().query(imageUri, projection, null, null, null),
+            getActivity().getContentResolver().query(videoUri, projection, null, null, null)
         };
 
         for (Cursor cur : curs) {
@@ -221,11 +237,7 @@ public class MediaPlugin extends Plugin {
     }
 
     private String _getAlbumsPath() {
-        if (Build.VERSION.SDK_INT >= API_LEVEL_29) {
-            return getContext().getExternalMediaDirs()[0].getAbsolutePath();
-        } else {
-            return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
-        }
+        return getContext().getExternalMediaDirs()[0].getAbsolutePath();
     }
 
     private void _saveMedia(PluginCall call) {
