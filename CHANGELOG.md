@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.0.0](https://github.com/capacitor-community/media/compare/v7.0.0...v6.0.0) (2024-08-28)
+- Add duration to `getMedias()` videos
+- Permissions are no longer required on Android for non-gallery use (BREAKING)
+- Added gallery functionality on Android to access all albums on device (BREAKING)
+
 ## [6.0.0](https://github.com/capacitor-community/media/compare/v5.4.1...v6.0.0) (2024-04-29)
 - Update to Capacitor 6
 - Fix missing source maps

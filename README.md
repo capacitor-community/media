@@ -51,11 +51,82 @@ This plugin is currently for Capacitor 6. Add an `@5` at the end to install for 
 
 After installing, be sure to sync by running `ionic cap sync`.
 
+## Migrating to v7
+
+There has been a breaking change to the way permissions are handled on Android.
+- If your app is not a "gallery" app (does not need access to all photo albums on the device, just its own), you no longer need the `READ_EXTERNAL_STORAGE`, `WRITE_EXTERNAL_STORAGE`, `READ_MEDIA_IMAGES`, or `READ_MEDIA_VIDEO` permissions. You can remove them from your `AndroidManifest.xml` file. The plugin will no longer request any permissions to save images to your app's albums.
+- If your app is a gallery app and you need access to all albums on the device, you'll need to update your `capacitor.config.ts` file -- see the setup instructions below.
+
+You will need to update to v7 to publish an app with this plugin on the Google Play Store.
+
 ## Migrating to Capacitor 6
 
 There are a few breaking changes to take note of:
 - `saveGif` no longer exists. Use `savePhoto` for images and GIFs.
 - Error text has been changed. If you were checking for specific error messages, you should now use `error.code`, which will be `accessDenied`, `argumentError`, `downloadError`, or `filesystemError`.
+
+## Setup
+
+### iOS
+
+You'll need to add the following to your app's `Info.plist` file:
+
+```xml
+<dict>
+  ...
+  <key>NSPhotoLibraryUsageDescription</key>
+  <string>Describe why you need access to user's photos (getting albums and media)</string>
+  <key>NSPhotoLibraryAddUsageDescription</key>
+  <string>Describe why you need to add photos to user's photo library</string>
+  ...
+</dict>
+```
+
+### Android
+
+By default, this plugin only has access to the albums associated with the
+app it's installed in. For this basic level of access, you only need to add
+the following permission:
+
+```xml
+<manifest>
+  ...
+  <uses-permission android:name="android.permission.INTERNET" />
+  ...
+</manifest>
+```
+
+If you're building an app that needs to access all photos and videos on the device
+(e.g. a photo gallery app), you'll need the following permissions:
+
+```xml
+<manifest>
+  ...
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+  <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+  ...
+```
+
+You'll also need to add the following configuration to `capacitor.config.ts`:
+
+```ts
+plugins: {
+  Media: {
+    androidGalleryMode: true
+  }
+}
+```
+
+You can find an example of how this should look in the `example/` folder.
+
+## Demo
+
+Go the the `example/` folder to play with an example app that should show all functionality of this plugin.
+
+<img style="width: 250px" src="https://github.com/capacitor-community/media/blob/main/example_app.png?raw=true" />
 
 ## API
 
@@ -357,45 +428,6 @@ Attributes to sort media by.
 | **`User`**   | <code>'user'</code>   | Album is a user-created album                                  |
 
 </docgen-api>
-
-## iOS
-
-You'll need to add the following to your app's `Info.plist` file:
-
-```xml
-<dict>
-  ...
-  <key>NSPhotoLibraryUsageDescription</key>
-  <string>Describe why you need access to user's photos (getting albums and media)</string>
-  <key>NSPhotoLibraryAddUsageDescription</key>
-  <string>Describe why you need to add photos to user's photo library</string>
-  ...
-</dict>
-```
-
-## Android
-
-You'll need to add the following to your app's `AndroidManifest.xml` file:
-
-```xml
-<manifest>
-  ...
-  <uses-permission android:name="android.permission.INTERNET" />
-  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-  <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-  <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
-  ...
-</manifest>
-```
-
-Note the READ_MEDIA permissions -- these are **new in Android 13**!
-
-## Demo
-
-Go the the `example/` folder to play with an example app that should show all functionality of this plugin.
-
-<img style="width: 250px" src="https://github.com/capacitor-community/media/blob/main/example_app.png?raw=true" />
 
 ## Contributors ✨
 

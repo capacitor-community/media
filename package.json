@@ -1,8 +1,8 @@
 {
   "name": "@capacitor-community/media",
-  "version": "6.0.1",
+  "version": "7.0.0",
   "description": "Enable some media features for Capacitor such as create albums, save videos, gifs and more.",
-  "author": "Stewan Silva",
+  "author": "Nisala Kalupahana",
   "license": "MIT",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
