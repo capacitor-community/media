@@ -79,7 +79,6 @@ public class MediaPlugin: CAPPlugin {
                     if let uti = uti {
                        ext = UTTypeCopyPreferredTagWithClass(uti as CFString, kUTTagClassFilenameExtension)?.takeRetainedValue() as String? ?? ext
                     }
-                
                     // Convert imageData to JPEG if it's not already in JPEG format
                     var jpegData: Data
                            if ext != "jpg" && ext != "jpeg" {
@@ -97,7 +96,6 @@ public class MediaPlugin: CAPPlugin {
 
                     let base64String = jpegData.base64EncodedString()
                     let dataUrl = "data:image/jpeg;base64,\(base64String)"
-                    
                     // Create path and save image
                     let fileURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0].appendingPathComponent("image-\(Int.random(in: 0...100000)).\(ext)")
                     do {
@@ -106,7 +104,6 @@ public class MediaPlugin: CAPPlugin {
                         ret["identifier"] = identifier
                         ret["path"] = fileURL.absoluteString
                         ret["dataUrl"] = dataUrl
-                        
                         call.resolve(ret)
                     } catch {
                         call.reject("Failed to save image to disk", EC_FS_ERROR)
@@ -262,12 +259,10 @@ public class MediaPlugin: CAPPlugin {
                 }
                 let fileName = NSUUID().uuidString + ext;
                 fileURL = NSURL.fileURL(withPathComponents: [directory, fileName])
-                
                 let url = URL(string: data)
                 let data = try! Data(contentsOf: url!)
                 try! data.write(to: fileURL!)
             }
-            
             // Add it to the photo library.
             PHPhotoLibrary.shared().performChanges({
                 let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: fileURL! as URL)
@@ -287,11 +282,11 @@ public class MediaPlugin: CAPPlugin {
             call.reject("Access to photos not allowed by user", EC_ACCESS_DENIED)
         })
     }
-        
+
     @objc func getAlbumsPath(_ call: CAPPluginCall) {
         call.unimplemented("Not implemented on iOS.")
     }
-    
+
     @available(iOS 14, *)
     func getPHAccessLevel(permission: AccessLevel) -> PHAccessLevel {
         switch (permission) {
@@ -309,7 +304,7 @@ public class MediaPlugin: CAPPlugin {
         } else {
             status = PHPhotoLibrary.authorizationStatus()
         }
-        
+
         if status == PHAuthorizationStatus.authorized {
             allowed()
         } else {
@@ -320,7 +315,7 @@ public class MediaPlugin: CAPPlugin {
                     notAllowed()
                 }
             }
-            
+
             if #available(iOS 14, *) {
                 PHPhotoLibrary.requestAuthorization(for: getPHAccessLevel(permission: permission), handler: handler)
             } else {
@@ -376,23 +371,56 @@ public class MediaPlugin: CAPPlugin {
 
         let quantity = call.getInt("quantity", MediaPlugin.DEFAULT_QUANTITY)
 
+        let startDateStr = call.getString("startDate", "")
+        let endDateStr = call.getString("endDate", "")
+
+        var startDate: Date? = nil
+        var endDate: Date? = nil
+
+        if !startDateStr.isEmpty {
+            let dateFormatter = DateFormatter();
+            dateFormatter.dateFormat = "yyyy/MM/dd"
+            startDate = dateFormatter.date(from: startDateStr)
+        }
+        if !endDateStr.isEmpty {
+            let dateFormatter = DateFormatter();
+            dateFormatter.dateFormat = "yyyy/MM/dd"
+            endDate = dateFormatter.date(from: endDateStr)
+        }
+
         var targetCollection: PHAssetCollection?
 
         let options = PHFetchOptions()
         options.fetchLimit = quantity
-        
+
+        var queryOptions: [String] = []
+        var argumentArray: [Any] = []
+        if let sd = startDate {
+            queryOptions.append("creationDate <= %@")
+            argumentArray.append(sd as NSDate)
+        }
+        if let ed = endDate {
+            queryOptions.append("creationDate => %@")
+            argumentArray.append(ed as NSDate)
+        }
         let types = call.getString("types") ?? MediaPlugin.DEFAULT_TYPES
         if types == "photos" {
-            options.predicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.image.rawValue)
+            queryOptions.append("mediaType == %d")
+            argumentArray.append(PHAssetMediaType.image.rawValue)
         } else if types == "videos" {
-            options.predicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.video.rawValue)
+            queryOptions.append("mediaType == %d")
+            argumentArray.append(PHAssetMediaType.video.rawValue)
         } else if types == "all" {
-            options.predicate = NSPredicate(format: "(mediaType == %d) || (mediaType == %d)", argumentArray: [PHAssetMediaType.image.rawValue, PHAssetMediaType.video.rawValue])
+            queryOptions.append("(mediaType == %d) || (mediaType == %d)")
+            argumentArray.append(PHAssetMediaType.image.rawValue)
+            argumentArray.append(PHAssetMediaType.video.rawValue)
         }
-        
+
+        options.predicate = NSPredicate(format: queryOptions.joined(separator: " AND "), argumentArray: argumentArray)
+
         // Set sort
         var sortDescriptors = [] as [NSSortDescriptor];
-        
+
         // Handle when sort is string
         if call.getString("sort") != nil {
             let key = call.getString("sort") ?? "creationDate"
@@ -401,7 +429,7 @@ public class MediaPlugin: CAPPlugin {
         // Handle when sort is an array
         else if let sortArray = call.getArray("sort") as? [[String: Any]] {
             for object in sortArray {
-        
+
                 // Should have at least key for array value
                 if let key = object["key"] as? String {
                     let ascending = object["ascending"] as? Bool ?? false
@@ -409,13 +437,13 @@ public class MediaPlugin: CAPPlugin {
                 }
             }
         }
-        
+
         // Check if sort descriptors is empty
         // it can happen because of validations inside the previous if, in this case, set a default value
         if sortDescriptors.isEmpty {
             sortDescriptors.append(NSSortDescriptor(key: "creationDate", ascending: false))
         }
-        
+
         // Set sort descriptors
         options.sortDescriptors = sortDescriptors
 
@@ -460,7 +488,7 @@ public class MediaPlugin: CAPPlugin {
                     // Handle the error case where the JPEG data couldn't be generated
                     print("Failed to generate JPEG data")
                 }
-                
+
                 if asset.creationDate != nil {
                     a["creationDate"] = JSDate.toString(asset.creationDate!)
                 }
