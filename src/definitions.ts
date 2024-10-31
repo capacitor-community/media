@@ -114,6 +114,16 @@ export interface MediaFetchOptions {
    * Sort order of returned assets by field and ascending/descending
    */
   sort?: MediaField | MediaSort[];
+
+  /**
+   * Start date if any YYYY/MM/DD
+   */
+  startDate?: string;
+
+  /**
+   * End date if any YYYY/MM/DD
+   */
+  endDate?: string;
 }
 
 export interface MediaSort {
