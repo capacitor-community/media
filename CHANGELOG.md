@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [7.0.1](https://github.com/capacitor-community/media/compare/v7.0.1...v7.0.0) (2024-12-17)
+- Add media identifier to return value of `savePhoto()` and `saveVideo()` on iOS
+
 ## [7.0.0](https://github.com/capacitor-community/media/compare/v7.0.0...v6.0.0) (2024-08-28)
 - Add duration to `getMedias()` videos
 - Permissions are no longer required on Android for non-gallery use (BREAKING)
