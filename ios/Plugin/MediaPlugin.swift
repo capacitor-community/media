@@ -188,11 +188,11 @@ public class MediaPlugin: CAPPlugin {
                 PHPhotoLibrary.shared().performChanges({
                     let creationRequest = PHAssetCreationRequest.forAsset()
                     creationRequest.addResource(with: .photo, data: imageData as Data, options: .none)
+                    createdIdentifer = creationRequest.placeholderForCreatedAsset!.localIdentifier
 
                     if let collection = targetCollection {
                         let addAssetRequest = PHAssetCollectionChangeRequest(for: collection)
                         addAssetRequest!.addAssets([creationRequest.placeholderForCreatedAsset! as Any] as NSArray)
-                        createdIdentifer = addAssetRequest!.placeholderForCreatedAssetCollection.localIdentifier
                     }
                 }, completionHandler: {success, error in
                     if !success {
@@ -256,11 +256,11 @@ public class MediaPlugin: CAPPlugin {
             var createdIdentifier = "";
             PHPhotoLibrary.shared().performChanges({
                 let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: fileURL! as URL)
+                createdIdentifier = creationRequest!.placeholderForCreatedAsset!.localIdentifier
 
                 if let collection = targetCollection {
                     let addAssetRequest = PHAssetCollectionChangeRequest(for: collection)
                     addAssetRequest!.addAssets([creationRequest?.placeholderForCreatedAsset! as Any] as NSArray)
-                    createdIdentifier = addAssetRequest!.placeholderForCreatedAssetCollection.localIdentifier
                 }
             }, completionHandler: {success, error in
                 if !success {
