@@ -376,10 +376,10 @@ Code Examples: [basic](https://github.com/capacitor-community/media/blob/main/ex
 
 #### PhotoResponse
 
-| Prop             | Type                | Description                                                                                                  |
-| ---------------- | ------------------- | ------------------------------------------------------------------------------------------------------------ |
-| **`filePath`**   | <code>string</code> | Available on Android only.                                                                                   |
-| **`identifier`** | <code>string</code> | Available on iOS only. To get a file path for an image on iOS, pass this identifier to getMediaByIdentifier. |
+| Prop             | Type                | Description                                                                                                    |
+| ---------------- | ------------------- | -------------------------------------------------------------------------------------------------------------- |
+| **`filePath`**   | <code>string</code> | Available on Android only.                                                                                     |
+| **`identifier`** | <code>string</code> | Available on iOS only. To get a file path for an image on iOS, pass this identifier to `getMediaByIdentifier`. |
 
 
 #### MediaSaveOptions
