@@ -184,19 +184,23 @@ public class MediaPlugin: CAPPlugin {
                    return
                 }
 
+                var createdIdentifer = ""
                 PHPhotoLibrary.shared().performChanges({
                     let creationRequest = PHAssetCreationRequest.forAsset()
                     creationRequest.addResource(with: .photo, data: imageData as Data, options: .none)
 
                     if let collection = targetCollection {
                         let addAssetRequest = PHAssetCollectionChangeRequest(for: collection)
-                        addAssetRequest?.addAssets([creationRequest.placeholderForCreatedAsset! as Any] as NSArray)
+                        addAssetRequest!.addAssets([creationRequest.placeholderForCreatedAsset! as Any] as NSArray)
+                        createdIdentifer = addAssetRequest!.placeholderForCreatedAssetCollection.localIdentifier
                     }
                 }, completionHandler: {success, error in
                     if !success {
                         call.reject("Unable to save image to album", EC_FS_ERROR)
                     } else {
-                        call.resolve()
+                        var ret = JSObject()
+                        ret["identifier"] = createdIdentifer
+                        call.resolve(ret)
                     }
                 })
            }
@@ -249,18 +253,22 @@ public class MediaPlugin: CAPPlugin {
             }
             
             // Add it to the photo library.
+            var createdIdentifier = "";
             PHPhotoLibrary.shared().performChanges({
                 let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: fileURL! as URL)
 
                 if let collection = targetCollection {
                     let addAssetRequest = PHAssetCollectionChangeRequest(for: collection)
-                    addAssetRequest?.addAssets([creationRequest?.placeholderForCreatedAsset! as Any] as NSArray)
+                    addAssetRequest!.addAssets([creationRequest?.placeholderForCreatedAsset! as Any] as NSArray)
+                    createdIdentifier = addAssetRequest!.placeholderForCreatedAssetCollection.localIdentifier
                 }
             }, completionHandler: {success, error in
                 if !success {
                     call.reject("Unable to save video to album", EC_FS_ERROR)
                 } else {
-                    call.resolve()
+                    var ret = JSObject()
+                    ret["identifier"] = createdIdentifier
+                    call.resolve(ret)
                 }
             })
         }, notAllowed: {

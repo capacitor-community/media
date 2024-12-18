@@ -272,4 +272,10 @@ export interface PhotoResponse {
    * Available on Android only.
    */
   filePath?: string;
+  /**
+   * Available on iOS only. To get a file path
+   * for an image on iOS, pass this identifier to
+   * getMediaByIdentifier.
+   */
+  identifier?: string;
 }
