@@ -268,6 +268,7 @@ Code Examples: [basic](https://github.com/capacitor-community/media/blob/master/
 | **`thumbnailWidth`**  | <code>number</code>                                     | Width of thumbnail preview                                                  |
 | **`thumbnailHeight`** | <code>number</code>                                     | Height of thumbnail preview                                                 |
 | **`location`**        | <code><a href="#medialocation">MediaLocation</a></code> | Location metadata for the asset                                             |
+| **`isFavorite`**      | <code>boolean</code> | Is media favorited               |
 
 
 #### MediaLocation

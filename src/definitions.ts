@@ -1,50 +1,50 @@
 export interface MediaPlugin {
   /**
-    * Get filtered thumbnails from camera roll. iOS only.
-    * 
-    * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetMedias.tsx)
-    */
+   * Get filtered thumbnails from camera roll. iOS only.
+   *
+   * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetMedias.tsx)
+   */
   getMedias(options?: MediaFetchOptions): Promise<MediaResponse>;
   /**
-    * Get a filesystem path to a full-quality media asset by its identifier. iOS only.
-    * This is not included for Android because on Android, a media asset's identifier IS its path!
-    * You can simply use the Filesystem plugin to work with it. On iOS, you have to turn the identifier into a path
-    * using this function. After that, you can use the Filesystem plugin, same as Android.
-    * 
-    * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetMedias.tsx)
-    */
+   * Get a filesystem path to a full-quality media asset by its identifier. iOS only.
+   * This is not included for Android because on Android, a media asset's identifier IS its path!
+   * You can simply use the Filesystem plugin to work with it. On iOS, you have to turn the identifier into a path
+   * using this function. After that, you can use the Filesystem plugin, same as Android.
+   *
+   * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetMedias.tsx)
+   */
   getMediaByIdentifier(options?: { identifier: string }): Promise<MediaPath>;
   /**
-    * Get list of albums. 
-    * 
-    * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetAlbums.tsx)
-    */
+   * Get list of albums.
+   *
+   * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetAlbums.tsx)
+   */
   getAlbums(): Promise<MediaAlbumResponse>;
   /**
    * Saves a still photo or GIF to the camera roll.
-   * 
-   * On Android and iOS, this supports web URLs, base64 encoded images 
+   *
+   * On Android and iOS, this supports web URLs, base64 encoded images
    * (e.g. data:image/jpeg;base64,...), and local files.
    * On Android, all image formats supported by the user's photo viewer are supported.
    * On iOS, most common image formats are supported.
-   * 
+   *
    * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
    */
   savePhoto(options?: MediaSaveOptions): Promise<PhotoResponse>;
   /**
    * Saves a video to the camera roll.
-   * 
-   * On Android and iOS, this supports web URLs, base64 encoded videos 
+   *
+   * On Android and iOS, this supports web URLs, base64 encoded videos
    * (e.g. data:image/mp4;base64,...), and local files.
    * On Android, all video formats supported by the user's photo viewer are supported.
    * On iOS, the supported formats are based on whatever iOS supports at the time.
-   * 
+   *
    * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
    */
   saveVideo(options?: MediaSaveOptions): Promise<PhotoResponse>;
   /**
    * Creates an album.
-   * 
+   *
    * [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/CreateDemoAlbum.tsx)
    */
   createAlbum(options: MediaAlbumCreate): Promise<void>;
@@ -55,9 +55,9 @@ export interface MediaPlugin {
    * are multiple albums with the same name, which is possible on Android.
    * Just compare the albums path to the start of the album identifier when
    * getting albums.
-   * 
+   *
    * Only available on Android.
-   * 
+   *
    * Code Examples: [basic](https://github.com/capacitor-community/media/blob/master/example/src/components/CreateDemoAlbum.tsx), [when saving media](https://github.com/capacitor-community/media/blob/master/example/src/components/SaveMedia.tsx)
    */
   getAlbumsPath(): Promise<AlbumsPathResponse>;
@@ -105,7 +105,7 @@ export interface MediaFetchOptions {
   /**
    * Which types of assets to return thumbnails for.
    */
-  types?: "photos" | "videos" | "all";
+  types?: 'photos' | 'videos' | 'all';
   /**
    * Which album identifier to query in (get identifier with getAlbums())
    */
@@ -133,7 +133,7 @@ export interface MediaSort {
 
 /**
  * Attributes to sort media by.
- * 
+ *
  * [iOS Source](https://developer.apple.com/documentation/photokit/phfetchoptions)
  */
 export type MediaField =
@@ -188,6 +188,10 @@ export interface MediaAsset {
    * Location metadata for the asset
    */
   location: MediaLocation;
+  /**
+   * Is media favorited
+   */
+  isFavorite: boolean;
 }
 
 export interface MediaPath {
