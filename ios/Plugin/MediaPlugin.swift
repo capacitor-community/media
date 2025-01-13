@@ -83,7 +83,7 @@ public class MediaPlugin: CAPPlugin {
                     var jpegData: Data
                            if ext != "jpg" && ext != "jpeg" {
                                if let image = UIImage(data: imageData),
-                                  let jpegDataConverted = image.jpegData(compressionQuality: 0.7) {
+                                  let jpegDataConverted = image.jpegData(compressionQuality: 0.6) {
                                    jpegData = jpegDataConverted
                                    ext = "jpg"
                                } else {
