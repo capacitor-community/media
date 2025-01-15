@@ -59,6 +59,8 @@ public class MediaPlugin: CAPPlugin {
                 return
             }
 
+            let resizeWidth = call.getInt("width", 1024)
+
             let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [identifier], options: nil)
             guard let asset = fetchResult.firstObject else {
                 call.reject("Asset with given identifier not found", EC_ARG_ERROR)
@@ -81,18 +83,33 @@ public class MediaPlugin: CAPPlugin {
                     }
                     // Convert imageData to JPEG if it's not already in JPEG format
                     var jpegData: Data
-                           if ext != "jpg" && ext != "jpeg" {
-                               if let image = UIImage(data: imageData),
-                                  let jpegDataConverted = image.jpegData(compressionQuality: 0.6) {
-                                   jpegData = jpegDataConverted
-                                   ext = "jpg"
-                               } else {
-                                   call.reject("Failed to convert image to JPEG", EC_ARG_ERROR)
-                                   return
-                               }
-                           } else {
-                               jpegData = imageData
-                           }
+                    if ext != "jpg" && ext != "jpeg" {
+                        if let image = UIImage(data: imageData) {
+                            // Calculate the new height while maintaining the aspect ratio
+                            let newWidth: CGFloat = resizeWidth
+                            let aspectRatio = image.size.height / image.size.width
+                            let newHeight = newWidth * aspectRatio
+                            
+                            // Resize the image
+                            let resizedImage = UIGraphicsImageRenderer(size: CGSize(width: newWidth, height: newHeight)).image { _ in
+                                image.draw(in: CGRect(origin: .zero, size: CGSize(width: newWidth, height: newHeight)))
+                            }
+                            
+                            // Convert the resized image to JPEG
+                            if let jpegDataConverted = resizedImage.jpegData(compressionQuality: 0.6) {
+                                jpegData = jpegDataConverted
+                                ext = "jpg"
+                            } else {
+                                call.reject("Failed to convert resized image to JPEG", EC_ARG_ERROR)
+                                return
+                            }
+                        } else {
+                            call.reject("Failed to load image", EC_ARG_ERROR)
+                            return
+                        }
+                    } else {
+                        jpegData = imageData
+                    }
 
                     let base64String = jpegData.base64EncodedString()
                     let dataUrl = "data:image/jpeg;base64,\(base64String)"
