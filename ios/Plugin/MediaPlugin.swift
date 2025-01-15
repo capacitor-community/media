@@ -86,7 +86,7 @@ public class MediaPlugin: CAPPlugin {
                     if ext != "jpg" && ext != "jpeg" {
                         if let image = UIImage(data: imageData) {
                             // Calculate the new height while maintaining the aspect ratio
-                            let newWidth: CGFloat = resizeWidth
+                            let newWidth: CGFloat = CGFloat(resizeWidth)
                             let aspectRatio = image.size.height / image.size.width
                             let newHeight = newWidth * aspectRatio
                             
