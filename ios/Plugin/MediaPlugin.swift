@@ -75,42 +75,53 @@ public class MediaPlugin: CAPPlugin {
                         call.reject("Failed to get image data for identifier", EC_ARG_ERROR)
                         return
                     }
-
+                    
                     var ext = "png" // default extension
                     // Get extension from UTI
                     if let uti = uti {
-                       ext = UTTypeCopyPreferredTagWithClass(uti as CFString, kUTTagClassFilenameExtension)?.takeRetainedValue() as String? ?? ext
+                        ext = UTTypeCopyPreferredTagWithClass(uti as CFString, kUTTagClassFilenameExtension)?.takeRetainedValue() as String? ?? ext
                     }
-                    // Convert imageData to JPEG if it's not already in JPEG format
-                    var jpegData: Data
-                    if ext != "jpg" && ext != "jpeg" {
-                        if let image = UIImage(data: imageData) {
-                            // Calculate the new height while maintaining the aspect ratio
-                            let newWidth: CGFloat = CGFloat(resizeWidth)
-                            let aspectRatio = image.size.height / image.size.width
-                            let newHeight = newWidth * aspectRatio
-                            
-                            // Resize the image
-                            let resizedImage = UIGraphicsImageRenderer(size: CGSize(width: newWidth, height: newHeight)).image { _ in
-                                image.draw(in: CGRect(origin: .zero, size: CGSize(width: newWidth, height: newHeight)))
-                            }
-                            
-                            // Convert the resized image to JPEG
-                            if let jpegDataConverted = resizedImage.jpegData(compressionQuality: 0.6) {
-                                jpegData = jpegDataConverted
-                                ext = "jpg"
-                            } else {
-                                call.reject("Failed to convert resized image to JPEG", EC_ARG_ERROR)
-                                return
-                            }
-                        } else {
-                            call.reject("Failed to load image", EC_ARG_ERROR)
+                    
+                    guard let image = CIImage(data: imageData) else {
+                        call.reject("Failed to create CI image from data", EC_ARG_ERROR)
+                        return
+                    }
+                    
+                    var outputImage = image
+                    var imageResized = false
+                    
+                    if (image.extent.width) > CGFloat(resizeWidth) {
+                        imageResized = true
+                        
+                        let scale = CGFloat(resizeWidth) / image.extent.width
+                        let resizeFilter = CIFilter(name:"CILanczosScaleTransform")!
+                        
+                        resizeFilter.setValue(image, forKey: kCIInputImageKey)
+                        resizeFilter.setValue(scale, forKey: kCIInputScaleKey)
+                        
+                        
+                        guard let outputImage = resizeFilter.outputImage else {
+                            call.reject("Unable to resize image", EC_ARG_ERROR)
                             return
                         }
-                    } else {
-                        jpegData = imageData
                     }
-
+                    
+                    var jpegData = imageData
+                    if (ext != "jpg" || ext != "jpeg" || imageResized) {
+                        guard let colorSpace = CGColorSpace(name: CGColorSpace.sRGB) else {
+                            call.reject("Unable to create color space", EC_ARG_ERROR)
+                            return
+                        }
+                        
+                        guard let jpegData = CIContext().jpegRepresentation(of: outputImage,
+                                                    colorSpace: colorSpace,
+                                                                            options: [kCGImageDestinationLossyCompressionQuality as CIImageRepresentationOption : 0.6]
+                            ) else {
+                            call.reject("Unable to convert to JPEG", EC_FS_ERROR)
+                            return
+                        }
+                    }
+                    
                     let base64String = jpegData.base64EncodedString()
                     let dataUrl = "data:image/jpeg;base64,\(base64String)"
                     // Create path and save image
