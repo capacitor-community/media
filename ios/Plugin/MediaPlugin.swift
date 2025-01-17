@@ -90,7 +90,7 @@ public class MediaPlugin: CAPPlugin {
                     var outputImage = image
                     var imageResized = false
                     
-                    if (image.extent.width) > CGFloat(resizeWidth) {
+                    if (image.extent.width > CGFloat(resizeWidth)) {
                         imageResized = true
                         
                         let scale = CGFloat(resizeWidth) / image.extent.width
@@ -100,10 +100,7 @@ public class MediaPlugin: CAPPlugin {
                         resizeFilter.setValue(scale, forKey: kCIInputScaleKey)
                         
                         
-                        guard let outputImage = resizeFilter.outputImage else {
-                            call.reject("Unable to resize image", EC_ARG_ERROR)
-                            return
-                        }
+                        outputImage = resizeFilter.outputImage!
                     }
                     
                     var jpegData = imageData
@@ -113,13 +110,9 @@ public class MediaPlugin: CAPPlugin {
                             return
                         }
                         
-                        guard let jpegData = CIContext().jpegRepresentation(of: outputImage,
-                                                    colorSpace: colorSpace,
-                                                                            options: [kCGImageDestinationLossyCompressionQuality as CIImageRepresentationOption : 0.6]
-                            ) else {
-                            call.reject("Unable to convert to JPEG", EC_FS_ERROR)
-                            return
-                        }
+                        jpegData = CIContext().jpegRepresentation(of: outputImage,
+                                                colorSpace: colorSpace)!
+                    
                     }
                     
                     let base64String = jpegData.base64EncodedString()
@@ -127,7 +120,7 @@ public class MediaPlugin: CAPPlugin {
                     // Create path and save image
                     let fileURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0].appendingPathComponent("image-\(Int.random(in: 0...100000)).\(ext)")
                     do {
-                        try imageData.write(to: fileURL)
+                        try jpegData.write(to: fileURL)
                         var ret = JSObject()
                         ret["identifier"] = identifier
                         ret["path"] = fileURL.absoluteString
