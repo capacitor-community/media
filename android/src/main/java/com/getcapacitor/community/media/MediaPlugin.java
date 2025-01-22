@@ -381,7 +381,7 @@ public class MediaPlugin extends Plugin {
                 call.reject("Cant create album", EC_FS_ERROR);
             } else {
                 Log.d("DEBUG LOG", "___SUCCESS ALBUM CREATED");
-                call.success();
+                call.resolve();
             }
         } else {
             Log.d("DEBUG LOG", "___ERROR ALBUM ALREADY EXISTS");
