@@ -100,7 +100,7 @@ Get filtered thumbnails from camera roll. iOS only.
 ### getMediaByIdentifier(...)
 
 ```typescript
-getMediaByIdentifier(options?: { identifier: string; } | undefined) => any
+getMediaByIdentifier(options?: { identifier: string; width?: number | undefined; } | undefined) => any
 ```
 
 Get a filesystem path to a full-quality media asset by its identifier. iOS only.
@@ -110,9 +110,9 @@ using this function. After that, you can use the Filesystem plugin, same as Andr
 
 [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetMedias.tsx)
 
-| Param         | Type                                 |
-| ------------- | ------------------------------------ |
-| **`options`** | <code>{ identifier: string; }</code> |
+| Param         | Type                                                 |
+| ------------- | ---------------------------------------------------- |
+| **`options`** | <code>{ identifier: string; width?: number; }</code> |
 
 **Returns:** <code>any</code>
 
@@ -125,7 +125,7 @@ using this function. After that, you can use the Filesystem plugin, same as Andr
 getAlbums() => any
 ```
 
-Get list of albums. 
+Get list of albums.
 
 [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetAlbums.tsx)
 
@@ -142,7 +142,7 @@ savePhoto(options?: MediaSaveOptions | undefined) => any
 
 Saves a still photo or GIF to the camera roll.
 
-On Android and iOS, this supports web URLs, base64 encoded images 
+On Android and iOS, this supports web URLs, base64 encoded images
 (e.g. data:image/jpeg;base64,...), and local files.
 On Android, all image formats supported by the user's photo viewer are supported.
 On iOS, most common image formats are supported.
@@ -166,7 +166,7 @@ saveVideo(options?: MediaSaveOptions | undefined) => any
 
 Saves a video to the camera roll.
 
-On Android and iOS, this supports web URLs, base64 encoded videos 
+On Android and iOS, this supports web URLs, base64 encoded videos
 (e.g. data:image/mp4;base64,...), and local files.
 On Android, all video formats supported by the user's photo viewer are supported.
 On iOS, the supported formats are based on whatever iOS supports at the time.
@@ -268,7 +268,7 @@ Code Examples: [basic](https://github.com/capacitor-community/media/blob/master/
 | **`thumbnailWidth`**  | <code>number</code>                                     | Width of thumbnail preview                                                  |
 | **`thumbnailHeight`** | <code>number</code>                                     | Height of thumbnail preview                                                 |
 | **`location`**        | <code><a href="#medialocation">MediaLocation</a></code> | Location metadata for the asset                                             |
-| **`isFavorite`**      | <code>boolean</code> | Is media favorited               |
+| **`isFavorite`**      | <code>boolean</code>                                    | Is media favorited                                                          |
 
 
 #### MediaLocation

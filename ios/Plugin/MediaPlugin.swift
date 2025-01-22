@@ -87,34 +87,44 @@ public class MediaPlugin: CAPPlugin {
                         return
                     }
                     
-                    var outputImage = image
+                    var outputImage: CIImage
                     var imageResized = false
                     
                     if (image.extent.width > CGFloat(resizeWidth)) {
                         imageResized = true
                         
                         let scale = CGFloat(resizeWidth) / image.extent.width
-                        let resizeFilter = CIFilter(name:"CILanczosScaleTransform")!
+                        let resizeFilter = CIFilter(name:"CILanczosScaleTransform")
+                        resizeFilter?.setValue(image, forKey: kCIInputImageKey)
+                        resizeFilter?.setValue(scale, forKey: kCIInputScaleKey)
                         
-                        resizeFilter.setValue(image, forKey: kCIInputImageKey)
-                        resizeFilter.setValue(scale, forKey: kCIInputScaleKey)
-                        
-                        
-                        outputImage = resizeFilter.outputImage!
+                        guard let resizedImage = resizeFilter?.outputImage else {
+                            call.reject("Unable to resize image", EC_ARG_ERROR)
+                            return
+                        }
+                        outputImage = resizedImage
+                    } else {
+                        outputImage = image
                     }
+                
                     
-                    var jpegData = imageData
+                    var jpegData: Data
                     if (ext != "jpg" || ext != "jpeg" || imageResized) {
                         guard let colorSpace = CGColorSpace(name: CGColorSpace.sRGB) else {
                             call.reject("Unable to create color space", EC_ARG_ERROR)
                             return
                         }
                         
-                        jpegData = CIContext().jpegRepresentation(of: outputImage,
-                                                colorSpace: colorSpace)!
-                    
+                        guard let convertedData =  CIContext().jpegRepresentation(of: outputImage,
+                                                    colorSpace: colorSpace) else {
+                            call.reject("Unable to convert image to JPEG", EC_ARG_ERROR)
+                            return
+                        }
+                        
+                        jpegData = convertedData
+                    } else {
+                        jpegData = imageData
                     }
-                    
                     let base64String = jpegData.base64EncodedString()
                     let dataUrl = "data:image/jpeg;base64,\(base64String)"
                     // Create path and save image
