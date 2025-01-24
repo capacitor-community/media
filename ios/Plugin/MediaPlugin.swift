@@ -59,7 +59,6 @@ public class MediaPlugin: CAPPlugin {
                 return
             }
 
-            let resizeWidth = call.getInt("width", 1024)
 
             let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [identifier], options: nil)
             guard let asset = fetchResult.firstObject else {
@@ -76,6 +75,13 @@ public class MediaPlugin: CAPPlugin {
                         return
                     }
                     
+                    let compression = call.getFloat("compression", 1.0)
+                    
+                    guard (compression >= 0.0 && compression <= 1.0) else {
+                        call.reject("Invalid compression parameter")
+                        return
+                    }
+                   
                     var ext = "png" // default extension
                     // Get extension from UTI
                     if let uti = uti {
@@ -86,11 +92,14 @@ public class MediaPlugin: CAPPlugin {
                         call.reject("Failed to create CI image from data", EC_ARG_ERROR)
                         return
                     }
+                
+                    let imageWidth = Int(image.extent.width)
+                    let resizeWidth = call.getInt("width", imageWidth)
                     
                     var outputImage: CIImage
                     var imageResized = false
                     
-                    if (image.extent.width > CGFloat(resizeWidth)) {
+                    if (imageWidth > resizeWidth) {
                         imageResized = true
                         
                         let scale = CGFloat(resizeWidth) / image.extent.width
@@ -108,6 +117,7 @@ public class MediaPlugin: CAPPlugin {
                     }
                 
                     
+                    
                     var jpegData: Data
                     if (ext != "jpg" || ext != "jpeg" || imageResized) {
                         guard let colorSpace = CGColorSpace(name: CGColorSpace.sRGB) else {
@@ -116,7 +126,9 @@ public class MediaPlugin: CAPPlugin {
                         }
                         
                         guard let convertedData =  CIContext().jpegRepresentation(of: outputImage,
-                                                    colorSpace: colorSpace) else {
+                                                    colorSpace: colorSpace,
+                                                                                  options: [kCGImageDestinationLossyCompressionQuality as CIImageRepresentationOption: compression]
+                        ) else {
                             call.reject("Unable to convert image to JPEG", EC_ARG_ERROR)
                             return
                         }

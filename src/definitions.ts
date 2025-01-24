@@ -16,6 +16,7 @@ export interface MediaPlugin {
   getMediaByIdentifier(options?: {
     identifier: string;
     width?: number;
+    compression?: number;
   }): Promise<MediaPath>;
   /**
    * Get list of albums.
