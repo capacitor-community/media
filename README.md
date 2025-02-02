@@ -17,23 +17,6 @@
 
 </p>
 
-## Sponsors
-
-<table>
-  <tr>
-    <td align="center">
-      <a href="https://chatness.ai">
-      <img src="https://cdn.chatness.ai/images/logo-white-symbol.png" width="40" />
-      </a>
-    </td>
-    <td>
-      <a href="https://chatness.ai">
-      Chatness AI
-      </a>
-    </td>
-  </tr>
-</table>
-
 ## Maintainers
 
 | Maintainer        | GitHub                                        | Social                                    |
