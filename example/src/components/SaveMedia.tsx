@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Media, MediaSaveOptions } from "@capacitor-community/media";
+import { Media, MediaSaveOptions } from "@west-co/capacitor-media-plugin";
 import { IonButton } from "@ionic/react";
 import { Camera, CameraResultType } from "@capacitor/camera";
 import { photoDataURI, gifDataURI, videoDataURI, webpDataURI } from "./data";

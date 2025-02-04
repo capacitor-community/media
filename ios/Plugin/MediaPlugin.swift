@@ -59,7 +59,6 @@ public class MediaPlugin: CAPPlugin {
                 return
             }
 
-
             let fetchResult = PHAsset.fetchAssets(withLocalIdentifiers: [identifier], options: nil)
             guard let asset = fetchResult.firstObject else {
                 call.reject("Asset with given identifier not found", EC_ARG_ERROR)
@@ -74,39 +73,39 @@ public class MediaPlugin: CAPPlugin {
                         call.reject("Failed to get image data for identifier", EC_ARG_ERROR)
                         return
                     }
-                    
+
                     let compression = call.getFloat("compression", 1.0)
-                    
+
                     guard (compression >= 0.0 && compression <= 1.0) else {
                         call.reject("Invalid compression parameter")
                         return
                     }
-                   
+
                     var ext = "png" // default extension
                     // Get extension from UTI
                     if let uti = uti {
                         ext = UTTypeCopyPreferredTagWithClass(uti as CFString, kUTTagClassFilenameExtension)?.takeRetainedValue() as String? ?? ext
                     }
-                    
+
                     guard let image = CIImage(data: imageData) else {
                         call.reject("Failed to create CI image from data", EC_ARG_ERROR)
                         return
                     }
-                
+
                     let imageWidth = Int(image.extent.width)
                     let resizeWidth = call.getInt("width", imageWidth)
-                    
+
                     var outputImage: CIImage
                     var imageResized = false
-                    
+
                     if (imageWidth > resizeWidth) {
                         imageResized = true
-                        
+
                         let scale = CGFloat(resizeWidth) / image.extent.width
                         let resizeFilter = CIFilter(name:"CILanczosScaleTransform")
                         resizeFilter?.setValue(image, forKey: kCIInputImageKey)
                         resizeFilter?.setValue(scale, forKey: kCIInputScaleKey)
-                        
+
                         guard let resizedImage = resizeFilter?.outputImage else {
                             call.reject("Unable to resize image", EC_ARG_ERROR)
                             return
@@ -115,16 +114,14 @@ public class MediaPlugin: CAPPlugin {
                     } else {
                         outputImage = image
                     }
-                
-                    
-                    
+
                     var jpegData: Data
                     if (ext != "jpg" || ext != "jpeg" || imageResized) {
                         guard let colorSpace = CGColorSpace(name: CGColorSpace.sRGB) else {
                             call.reject("Unable to create color space", EC_ARG_ERROR)
                             return
                         }
-                        
+
                         guard let convertedData =  CIContext().jpegRepresentation(of: outputImage,
                                                     colorSpace: colorSpace,
                                                                                   options: [kCGImageDestinationLossyCompressionQuality as CIImageRepresentationOption: compression]
@@ -132,7 +129,7 @@ public class MediaPlugin: CAPPlugin {
                             call.reject("Unable to convert image to JPEG", EC_ARG_ERROR)
                             return
                         }
-                        
+
                         jpegData = convertedData
                     } else {
                         jpegData = imageData
@@ -414,6 +411,9 @@ public class MediaPlugin: CAPPlugin {
 
         let quantity = call.getInt("quantity", MediaPlugin.DEFAULT_QUANTITY)
 
+        let offset = call.getInt("offset", 0)
+        let fetchCount = call.getBool("fetchCount", true)
+
         let startDateStr = call.getString("startDate", "")
         let endDateStr = call.getString("endDate", "")
 
@@ -434,17 +434,18 @@ public class MediaPlugin: CAPPlugin {
         var targetCollection: PHAssetCollection?
 
         let options = PHFetchOptions()
-        options.fetchLimit = quantity
+        options.fetchLimit = offset + quantity
 
         var queryOptions: [String] = []
         var argumentArray: [Any] = []
         if let sd = startDate {
-            queryOptions.append("creationDate <= %@")
+            queryOptions.append("creationDate >= %@")
             argumentArray.append(sd as NSDate)
         }
         if let ed = endDate {
-            queryOptions.append("creationDate => %@")
-            argumentArray.append(ed as NSDate)
+            let endOfDay = Calendar.current.date(bySettingHour: 23, minute: 59, second: 59, of: ed) ?? ed
+            queryOptions.append("creationDate <= %@")
+            argumentArray.append(endOfDay as NSDate)
         }
         let types = call.getString("types") ?? MediaPlugin.DEFAULT_TYPES
         if types == "photos" {
@@ -490,11 +491,11 @@ public class MediaPlugin: CAPPlugin {
         // Set sort descriptors
         options.sortDescriptors = sortDescriptors
 
-        if albumId != nil {
-            let albumFetchResult = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [albumId!], options: nil)
-            albumFetchResult.enumerateObjects({ (collection, count, _) in
-                targetCollection = collection
-            })
+        if let albumId = albumId {
+            let albumFetchResult = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [albumId], options: nil)
+            if let firstAlbum = albumFetchResult.firstObject {
+                targetCollection = firstAlbum
+            }
         }
 
         var fetchResult: PHFetchResult<PHAsset>;
@@ -502,6 +503,34 @@ public class MediaPlugin: CAPPlugin {
             fetchResult = PHAsset.fetchAssets(in: targetCollection!, options: options)
         } else {
             fetchResult = PHAsset.fetchAssets(with: options)
+        }
+
+        var totalCount = fetchResult.count
+
+        if offset >= fetchResult.count {
+           call.resolve([
+               "medias": [],
+               "totalCount": totalCount,
+               "offset": offset,
+           ])
+           return
+       }
+
+        // For counting
+        if fetchCount {
+            var fetchResultCount: PHFetchResult<PHAsset>;
+            let countOptions = PHFetchOptions()
+            countOptions.predicate = options.predicate
+            countOptions.sortDescriptors = options.sortDescriptors
+            countOptions.includeHiddenAssets = options.includeHiddenAssets
+            countOptions.includeAllBurstAssets = options.includeAllBurstAssets
+            if targetCollection != nil {
+                fetchResultCount = PHAsset.fetchAssets(in: targetCollection!, options: countOptions)
+            } else {
+                fetchResultCount = PHAsset.fetchAssets(with: countOptions)
+            }
+
+            totalCount = fetchResultCount.count
         }
 
         let thumbnailWidth = call.getInt("thumbnailWidth", MediaPlugin.DEFAULT_THUMBNAIL_WIDTH)
@@ -514,10 +543,19 @@ public class MediaPlugin: CAPPlugin {
         requestOptions.deliveryMode = .opportunistic
         requestOptions.isSynchronous = true
 
-        fetchResult.enumerateObjects({ (asset, count: Int, stop: UnsafeMutablePointer<ObjCBool>) in
+        let startIdx = offset
+        let endIdx = min(offset + quantity, fetchResult.count)
+
+        let group = DispatchGroup()
+
+        for index in startIdx..<endIdx {
+            let asset = fetchResult.object(at: index)
             var a = JSObject()
 
+            group.enter()
+
             self.imageManager.requestImage(for: asset, targetSize: thumbnailSize, contentMode: .aspectFill, options: requestOptions, resultHandler: { (fetchedImage, _) in
+                defer { group.leave() }
                 guard let image = fetchedImage else {
                     return
                 }
@@ -545,11 +583,14 @@ public class MediaPlugin: CAPPlugin {
 
                 assets.append(a)
             })
-        })
-
-        call.resolve([
-            "medias": assets
+        }
+        group.notify(queue: .main) {
+            call.resolve([
+                "medias": assets,
+                "totalCount": totalCount,
+                "offset": offset,
             ])
+        }
     }
 
 

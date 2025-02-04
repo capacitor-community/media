@@ -100,7 +100,7 @@ Get filtered thumbnails from camera roll. iOS only.
 ### getMediaByIdentifier(...)
 
 ```typescript
-getMediaByIdentifier(options?: { identifier: string; width?: number | undefined; } | undefined) => any
+getMediaByIdentifier(options?: { identifier: string; width?: number | undefined; compression?: number | undefined; } | undefined) => any
 ```
 
 Get a filesystem path to a full-quality media asset by its identifier. iOS only.
@@ -110,9 +110,9 @@ using this function. After that, you can use the Filesystem plugin, same as Andr
 
 [Code Examples](https://github.com/capacitor-community/media/blob/master/example/src/components/GetMedias.tsx)
 
-| Param         | Type                                                 |
-| ------------- | ---------------------------------------------------- |
-| **`options`** | <code>{ identifier: string; width?: number; }</code> |
+| Param         | Type                                                                       |
+| ------------- | -------------------------------------------------------------------------- |
+| **`options`** | <code>{ identifier: string; width?: number; compression?: number; }</code> |
 
 **Returns:** <code>any</code>
 
@@ -239,6 +239,8 @@ Code Examples: [basic](https://github.com/capacitor-community/media/blob/master/
 | **`sort`**             | <code>{} \| "mediaType" \| "mediaSubtypes" \| "sourceType" \| "pixelWidth" \| "pixelHeight" \| "creationDate" \| "modificationDate" \| "isFavorite" \| "burstIdentifier"</code> | Sort order of returned assets by field and ascending/descending                                                                                                          |
 | **`startDate`**        | <code>string</code>                                                                                                                                                             | Start date if any YYYY/MM/DD                                                                                                                                             |
 | **`endDate`**          | <code>string</code>                                                                                                                                                             | End date if any YYYY/MM/DD                                                                                                                                               |
+| **`offset`**           | <code>number</code>                                                                                                                                                             | Offset for pagination (use together with quantity to paginate results)                                                                                                   |
+| **`fetchCount`**       | <code>boolean</code>                                                                                                                                                            | If we are to fetch total count (default true)                                                                                                                            |
 
 
 #### MediaSort
@@ -251,9 +253,11 @@ Code Examples: [basic](https://github.com/capacitor-community/media/blob/master/
 
 #### MediaResponse
 
-| Prop         | Type            |
-| ------------ | --------------- |
-| **`medias`** | <code>{}</code> |
+| Prop             | Type                |
+| ---------------- | ------------------- |
+| **`medias`**     | <code>{}</code>     |
+| **`totalCount`** | <code>number</code> |
+| **`offset`**     | <code>number</code> |
 
 
 #### MediaAsset

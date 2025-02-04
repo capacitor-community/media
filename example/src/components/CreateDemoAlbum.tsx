@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Media } from '@capacitor-community/media';
+import { Media } from "@west-co/capacitor-media-plugin";
 import { IonButton } from '@ionic/react';
 
 const CreateDemoAlbum = () => {

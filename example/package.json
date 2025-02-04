@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@capacitor-community/media": "file:../",
     "@capacitor/android": "^6.0.0",
     "@capacitor/app": "^6.0.0",
     "@capacitor/camera": "^6.0.0",
@@ -24,6 +23,8 @@
     "@types/react-dom": "^18.0.6",
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
+    "@west-co/capacitor-media-plugin": "file:../",
+    "dayjs": "^1.11.13",
     "history": "^4.9.0",
     "ionicons": "^6.0.3",
     "react": "^18.2.0",

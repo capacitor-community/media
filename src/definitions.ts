@@ -128,6 +128,16 @@ export interface MediaFetchOptions {
    * End date if any YYYY/MM/DD
    */
   endDate?: string;
+
+  /**
+   * Offset for pagination (use together with quantity to paginate results)
+   */
+  offset?: number;
+
+  /**
+   * If we are to fetch total count (default true)
+   */
+  fetchCount?: boolean;
 }
 
 export interface MediaSort {
@@ -153,6 +163,8 @@ export type MediaField =
 
 export interface MediaResponse {
   medias: MediaAsset[];
+  totalCount: number;
+  offset: number;
 }
 
 export interface AlbumsPathResponse {

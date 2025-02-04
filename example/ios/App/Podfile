@@ -11,13 +11,13 @@ install! 'cocoapods', :disable_input_output_paths => true
 def capacitor_pods
   pod 'Capacitor', :path => '../../node_modules/@capacitor/ios'
   pod 'CapacitorCordova', :path => '../../node_modules/@capacitor/ios'
-  pod 'CapacitorCommunityMedia', :path => '../../..'
   pod 'CapacitorApp', :path => '../../node_modules/@capacitor/app'
   pod 'CapacitorCamera', :path => '../../node_modules/@capacitor/camera'
   pod 'CapacitorHaptics', :path => '../../node_modules/@capacitor/haptics'
   pod 'CapacitorKeyboard', :path => '../../node_modules/@capacitor/keyboard'
   pod 'CapacitorStatusBar', :path => '../../node_modules/@capacitor/status-bar'
   pod 'CapawesomeCapacitorFilePicker', :path => '../../node_modules/@capawesome/capacitor-file-picker'
+  pod 'WestCoCapacitorMediaPlugin', :path => '../../..'
 end
 
 target 'App' do
