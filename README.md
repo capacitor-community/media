@@ -12,7 +12,7 @@
   <a href="https://www.npmjs.com/package/@capacitor-community/media"><img src="https://img.shields.io/npm/dw/@capacitor-community/media?style=flat-square" /></a>
   <a href="https://www.npmjs.com/package/@capacitor-community/media"><img src="https://img.shields.io/npm/v/@capacitor-community/media?style=flat-square" /></a>
   <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-12-orange?style=flat-square" /></a>
+<a href="#contributors"><img src="https://img.shields.io/badge/all%20contributors-13-orange?style=flat-square" /></a>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 </p>
@@ -30,11 +30,11 @@
 npm install @capacitor-community/media
 ```
 
-This plugin is currently maintained for Capacitor 6. Add an `@5` at the end to install for Capacitor 5. Note that the Capacitor 5 version is no longer maintained, and cannot be published to the Google Play Store.
+This plugin is currently maintained for Capacitor 7 (plugin version 8). Add an `@7` at the end to install for Capacitor 6. There are currently no API changes between these two versions, so if you're migrating from plugin v7 to v8 (Capacitor 6 to 7), no code changes should be required.
 
 After installing, be sure to sync by running `ionic cap sync`.
 
-## Migrating to Plugin v7 (Capacitor 6)
+## Migrating from Plugin v6 to v7+
 
 There has been a breaking change to the way permissions are handled on Android.
 - If your app is not a "gallery" app (does not need access to all photo albums on the device, just its own), you no longer need the `READ_EXTERNAL_STORAGE`, `WRITE_EXTERNAL_STORAGE`, `READ_MEDIA_IMAGES`, or `READ_MEDIA_VIDEO` permissions. You can remove them from your `AndroidManifest.xml` file. The plugin will no longer request any permissions to save images to your app's albums.
@@ -42,7 +42,7 @@ There has been a breaking change to the way permissions are handled on Android.
 
 You will need to update to v7 to publish an app with this plugin on the Google Play Store.
 
-## Migrating to Capacitor 6
+## Migrating from Plugin v5 to v6
 
 There are a few breaking changes to take note of:
 - `saveGif` no longer exists. Use `savePhoto` for images and GIFs.
@@ -438,6 +438,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="http://www.mrfischer.de/"><img src="https://avatars.githubusercontent.com/u/2657649?v=4?s=75" width="75px;" alt=""/><br /><sub><b>Stephan Fischer</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=stephan-fischer" title="Code">💻</a></td>
     <td align="center"><a href="https://www.mtda.me/"><img src="https://avatars.githubusercontent.com/u/2229994?v=4?s=75" width="75px;" alt=""/><br /><sub><b>Matheus Davidson</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=matheusdavidson" title="Code">💻</a> <a href="https://github.com/capacitor-community/media/commits?author=matheusdavidson" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/mauricewegner"><img src="https://avatars.githubusercontent.com/u/53715854?v=4?s=75" width="75px;" alt=""/><br /><sub><b>Maurice Wegner</b></sub></a><br /><a href="https://github.com/capacitor-community/media/commits?author=mauricewegner" title="Code">💻</a></td>
   </tr>
 </table>
 
