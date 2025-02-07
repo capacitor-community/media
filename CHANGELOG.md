@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [8.0.0](https://github.com/capacitor-community/media/compare/v8.0.0...v7.0.1) (2025-02-06)
+- Upgrade to Capacitor 7 (BREAKING)
+
 ## [7.0.1](https://github.com/capacitor-community/media/compare/v7.0.1...v7.0.0) (2024-12-17)
 - Add media identifier to return value of `savePhoto()` and `saveVideo()` on iOS
 
