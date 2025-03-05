@@ -29,6 +29,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.InputStream;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -314,9 +315,16 @@ public class MediaPlugin extends Plugin {
                 // Save to temp file
                 try {
                     inputFile = File.createTempFile("tmp", "." + extension, getContext().getCacheDir());
-                    OutputStream os = new FileOutputStream(inputFile);
-                    os.write(response.body().bytes());
-                    os.close();
+
+                    try (InputStream inputStream = response.body().byteStream();
+                         OutputStream os = new FileOutputStream(inputFile)) {
+
+                        byte[] buffer = new byte[524288]; // Buffer 512KB
+                        int bytesRead;
+                        while ((bytesRead = inputStream.read(buffer)) != -1) {
+                            os.write(buffer, 0, bytesRead);
+                        }
+                    }
                 } catch (IOException e) {
                     call.reject("Saving download to device failed.", EC_FS_ERROR);
                     return;
