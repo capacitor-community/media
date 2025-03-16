@@ -319,7 +319,7 @@ public class MediaPlugin extends Plugin {
                     try (InputStream inputStream = response.body().byteStream();
                          OutputStream os = new FileOutputStream(inputFile)) {
 
-                        byte[] buffer = new byte[524288]; // Buffer 512KB
+                        byte[] buffer = new byte[8192];
                         int bytesRead;
                         while ((bytesRead = inputStream.read(buffer)) != -1) {
                             os.write(buffer, 0, bytesRead);
