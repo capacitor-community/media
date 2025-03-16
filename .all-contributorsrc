@@ -3,9 +3,7 @@
   "projectOwner": "capacitor-community",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "files": [
-    "README.md"
-  ],
+  "files": ["README.md"],
   "imageSize": 75,
   "commit": true,
   "commitConvention": "angular",
@@ -16,125 +14,100 @@
       "name": "stewones",
       "avatar_url": "https://avatars1.githubusercontent.com/u/719763?v=4",
       "profile": "https://twitter.com/stewones",
-      "contributions": [
-        "code",
-        "doc",
-        "maintenance"
-      ]
+      "contributions": ["code", "doc", "maintenance"]
     },
     {
       "login": "zakton5",
       "name": "Zachary Keeton",
       "avatar_url": "https://avatars1.githubusercontent.com/u/7013396?v=4",
       "profile": "https://github.com/zakton5",
-      "contributions": [
-        "code"
-      ]
+      "contributions": ["code"]
     },
     {
       "login": "pgrimaud",
       "name": "Pierre Grimaud",
       "avatar_url": "https://avatars.githubusercontent.com/u/1866496?v=4",
       "profile": "https://github.com/pgrimaud",
-      "contributions": [
-        "doc"
-      ]
+      "contributions": ["doc"]
     },
     {
       "login": "tallesventura",
       "name": "Talles Alves",
       "avatar_url": "https://avatars.githubusercontent.com/u/14003158?v=4",
       "profile": "https://www.kuau.com.br/",
-      "contributions": [
-        "maintenance"
-      ]
+      "contributions": ["maintenance"]
     },
     {
       "login": "zyad-yasser",
       "name": "Zyad Yasser",
       "avatar_url": "https://avatars.githubusercontent.com/u/38470992?v=4",
       "profile": "https://www.zyadyasser.net/",
-      "contributions": [
-        "maintenance"
-      ]
+      "contributions": ["maintenance"]
     },
     {
       "login": "dragermrb",
       "name": "Manuel Rodríguez",
       "avatar_url": "https://avatars.githubusercontent.com/u/11479696?v=4",
       "profile": "https://github.com/dragermrb",
-      "contributions": [
-        "code",
-        "maintenance"
-      ]
+      "contributions": ["code", "maintenance"]
     },
     {
       "login": "Gr1zlY",
       "name": "Michael",
       "avatar_url": "https://avatars.githubusercontent.com/u/195971?v=4",
       "profile": "https://github.com/Gr1zlY",
-      "contributions": [
-        "code"
-      ]
+      "contributions": ["code"]
     },
     {
       "login": "nkalupahana",
       "name": "Nisala Kalupahana",
       "avatar_url": "https://avatars.githubusercontent.com/u/7347290?v=4",
       "profile": "https://linkedin.com/in/nisala",
-      "contributions": [
-        "code",
-        "doc",
-        "example",
-        "maintenance"
-      ]
+      "contributions": ["code", "doc", "example", "maintenance"]
     },
     {
       "login": "rdlabo",
       "name": "Masahiko Sakakibara",
       "avatar_url": "https://avatars.githubusercontent.com/u/9690024?v=4",
       "profile": "https://rdlabo.jp/",
-      "contributions": [
-        "maintenance"
-      ]
+      "contributions": ["maintenance"]
     },
     {
       "login": "ha6-6ru",
       "name": "ha6-6ru",
       "avatar_url": "https://avatars.githubusercontent.com/u/20640973?v=4",
       "profile": "https://ha6-6ru.hatenablog.com/",
-      "contributions": [
-        "code"
-      ]
+      "contributions": ["code"]
     },
     {
       "login": "stephan-fischer",
       "name": "Stephan Fischer",
       "avatar_url": "https://avatars.githubusercontent.com/u/2657649?v=4",
       "profile": "http://www.mrfischer.de/",
-      "contributions": [
-        "code"
-      ]
+      "contributions": ["code"]
     },
     {
       "login": "matheusdavidson",
       "name": "Matheus Davidson",
       "avatar_url": "https://avatars.githubusercontent.com/u/2229994?v=4",
       "profile": "https://www.mtda.me/",
-      "contributions": [
-        "code",
-        "doc"
-      ]
+      "contributions": ["code", "doc"]
     },
     {
       "login": "mauricewegner",
       "name": "Maurice Wegner",
       "avatar_url": "https://avatars.githubusercontent.com/u/53715854?v=4",
       "profile": "https://github.com/mauricewegner",
-      "contributions": [
-        "code"
-      ]
+      "contributions": ["code"]
+    },
+    {
+      "login": "samurm",
+      "name": "Samuel Ramos Muñoz",
+      "avatar_url": "https://avatars.githubusercontent.com/u/47331776?v=4",
+      "profile": "https://github.com/samurm",
+      "contributions": ["code"]
     }
   ],
   "contributorsPerLine": 5
 }
+
