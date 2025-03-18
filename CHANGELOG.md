@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [8.0.1](https://github.com/capacitor-community/media/compare/v8.0.1...v8.0.0) (2025-03-17)
+- Support larger file downloads on Android by using buffered file reading
+
 ## [8.0.0](https://github.com/capacitor-community/media/compare/v8.0.0...v7.0.1) (2025-02-06)
 - Upgrade to Capacitor 7 (BREAKING)
 
