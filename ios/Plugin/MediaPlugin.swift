@@ -242,7 +242,9 @@ public class MediaPlugin: CAPPlugin {
                 if data.starts(with: "data:") {
                     ext = "." + data.split(separator: ";")[0].split(separator: "/")[1];
                 } else {
-                    ext = String(data[data.lastIndex(of: ".")!...])
+                    // Strip query parameters before extracting extension
+                    let pathOnly = data.components(separatedBy: "?").first ?? data
+                    ext = String(pathOnly[pathOnly.lastIndex(of: ".")!...])
                 }
                 let fileName = NSUUID().uuidString + ext;
                 fileURL = NSURL.fileURL(withPathComponents: [directory, fileName])
