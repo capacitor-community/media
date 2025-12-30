@@ -1,6 +1,6 @@
 {
   "name": "@capacitor-community/media",
-  "version": "8.0.1",
+  "version": "9.0.0",
   "description": "Capacitor plugin for saving and retrieving photos and videos, and managing photo albums.",
   "author": "Nisala Kalupahana",
   "license": "MIT",
