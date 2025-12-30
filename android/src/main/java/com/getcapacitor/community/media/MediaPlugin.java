@@ -55,10 +55,6 @@ import okhttp3.ResponseBody;
     }
 )
 public class MediaPlugin extends Plugin {
-
-    private static final String PERMISSION_DENIED_ERROR = "Unable to access media, user denied permission request";
-
-    private static final int API_LEVEL_29 = 29;
     private static final int API_LEVEL_33 = 33;
 
     public static final String EC_ACCESS_DENIED = "accessDenied";

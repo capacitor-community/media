@@ -9,6 +9,6 @@ We also include a few other plugins that are commonly used with this one.
 
 ```bash
 npm install                     # Install dependencies
-ionic cap sync                  # Sync plugins
-ionic cap open [ios|android]    # Open project in Xcode or Android Studio to test
+npx cap sync                  # Sync plugins
+npx cap open [ios|android]    # Open project in Xcode or Android Studio to test
 ```
