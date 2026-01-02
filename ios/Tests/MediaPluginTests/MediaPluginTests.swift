@@ -1,5 +1,5 @@
 import XCTest
-@testable import Plugin
+@testable import MediaPlugin
 
 class MediaTests: XCTestCase {
     override func setUp() {
