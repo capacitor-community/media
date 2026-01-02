@@ -26,7 +26,18 @@ let EC_FS_ERROR = "filesystemError";
  * here: https://capacitorjs.com/docs/plugins/ios
  */
 @objc(MediaPlugin)
-public class MediaPlugin: CAPPlugin {
+public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
+    public let identifier = "MediaPlugin"
+    public let jsName = "Media"
+    public let pluginMethods: [CAPPluginMethod] = [
+        CAPPluginMethod(name: "getMedias", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getMediaByIdentifier", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getAlbums", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "createAlbum", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "savePhoto", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "saveVideo", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getAlbumsPath", returnType: CAPPluginReturnPromise),
+    ]
     typealias JSObject = [String:Any]
     static let DEFAULT_QUANTITY = 25
     static let DEFAULT_TYPES = "photos"
