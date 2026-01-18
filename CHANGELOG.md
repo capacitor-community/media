@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [9.0.1](https://github.com/capacitor-community/media/compare/v9.0.0...v9.0.1) (2026-01-17)
+- Add SPM support
+
 ## [9.0.0](https://github.com/capacitor-community/media/compare/v9.0.0...v8.0.1) (2025-12-30)
 - Update to Capacitor 8
 

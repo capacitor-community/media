@@ -30,7 +30,7 @@
 npm install @capacitor-community/media
 ```
 
-This plugin is currently maintained for Capacitor 8 (plugin version 9). Add an `@8` at the end to install for Capacitor 7, or `@7` for Capacitor 6. There are currently no API changes between these three versions, so if you're migrating between plugin v7 - v9 (Capacitor 6 - 8), no code changes should be required.
+This plugin is currently maintained for Capacitor 8 (plugin version 9). Add an `@8` at the end to install for Capacitor 7, or `@7` for Capacitor 6. There are currently no API changes between these three versions, so if you're migrating between plugin v7 - v9 (Capacitor 6 - 8), no code changes should be required. SPM is only supported for plugin v9.
 
 After installing, be sure to sync by running `npx cap sync`.
 
