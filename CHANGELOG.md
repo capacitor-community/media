@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## [9.0.2](https://github.com/capacitor-community/media/compare/v9.0.0...v9.0.1) (2026-02-26)
+- Change to proguard-android-optimize.txt to support AGP 9
+
 ## [9.0.1](https://github.com/capacitor-community/media/compare/v9.0.0...v9.0.1) (2026-01-17)
 - Add SPM support
 
