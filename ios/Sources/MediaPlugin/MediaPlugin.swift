@@ -2,7 +2,7 @@ import Foundation
 import Photos
 import Capacitor
 import SDWebImage
-import CoreServices
+import UniformTypeIdentifiers
 
 public class JSDate {
     static func toString(_ date: Date) -> String {
@@ -16,15 +16,16 @@ enum AccessLevel {
     case readWrite
 }
 
+struct PluginError {
+    let code: String
+    let description: String
+}
+
 let EC_ACCESS_DENIED = "accessDenied";
 let EC_ARG_ERROR = "argumentError";
 let EC_DOWNLOAD_ERROR = "downloadError";
 let EC_FS_ERROR = "filesystemError";
 
-/**
- * Please read the Capacitor iOS Plugin Development Guide
- * here: https://capacitorjs.com/docs/plugins/ios
- */
 @objc(MediaPlugin)
 public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
     public let identifier = "MediaPlugin"
@@ -46,6 +47,13 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
 
     // Must be lazy here because it will prompt for permissions on instantiation without it
     lazy var imageManager = PHCachingImageManager()
+
+    private func getExtensionFromMime(_ mimeType: String) -> String? {
+        if let type = UTType(mimeType: mimeType) {
+            return type.preferredFilenameExtension
+        }
+        return nil
+    }
 
     @objc func getAlbums(_ call: CAPPluginCall) {
         checkAuthorization(permission: .readWrite, allowed: {
@@ -85,10 +93,9 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
                         return
                     }
 
-                    var ext = "png" // default extension
-                    // Get extension from UTI
-                    if let uti = uti {
-                       ext = UTTypeCopyPreferredTagWithClass(uti as CFString, kUTTagClassFilenameExtension)?.takeRetainedValue() as String? ?? ext
+                    var ext = "png"
+                    if let utiString = uti as String?, let type = UTType(utiString) {
+                        ext = type.preferredFilenameExtension ?? ext
                     }
 
                     // Create path and save image
@@ -222,7 +229,7 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
     }
 
     @objc func saveVideo(_ call: CAPPluginCall) {
-        guard let data = call.getString("path") else {
+        guard let pathData = call.getString("path") else {
             call.reject("Must provide the data path", EC_ARG_ERROR)
             return
         }
@@ -246,36 +253,97 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
         }
 
         checkAuthorization(permission: .addOnly, allowed: {
-            var fileURL = URL(string: data)
-            if !data.starts(with: "file://") {
-                let directory = NSTemporaryDirectory()
-                var ext = "";
-                if data.starts(with: "data:") {
-                    ext = "." + data.split(separator: ";")[0].split(separator: "/")[1];
+            var fileURL: URL?
+            var downloadError: PluginError?
+            
+            if pathData.starts(with: "file://") {
+                // Local file path
+                fileURL = URL(string: pathData)
+            } else if (pathData.starts(with: "data:")) {
+                // Data URI
+                let parts = pathData.components(separatedBy: ",")
+                if parts.count > 1 {
+                    let metadata = parts[0]
+                    let mimeType = metadata.replacingOccurrences(of: "data:", with: "").components(separatedBy: ";")[0]
+                    
+                    if let ext = self.getExtensionFromMime(mimeType) {
+                        let fileName = "\(NSUUID().uuidString).\(ext)"
+                        let tempPath = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
+                        if let decodedData = Data(base64Encoded: parts[1]) {
+                            try? decodedData.write(to: tempPath)
+                            fileURL = tempPath
+                        }
+                    } else {
+                        downloadError = PluginError(code: EC_ARG_ERROR, description: "Could not determine extension from data URI MIME type: \(mimeType)")
+                    }
                 } else {
-                    ext = String(data[data.lastIndex(of: ".")!...])
+                    downloadError = PluginError(code: EC_ARG_ERROR, description: "Malformed data URI")
                 }
-                let fileName = NSUUID().uuidString + ext;
-                fileURL = NSURL.fileURL(withPathComponents: [directory, fileName])
+            } else {
+                // Remote URL
+                let semaphore = DispatchSemaphore(value: 0)
+                if let remoteURL = URL(string: pathData) {
+                    let task = URLSession.shared.downloadTask(with: remoteURL) { (tempLocalUrl, response, error) in
+                        defer { semaphore.signal() }
+                        
+                        if let error = error {
+                            downloadError = PluginError(code: EC_DOWNLOAD_ERROR, description: error.localizedDescription)
+                            return
+                        }
+                        
+                        guard let tempLocalUrl = tempLocalUrl, let response = response as? HTTPURLResponse else {
+                            downloadError = PluginError(code: EC_DOWNLOAD_ERROR, description: "Invalid server response")
+                            return
+                        }
+                        
+                        // Try URL extension first, then MIME
+                        var resolvedExt: String?
+                        if !remoteURL.pathExtension.isEmpty {
+                            resolvedExt = remoteURL.pathExtension
+                        }
+                        
+                        if resolvedExt == nil, let mimeType = response.mimeType {
+                            resolvedExt = self.getExtensionFromMime(mimeType)
+                        }
+                        
+                        if let ext = resolvedExt {
+                            let fileName = "\(NSUUID().uuidString).\(ext)"
+                            let finalTempURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
+                            try? FileManager.default.moveItem(at: tempLocalUrl, to: finalTempURL)
+                            fileURL = finalTempURL
+                        } else {
+                            downloadError = PluginError(code: EC_ARG_ERROR, description: "Failed to determine file extension from MIME type or URL.")
+                        }
+                    }
+                    task.resume()
+                }
                 
-                let url = URL(string: data)
-                let data = try! Data(contentsOf: url!)
-                try! data.write(to: fileURL!)
+                _ = semaphore.wait(timeout: .distantFuture)
             }
             
-            // Add it to the photo library.
-            var createdIdentifier = "";
+            if let err = downloadError {
+                call.reject(err.description, err.code)
+                return
+            }
+            
+            guard let finalURL = fileURL else {
+                call.reject("Could not prepare video file (invalid path)", EC_ARG_ERROR)
+                return
+            }
+
+            // Save to Library
+            var createdIdentifier = ""
             PHPhotoLibrary.shared().performChanges({
-                let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: fileURL! as URL)
-                createdIdentifier = creationRequest!.placeholderForCreatedAsset!.localIdentifier
+                let creationRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: finalURL)
+                createdIdentifier = creationRequest?.placeholderForCreatedAsset?.localIdentifier ?? ""
 
                 if let collection = targetCollection {
                     let addAssetRequest = PHAssetCollectionChangeRequest(for: collection)
-                    addAssetRequest!.addAssets([creationRequest?.placeholderForCreatedAsset! as Any] as NSArray)
+                    addAssetRequest?.addAssets([creationRequest?.placeholderForCreatedAsset as Any] as NSArray)
                 }
-            }, completionHandler: {success, error in
+            }, completionHandler: { success, error in
                 if !success {
-                    call.reject("Unable to save video to album", EC_FS_ERROR)
+                    call.reject("Unable to save video: \(error?.localizedDescription ?? "Unknown error")", EC_FS_ERROR)
                 } else {
                     var ret = JSObject()
                     ret["identifier"] = createdIdentifier

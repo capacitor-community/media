@@ -8,7 +8,11 @@ We also include a few other plugins that are commonly used with this one.
 ### Usage
 
 ```bash
-npm install                     # Install dependencies
+npm install                   # Install plugin dependencies
+npm run build                 # Build plugin JS
+cd example
+npm install                   # Install dependencies
+npm run build                 # Build example app JS
 npx cap sync                  # Sync plugins
 npx cap open [ios|android]    # Open project in Xcode or Android Studio to test
 ```
