@@ -45,6 +45,7 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
     static let DEFAULT_THUMBNAIL_WIDTH = 256
     static let DEFAULT_THUMBNAIL_HEIGHT = 256
 
+    // Must be lazy here because it will prompt for permissions on instantiation without it
     lazy var imageManager = PHCachingImageManager()
 
     private func getExtensionFromMime(_ mimeType: String) -> String? {
@@ -256,37 +257,32 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
             var downloadError: PluginError?
             
             if pathData.starts(with: "file://") {
-                if let url = URL(string: pathData) {
-                    if url.pathExtension.isEmpty {
-                        call.reject("Local file path must have an extension", EC_ARG_ERROR)
-                        return
-                    }
-                    fileURL = url
-                }
-            } else {
-                let semaphore = DispatchSemaphore(value: 0)
-
-                if pathData.starts(with: "data:") {
-                    let parts = pathData.components(separatedBy: ",")
-                    if parts.count > 1 {
-                        let metadata = parts[0]
-                        let mimeType = metadata.replacingOccurrences(of: "data:", with: "").components(separatedBy: ";")[0]
-                        
-                        if let ext = self.getExtensionFromMime(mimeType) {
-                            let fileName = "\(NSUUID().uuidString).\(ext)"
-                            let tempPath = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
-                            if let decodedData = Data(base64Encoded: parts[1]) {
-                                try? decodedData.write(to: tempPath)
-                                fileURL = tempPath
-                            }
-                        } else {
-                            downloadError = PluginError(code: EC_ARG_ERROR, description: "Could not determine extension from data URI MIME type: \(mimeType)")
+                // Local file path
+                fileURL = URL(string: pathData)
+            } else if (pathData.starts(with: "data:")) {
+                // Data URI
+                let parts = pathData.components(separatedBy: ",")
+                if parts.count > 1 {
+                    let metadata = parts[0]
+                    let mimeType = metadata.replacingOccurrences(of: "data:", with: "").components(separatedBy: ";")[0]
+                    
+                    if let ext = self.getExtensionFromMime(mimeType) {
+                        let fileName = "\(NSUUID().uuidString).\(ext)"
+                        let tempPath = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
+                        if let decodedData = Data(base64Encoded: parts[1]) {
+                            try? decodedData.write(to: tempPath)
+                            fileURL = tempPath
                         }
                     } else {
-                        downloadError = PluginError(code: EC_ARG_ERROR, description: "Malformed data URI")
+                        downloadError = PluginError(code: EC_ARG_ERROR, description: "Could not determine extension from data URI MIME type: \(mimeType)")
                     }
-                    semaphore.signal()
-                } else if let remoteURL = URL(string: pathData) {
+                } else {
+                    downloadError = PluginError(code: EC_ARG_ERROR, description: "Malformed data URI")
+                }
+            } else {
+                // Remote URL
+                let semaphore = DispatchSemaphore(value: 0)
+                if let remoteURL = URL(string: pathData) {
                     let task = URLSession.shared.downloadTask(with: remoteURL) { (tempLocalUrl, response, error) in
                         defer { semaphore.signal() }
                         
@@ -331,7 +327,7 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
             }
             
             guard let finalURL = fileURL else {
-                call.reject("Could not prepare video file (Missing extension or invalid path)", EC_ARG_ERROR)
+                call.reject("Could not prepare video file (invalid path)", EC_ARG_ERROR)
                 return
             }
 
