@@ -124,9 +124,16 @@ const SaveMedia = () => {
 
     const saveVideoOnline = async () => {
         setStatus("");
-        let opts: MediaSaveOptions = { path: "https://samplelib.com/lib/preview/mp4/sample-5s.mp4", albumIdentifier: await ensureDemoAlbum() };
+        let opts: MediaSaveOptions = { path: "https://samplelib.com/lib/preview/mp4/sample-5s.mp4?random=query&parameters=true", albumIdentifier: await ensureDemoAlbum() };
         await Media.saveVideo(opts);
         setStatus("Saved video from online source URL!");
+    };
+
+    const saveVideoOnlineNoExt = async () => {
+        setStatus("");
+        let opts: MediaSaveOptions = { path: "https://files.nisa.la/media/random", albumIdentifier: await ensureDemoAlbum() };
+        await Media.saveVideo(opts);
+        setStatus("Saved video from online source URL (no ext)!");
     };
 
     return <>
@@ -142,6 +149,7 @@ const SaveMedia = () => {
         <IonButton onClick={saveGIFDataURI}>Save GIF from Data URI</IonButton>
         <br />
         <IonButton onClick={saveVideoOnline}>Save Video from online URL</IonButton>
+        <IonButton onClick={saveVideoOnlineNoExt}>Save Video from online URL (no ext)</IonButton>
         <IonButton onClick={saveVideoURI}>Save Video from Data URI</IonButton>
         <IonButton onClick={saveTakenVideo}>Save Previously Taken Video</IonButton>
         <p>{ status }</p>
