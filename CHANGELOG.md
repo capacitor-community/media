@@ -2,7 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## [9.0.2](https://github.com/capacitor-community/media/compare/v9.0.0...v9.0.1) (2026-02-26)
+## [9.1.0](https://github.com/capacitor-community/media/compare/v9.0.2...v9.1.0) (2026-02-26)
+- Fix saving videos on iOS from URLs with query parameters
+- Fix saving videos on iOS from URLs with no extension
+- More robust MIME type to extension for data URL saving on iOS
+- Some error descriptions have been changed (should be non-breaking -- be sure to rely on error codes, not descriptions)
+
+## [9.0.2](https://github.com/capacitor-community/media/compare/v9.0.1...v9.0.2) (2026-02-26)
 - Change to proguard-android-optimize.txt to support AGP 9
 
 ## [9.0.1](https://github.com/capacitor-community/media/compare/v9.0.0...v9.0.1) (2026-01-17)
