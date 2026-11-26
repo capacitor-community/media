@@ -21,10 +21,10 @@ struct PluginError {
     let description: String
 }
 
-let EC_ACCESS_DENIED = "accessDenied";
-let EC_ARG_ERROR = "argumentError";
-let EC_DOWNLOAD_ERROR = "downloadError";
-let EC_FS_ERROR = "filesystemError";
+let EC_ACCESS_DENIED = "accessDenied"
+let EC_ARG_ERROR = "argumentError"
+let EC_DOWNLOAD_ERROR = "downloadError"
+let EC_FS_ERROR = "filesystemError"
 
 @objc(MediaPlugin)
 public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
@@ -37,9 +37,9 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
         CAPPluginMethod(name: "createAlbum", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "savePhoto", returnType: CAPPluginReturnPromise),
         CAPPluginMethod(name: "saveVideo", returnType: CAPPluginReturnPromise),
-        CAPPluginMethod(name: "getAlbumsPath", returnType: CAPPluginReturnPromise),
+        CAPPluginMethod(name: "getAlbumsPath", returnType: CAPPluginReturnPromise)
     ]
-    typealias JSObject = [String:Any]
+    typealias JSObject = [String: Any]
     static let DEFAULT_QUANTITY = 25
     static let DEFAULT_TYPES = "photos"
     static let DEFAULT_THUMBNAIL_WIDTH = 256
@@ -178,7 +178,7 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
 
         if albumId != nil {
             let albumFetchResult = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [albumId!], options: nil)
-            albumFetchResult.enumerateObjects({ (collection, count, _) in
+            albumFetchResult.enumerateObjects({ (collection, _, _) in
                 targetCollection = collection
             })
             if targetCollection == nil {
@@ -196,10 +196,10 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
             let imageUrl = URL(string: data)
             let downloaderOptions: SDWebImageDownloaderOptions = [.ignoreCachedResponse]
 
-            SDWebImageDownloader.shared.downloadImage(with: imageUrl, options: downloaderOptions, progress: nil) { (image, data, error, finished) in
+            SDWebImageDownloader.shared.downloadImage(with: imageUrl, options: downloaderOptions, progress: nil) { (_, data, _, finished) in
                 guard let imageData = data, finished else {
-                   call.reject("Unable to download image from URL", EC_DOWNLOAD_ERROR)
-                   return
+                    call.reject("Unable to download image from URL", EC_DOWNLOAD_ERROR)
+                    return
                 }
 
                 var createdIdentifer = ""
@@ -212,7 +212,7 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
                         let addAssetRequest = PHAssetCollectionChangeRequest(for: collection)
                         addAssetRequest!.addAssets([creationRequest.placeholderForCreatedAsset! as Any] as NSArray)
                     }
-                }, completionHandler: {success, error in
+                }, completionHandler: {success, _ in
                     if !success {
                         call.reject("Unable to save image to album", EC_FS_ERROR)
                     } else {
@@ -221,7 +221,7 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
                         call.resolve(ret)
                     }
                 })
-           }
+            }
         }, notAllowed: {
             call.reject("Access to photos not allowed by user", EC_ACCESS_DENIED)
         })
@@ -239,7 +239,7 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
 
         if albumId != nil {
             let albumFetchResult = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [albumId!], options: nil)
-            albumFetchResult.enumerateObjects({ (collection, count, _) in
+            albumFetchResult.enumerateObjects({ (collection, _, _) in
                 targetCollection = collection
             })
             if targetCollection == nil {
@@ -255,17 +255,17 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
         checkAuthorization(permission: .addOnly, allowed: {
             var fileURL: URL?
             var downloadError: PluginError?
-            
+
             if pathData.starts(with: "file://") {
                 // Local file path
                 fileURL = URL(string: pathData)
-            } else if (pathData.starts(with: "data:")) {
+            } else if pathData.starts(with: "data:") {
                 // Data URI
                 let parts = pathData.components(separatedBy: ",")
                 if parts.count > 1 {
                     let metadata = parts[0]
                     let mimeType = metadata.replacingOccurrences(of: "data:", with: "").components(separatedBy: ";")[0]
-                    
+
                     if let ext = self.getExtensionFromMime(mimeType) {
                         let fileName = "\(NSUUID().uuidString).\(ext)"
                         let tempPath = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
@@ -285,27 +285,27 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
                 if let remoteURL = URL(string: pathData) {
                     let task = URLSession.shared.downloadTask(with: remoteURL) { (tempLocalUrl, response, error) in
                         defer { semaphore.signal() }
-                        
+
                         if let error = error {
                             downloadError = PluginError(code: EC_DOWNLOAD_ERROR, description: error.localizedDescription)
                             return
                         }
-                        
+
                         guard let tempLocalUrl = tempLocalUrl, let response = response as? HTTPURLResponse else {
                             downloadError = PluginError(code: EC_DOWNLOAD_ERROR, description: "Invalid server response")
                             return
                         }
-                        
+
                         // Try URL extension first, then MIME
                         var resolvedExt: String?
                         if !remoteURL.pathExtension.isEmpty {
                             resolvedExt = remoteURL.pathExtension
                         }
-                        
+
                         if resolvedExt == nil, let mimeType = response.mimeType {
                             resolvedExt = self.getExtensionFromMime(mimeType)
                         }
-                        
+
                         if let ext = resolvedExt {
                             let fileName = "\(NSUUID().uuidString).\(ext)"
                             let finalTempURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(fileName)
@@ -317,15 +317,15 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
                     }
                     task.resume()
                 }
-                
+
                 _ = semaphore.wait(timeout: .distantFuture)
             }
-            
+
             if let err = downloadError {
                 call.reject(err.description, err.code)
                 return
             }
-            
+
             guard let finalURL = fileURL else {
                 call.reject("Could not prepare video file (invalid path)", EC_ARG_ERROR)
                 return
@@ -354,14 +354,14 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
             call.reject("Access to photos not allowed by user", EC_ACCESS_DENIED)
         })
     }
-        
+
     @objc func getAlbumsPath(_ call: CAPPluginCall) {
         call.unimplemented("Not implemented on iOS.")
     }
-    
+
     @available(iOS 14, *)
     func getPHAccessLevel(permission: AccessLevel) -> PHAccessLevel {
-        switch (permission) {
+        switch permission {
         case .addOnly:
             return PHAccessLevel.addOnly
         case .readWrite:
@@ -376,7 +376,7 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
         } else {
             status = PHPhotoLibrary.authorizationStatus()
         }
-        
+
         if status == PHAuthorizationStatus.authorized {
             allowed()
         } else {
@@ -387,7 +387,7 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
                     notAllowed()
                 }
             }
-            
+
             if #available(iOS 14, *) {
                 PHPhotoLibrary.requestAuthorization(for: getPHAccessLevel(permission: permission), handler: handler)
             } else {
@@ -403,7 +403,7 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
 
         // Load our smart albums
         var fetchResult = PHAssetCollection.fetchAssetCollections(with: .smartAlbum, subtype: .albumRegular, options: nil)
-        fetchResult.enumerateObjects({ (collection, count, stop: UnsafeMutablePointer<ObjCBool>) in
+        fetchResult.enumerateObjects({ (collection, _, _: UnsafeMutablePointer<ObjCBool>) in
             var o = JSObject()
             o["name"] = collection.localizedTitle
             o["identifier"] = collection.localIdentifier
@@ -413,7 +413,7 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
 
         if loadSharedAlbums {
             fetchResult = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumCloudShared, options: nil)
-            fetchResult.enumerateObjects({ (collection, count, stop: UnsafeMutablePointer<ObjCBool>) in
+            fetchResult.enumerateObjects({ (collection, _, _: UnsafeMutablePointer<ObjCBool>) in
                 var o = JSObject()
                 o["name"] = collection.localizedTitle
                 o["identifier"] = collection.localIdentifier
@@ -423,7 +423,7 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
         }
 
         // Load our user albums
-        PHCollectionList.fetchTopLevelUserCollections(with: nil).enumerateObjects({ (collection, count, stop: UnsafeMutablePointer<ObjCBool>) in
+        PHCollectionList.fetchTopLevelUserCollections(with: nil).enumerateObjects({ (collection, _, _: UnsafeMutablePointer<ObjCBool>) in
             var o = JSObject()
             o["name"] = collection.localizedTitle
             o["identifier"] = collection.localIdentifier
@@ -433,7 +433,7 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
 
         call.resolve([
             "albums": albums
-            ])
+        ])
     }
 
     func fetchResultAssetsToJs(_ call: CAPPluginCall) {
@@ -447,7 +447,7 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
 
         let options = PHFetchOptions()
         options.fetchLimit = quantity
-        
+
         let types = call.getString("types") ?? MediaPlugin.DEFAULT_TYPES
         if types == "photos" {
             options.predicate = NSPredicate(format: "mediaType == %d", PHAssetMediaType.image.rawValue)
@@ -456,10 +456,10 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
         } else if types == "all" {
             options.predicate = NSPredicate(format: "(mediaType == %d) || (mediaType == %d)", argumentArray: [PHAssetMediaType.image.rawValue, PHAssetMediaType.video.rawValue])
         }
-        
+
         // Set sort
-        var sortDescriptors = [] as [NSSortDescriptor];
-        
+        var sortDescriptors = [] as [NSSortDescriptor]
+
         // Handle when sort is string
         if call.getString("sort") != nil {
             let key = call.getString("sort") ?? "creationDate"
@@ -468,7 +468,7 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
         // Handle when sort is an array
         else if let sortArray = call.getArray("sort") as? [[String: Any]] {
             for object in sortArray {
-        
+
                 // Should have at least key for array value
                 if let key = object["key"] as? String {
                     let ascending = object["ascending"] as? Bool ?? false
@@ -476,24 +476,24 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
                 }
             }
         }
-        
+
         // Check if sort descriptors is empty
         // it can happen because of validations inside the previous if, in this case, set a default value
         if sortDescriptors.isEmpty {
             sortDescriptors.append(NSSortDescriptor(key: "creationDate", ascending: false))
         }
-        
+
         // Set sort descriptors
         options.sortDescriptors = sortDescriptors
 
         if albumId != nil {
             let albumFetchResult = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [albumId!], options: nil)
-            albumFetchResult.enumerateObjects({ (collection, count, _) in
+            albumFetchResult.enumerateObjects({ (collection, _, _) in
                 targetCollection = collection
             })
         }
 
-        var fetchResult: PHFetchResult<PHAsset>;
+        var fetchResult: PHFetchResult<PHAsset>
         if targetCollection != nil {
             fetchResult = PHAsset.fetchAssets(in: targetCollection!, options: options)
         } else {
@@ -510,7 +510,7 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
         requestOptions.deliveryMode = .opportunistic
         requestOptions.isSynchronous = true
 
-        fetchResult.enumerateObjects({ (asset, count: Int, stop: UnsafeMutablePointer<ObjCBool>) in
+        fetchResult.enumerateObjects({ (asset, _: Int, _: UnsafeMutablePointer<ObjCBool>) in
             var a = JSObject()
 
             self.imageManager.requestImage(for: asset, targetSize: thumbnailSize, contentMode: .aspectFill, options: requestOptions, resultHandler: { (fetchedImage, _) in
@@ -539,9 +539,8 @@ public class MediaPlugin: CAPPlugin, CAPBridgedPlugin {
 
         call.resolve([
             "medias": assets
-            ])
+        ])
     }
-
 
     func makeLocation(_ asset: PHAsset) -> JSObject {
         var loc = JSObject()
