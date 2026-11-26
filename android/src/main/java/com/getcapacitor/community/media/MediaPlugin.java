@@ -28,8 +28,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -55,6 +55,7 @@ import okhttp3.ResponseBody;
     }
 )
 public class MediaPlugin extends Plugin {
+
     private static final int API_LEVEL_33 = 33;
 
     public static final String EC_ACCESS_DENIED = "accessDenied";
@@ -172,13 +173,9 @@ public class MediaPlugin extends Plugin {
             MediaStore.MediaColumns.DATA
         };
 
-        Uri imageUri = isGalleryMode() ?
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI :
-                MediaStore.Images.Media.INTERNAL_CONTENT_URI;
+        Uri imageUri = isGalleryMode() ? MediaStore.Images.Media.EXTERNAL_CONTENT_URI : MediaStore.Images.Media.INTERNAL_CONTENT_URI;
 
-        Uri videoUri = isGalleryMode() ?
-                MediaStore.Video.Media.EXTERNAL_CONTENT_URI :
-                MediaStore.Video.Media.INTERNAL_CONTENT_URI;
+        Uri videoUri = isGalleryMode() ? MediaStore.Video.Media.EXTERNAL_CONTENT_URI : MediaStore.Video.Media.INTERNAL_CONTENT_URI;
 
         Cursor[] curs = {
             getActivity().getContentResolver().query(imageUri, projection, null, null, null),
@@ -312,9 +309,7 @@ public class MediaPlugin extends Plugin {
                 try {
                     inputFile = File.createTempFile("tmp", "." + extension, getContext().getCacheDir());
 
-                    try (InputStream inputStream = response.body().byteStream();
-                         OutputStream os = new FileOutputStream(inputFile)) {
-
+                    try (InputStream inputStream = response.body().byteStream(); OutputStream os = new FileOutputStream(inputFile)) {
                         byte[] buffer = new byte[8192];
                         int bytesRead;
                         while ((bytesRead = inputStream.read(buffer)) != -1) {

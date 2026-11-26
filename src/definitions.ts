@@ -33,7 +33,7 @@ export interface MediaPlugin {
    *
    * [Code Examples](https://github.com/capacitor-community/media/blob/main/example/src/components/GetMedias.tsx)
    */
-  getMediaByIdentifier(options?: {identifier: string}): Promise<MediaPath>;
+  getMediaByIdentifier(options?: { identifier: string }): Promise<MediaPath>;
   /**
    * Get list of albums.
    *
